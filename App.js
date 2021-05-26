@@ -1,78 +1,83 @@
-import React, {Component } from 'react'; 
-import { StyleSheet, View, Text, Button } from 'react-native'
-import {createAppContainer} from 'react-navigation';
-import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
+//npx babel-node --presets @babel/env index.js
+//npx react-native run-android
 
-class Home extends Component {
-  render() {
+import * as React from 'react';
+import { Text, View,SafeAreaView, StyleSheet, Button } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import SaleList from './saleList';
+import TopBar from './topbar'
+
+const Tab = createMaterialTopTabNavigator();
+
+const App = () => { 
+  const [allInfo, setAllInfo] = React.useState([]);
+  fetch("http://192.168.1.171:3000").then(res=>res.json())
+    .then(res=>{
+      let arr=[]
+      for(let i of Object.entries(res["baemin"])){
+        arr.push({brand: "baemin", name: i[0], discountAmount: i[1]})
+      }
+      for(let i of Object.entries(res["yogiyo"])){
+        arr.push({brand: "yogiyo", name: i[0], discountAmount: i[1]})
+      }
+      arr.sort((a,b)=>(a.name.localeCompare(b.name)))
+      //console.log(arr)
+      setAllInfo([...arr])
+    })
+
+  function HomeScreen1() {
     return (
-      <View style={styles.eachView} >
-        <Text> 홈 화면 입니다.</Text>
-        <Button
-          title="챗 화면으로 가기"
-          onPress={() => this.props.navigation.navigate('Chat')}
-        />
-        <Button
-          title="세팅 화면으로 가기"
-          onPress={() => this.props.navigation.navigate('Settings')}
-        />
+      <View style={styles.card}>
+        <SaleList infos={allInfo} />
       </View>
-    )
+    );
   }
+    
+  function SettingsScreen() {
+    return (
+      <View style={styles.card}>
+        <SaleList infos={allInfo} />
+      </View>
+    );
+  }
+  
+  return (
+    <SafeAreaView style={styles.container}>
+      <TopBar/>
+      <NavigationContainer style={{flex:1}}  >
+        <Tab.Navigator style={{flex:13}} >
+          <Tab.Screen name="Home" component={HomeScreen1} />
+          <Tab.Screen name="Settings" component={SettingsScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </SafeAreaView>
+
+
+  );
 }
 
-class Chat extends Component {
-  render() {
-    return (
-      <View style={styles.eachView} >
-        <Text> 챗 화면 입니다.</Text>
-        <Button
-          title="홈 화면으로 가기"
-          onPress={() => this.props.navigation.navigate('Home')}
-        />
-      </View>
-    )
-  }
-}
-
-class Settings extends Component {
-  render() {
-    return (
-      <View style={styles.eachView} >
-        <Text> 세팅 화면 입니다.</Text>
-        <Button
-          title="홈 화면으로 가기"
-          onPress={() => this.props.navigation.navigate('Home')}
-        />
-      </View>
-    )
-  }
-}
-
-
-const TabNavigator = createMaterialTopTabNavigator({
-  Home: {
-    screen: Home,
-  },
-  Chat: {
-    screen: Chat,
-  },
-  Settings: {
-    screen: Settings,
-  },
-});
-export default createAppContainer(TabNavigator);
 
 
 const styles = StyleSheet.create({
-  centerView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+  container: {
+    flex:1,
   },
-  eachView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  }
-})
+  card: {
+    flex:13,
+    backgroundColor: '#abcd',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  menuScrollBar:{
+  },
+  menuBarTab:{
+    width: 130,
+    borderWidth: 0.5,
+  },
+
+});
+
+export default App;

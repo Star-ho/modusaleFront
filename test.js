@@ -5,20 +5,6 @@ import React,{useState, Component} from 'react';
 import {SafeAreaView, StyleSheet, View, Text, ScrollView } from 'react-native';
 import SaleList from './saleList';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {createAppContainer} from 'react-navigation';
-import {createBottomTabNavigator} from 'react-navigation-tabs';
-
-const TabNavigator = createBottomTabNavigator({
-  Home: {
-    screen: HomeScreen,
-  },
-  Chat: {
-    screen: ChatScreen,
-  },
-  Settings: {
-    screen: SettingsScreen,
-  },
-});
 
 class TopBar extends Component {
   render() {
