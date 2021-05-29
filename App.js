@@ -5,7 +5,7 @@ import * as React from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, CheckBox} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MenuDrawer from 'react-native-side-drawer'
-import Contents from './Contents.js'
+import ContentsTab from './ContentsTab.js'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -13,6 +13,7 @@ export default class App extends React.Component {
     this.state = {
       open: false
     };
+    const [filter, setfilter] = React.useState({brand:undefined,menu:undefined});
   }
 
   toggleOpen = () => {
@@ -20,28 +21,39 @@ export default class App extends React.Component {
   };
 
   drawerContent = () => {
-    const [isSelected, setSelection] = useState(false);
-
+    const [yogiyoSelected, setyogiyoSelection] = React.useState(true);
+    const [baeminSelected, setbaeminSelection] = React.useState(true);
+    const [coupangSelected, setcoupangSelection] = React.useState(true);
     return (
       <View>
-      <TouchableOpacity onPress={this.toggleOpen} style={styles.animatedBox}>
-        <Text>Close</Text>
-      </TouchableOpacity>
-            <CheckBox
-              value={isSelected}
-              onValueChange={setSelection}
-              style={styles.checkbox}
-            />
-            <CheckBox
-            value={isSelected}
-            onValueChange={setSelection}
+        <TouchableOpacity onPress={this.toggleOpen} style={styles.animatedBox}>
+          <Text>Close</Text>
+        </TouchableOpacity>
+          <CheckBox
+            value={yogiyoSelected}
+            onValueChange={setyogiyoSelection}
             style={styles.checkbox}
-          />
-          </View>
+          ><Text>요기요</Text>
+          </CheckBox>
+          <CheckBox
+            value={baeminSelected}
+            onValueChange={setbaeminSelection}
+            style={styles.checkbox}
+          ><Text>배달의민족</Text>
+          </CheckBox>
+
+          <CheckBox
+            value={coupangSelected}
+            onValueChange={setcoupangSelection}
+            style={styles.checkbox}
+          ><Text>쿠팡잇츠</Text>
+          </CheckBox>
+        </View>
     );
   };
 
   render() {
+
     return (
       <View style={styles.container}>
         <MenuDrawer 
@@ -59,7 +71,7 @@ export default class App extends React.Component {
               <Text>현재 사용하는것들</Text>
             </View>
           </View>
-          <Contents />
+          <ContentsTab />
         </MenuDrawer>
       </View>
     );

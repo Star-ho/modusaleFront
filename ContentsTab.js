@@ -4,48 +4,29 @@ import { Text, View,SafeAreaView, StyleSheet, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import SaleList from './saleList';
-import TopBar from './topbar'
+import Contents from "./Content.js"
 
 const Tab = createMaterialTopTabNavigator();
 
-const Contents = () => { 
+const ContentsTab = () => { 
   const [allInfo, setAllInfo] = React.useState([]);
   fetch("http://192.168.1.171:3000").then(res=>res.json())
     .then(res=>{
       let arr=[]
-      for(let i of Object.entries(res["baemin"])){
-        arr.push({brand: "baemin", name: i[0], discountAmount: i[1]})
+      for(let i of Object.entries(res)){
+        arr.push( { [ i[0] ] : [ i[1][0], i[1][1], i[1][2], i[1][3] ] })
       }
-      for(let i of Object.entries(res["yogiyo"])){
-        arr.push({brand: "yogiyo", name: i[0], discountAmount: i[1]})
-      }
-      arr.sort((a,b)=>(a.name.localeCompare(b.name)))
+      //arr.sort((a,b)=>(Object.keys(a)[0].localeCompare(Object.keys(b)[0])))
       //console.log(arr)
       setAllInfo([...arr])
     })
 
-  function HomeScreen1() {
-    return (
-      <View style={styles.card}>
-        <SaleList infos={allInfo} />
-      </View>
-    );
-  }
-    
-  function SettingsScreen() {
-    return (
-      <View style={styles.card}>
-        <SaleList infos={allInfo} />
-      </View>
-    );
-  }
-  
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer style={{flex:3}}  >
         <Tab.Navigator style={{flex:4}} >
-          <Tab.Screen name="Home" component={HomeScreen1} />
-          <Tab.Screen name="Settings" component={SettingsScreen} />
+          <Tab.Screen name="Home" component={Contents} value={allInfo} />
+          <Tab.Screen name="Settings" component={Contents} value={allInfo} />
         </Tab.Navigator>
       </NavigationContainer>
     </SafeAreaView>
@@ -75,4 +56,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Contents;
+export default ContentsTab;
