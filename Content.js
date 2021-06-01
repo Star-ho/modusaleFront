@@ -1,18 +1,31 @@
 import * as React from 'react';
 import { Text, View,SafeAreaView, StyleSheet, Button } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import SaleList from './saleList';
 
 
 
-function Contents({allInfo}) {
-  const [viewInfo, setViewInfo] = React.useState([]);
-
+function Contents({allInfo,filter}) {
     return (
       <View style={styles.card}>
-        <SaleList infos={allInfo} />
+        <SaleList infos={allInfo} filter={filter} />
       </View>
     );
   } 
+
+  const styles = StyleSheet.create({
+  container: {
+    flex:13,
+  },
+  card: {
+    flex:13,
+  },
+  menuScrollBar:{
+  },
+  menuBarTab:{
+    width: 130,
+    borderWidth: 0.5,
+  },
+
+});
 export default Contents;
+

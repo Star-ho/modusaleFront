@@ -1,42 +1,70 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
-const SaleListItem = ({brand, name, discountAmount}) => {
+const SaleListItem = ({val,filter}) => {
+  if( (val[1]=="yogiyo"&&!filter.yogiyo) || (val[1]=='baemin'&&!filter.baemin) || (val[1]=='coupang'&&!filter.coupang) ){
+    return <View></View>
+  }
+  
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
-        <View style={styles.circle} />
-      </TouchableOpacity>
-      <Text style={[styles.text, styles.strikeText]}>{brand} {name} {discountAmount}</Text>
+      <HaveImage ImageName={val[2]}/>
+      <View style={{flex:1, marginLeft:10}}>
+      <Text style={styles.sourceText}>{ val[1] }</Text>
+      <Text style={styles.brandText}>{ val[0] }</Text>
+      <Text style={styles.priceText}>{ "최대 " +val[4]+"원 할인" }</Text>
+      </View>
     </View>
   );
 };
 
+const HaveImage = ({ImageName}) => { 
+  if(ImageName!='없음'){
+    return <Image 
+    style={styles.logo}
+    source={{
+      uri: `http://192.168.1.171:3000/${ImageName}`,
+    }}
+    />
+  }
+  return <Image 
+    style={styles.logo}
+    source={{
+      uri: "http://192.168.1.171:3000/yunansikdang.png",
+    }}
+    />
+}
+//val 값 [ 브랜드명, 출처(요기요, 배민), 이미지, 분류, 할인금액 ] 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderBottomColor: '#bbb',
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    padding:10
   },
-  text: {
+  sourceText: {
+    flex: 2,
+    fontWeight: '500',
+    fontSize: 10,
+  },
+  brandText: {
     flex: 5,
     fontWeight: '500',
     fontSize: 18,
-    marginVertical: 20,
-    width: 100,
   },
-  circle: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    borderColor: 'blue',
-    borderWidth: 2,
-    marginRight: 20,
-    marginLeft: 20,
+  priceText: {
+    flex: 2,
+    fontWeight: '500',
+    fontSize: 10,
   },
+  logo: {
+    width: 70,
+    height: 70,
+  },
+
 });
 
 export default SaleListItem;
