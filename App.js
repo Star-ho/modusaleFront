@@ -1,8 +1,8 @@
 //npx babel-node --presets @babel/env index.js
 //npm run android
 
-import React,{useState} from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity, CheckBox} from 'react-native';
+import * as React from 'react';
+import { View, Text, Button, StyleSheet, TouchableOpacity, CheckBox, SafeAreaView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MenuDrawer from 'react-native-side-drawer'
 import ContentsTab from './ContentsTab.js'
@@ -10,14 +10,14 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import DrawerIcon from "./DrawerIconSet.js"
 
 export default function App (){
-  const [yogiyoSelected, setyogiyoSelection] = useState(true);
-  const [baeminSelected, setbaeminSelection] = useState(true);
-  const [coupangSelected, setcoupangSelection] = useState(true);
-  const [drawerState, setdrawerState] = useState(false);
+  const [yogiyoSelected, setyogiyoSelection] = React.useState(true);
+  const [baeminSelected, setbaeminSelection] = React.useState(true);
+  const [coupangSelected, setcoupangSelection] = React.useState(true);
+  const [drawerState, setdrawerState] = React.useState(false);
   const filter={yogiyo:yogiyoSelected,baemin:baeminSelected,coupang:coupangSelected}
-  const [open, setOpen] = useState(false);
-  const [sortValue, setsortValue] = useState(1);
-  const [items, setItems] = useState([
+  const [open, setOpen] = React.useState(false);
+  const [sortValue, setsortValue] = React.useState(1);
+  const [items, setItems] = React.useState([
     {
       value: '1',
       icon: () => <DrawerIcon val={1} />
@@ -37,7 +37,7 @@ export default function App (){
   ]);
 
   const toggleOpen = () => {
-    setdrawerState(!drawerState);
+    setdrawerState(true);
   };
 
   const drawerClose = () => {
@@ -47,46 +47,44 @@ export default function App (){
   const drawerContent = () => {
     return (  
         <View style={{flex:1,backgroundColor:'white'}}>
-          <View style={styles.animatedBox}>
-            <TouchableOpacity onPress={toggleOpen} style={{flex:1 }} >
-              <Text>Close</Text>
-            </TouchableOpacity>
-            <View style={{flex:1, flexDirection:'row'}}>
-              <CheckBox
-                value={yogiyoSelected}
-                onValueChange={setyogiyoSelection}
-                style={styles.checkbox}
-              /><Text style={{flex:3, paddingTop:6}} >요기요</Text>
-            </View>
-            <View style={{flex:1, flexDirection:'row'}}>
-              <CheckBox
-                value={baeminSelected}
-                onValueChange={setbaeminSelection}
-                style={styles.checkbox}
-              /><Text style={{flex:3, paddingTop:6 }} >배달의민족</Text>
-            </View>
-            <View style={{flex:1, flexDirection:'row'}}>
-              <CheckBox
-                value={coupangSelected}
-                onValueChange={setcoupangSelection}
-                style={styles.checkbox}
-              /><Text style={{flex:3, paddingTop:6 }} >쿠팡잇츠</Text>
-            </View>
-            <View style={{flex:15}}></View>
-            </View>
+          <TouchableOpacity onPress={drawerClose} style={{flex:1 }} >
+            <Text>Close</Text>
+          </TouchableOpacity>
+          <View style={{flex:1, flexDirection:'row'}}>
+            <CheckBox
+              value={yogiyoSelected}
+              onValueChange={setyogiyoSelection}
+              style={styles.checkbox}
+            /><Text style={{flex:3, paddingTop:6}} >요기요</Text>
+          </View>
+          <View style={{flex:1, flexDirection:'row'}}>
+            <CheckBox
+              value={baeminSelected}
+              onValueChange={setbaeminSelection}
+              style={styles.checkbox}
+            /><Text style={{flex:3, paddingTop:6 }} >배달의민족</Text>
+          </View>
+          <View style={{flex:1, flexDirection:'row'}}>
+            <CheckBox
+              value={coupangSelected}
+              onValueChange={setcoupangSelection}
+              style={styles.checkbox}
+            /><Text style={{flex:3, paddingTop:6 }} >쿠팡잇츠</Text>
+          </View>
+          <View style={{flex:13}}></View>
         </View>
       
     );
   };
     return (
-      <View style={{flex:1, marginTop:30}}>
+      <SafeAreaView style={{flex:1, marginTop:30}}>
         <MenuDrawer
           open={drawerState} 
           drawerContent={drawerContent()}
           drawerPercentage={45}
           animationTime={250}
           overlay={true}
-          opacity={0.4}
+          opacity={0}
         >
           <View style={{ flex:1, flexDirection: 'row'}}>
             <Ionicons name="menu-outline" size={50} onPress={toggleOpen}/>
@@ -110,9 +108,9 @@ export default function App (){
               }}
             />  
           </View>
-          <ContentsTab filter={filter} sortValue={sortValue}/>
+          {/* <ContentsTab filter={filter} sortValue={sortValue} /> */}
         </MenuDrawer>
-      </View>
+      </SafeAreaView>
     );
 }
 
@@ -123,12 +121,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 30,
     zIndex: 0
-  },
-  animatedBox: {
-    flex: 1,
-    padding: 10,
-    borderColor:'#000', 
-    backgroundColor: "#1234",
   },
   body: {
     flex: 1,

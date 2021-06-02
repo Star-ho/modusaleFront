@@ -16,34 +16,36 @@ function ContentsTab ({filter, sortValue}){
       .then(res=>{
         let arr=[]
         for(let i of Object.entries(res)){
-          
           arr.push( [ [ i[0] ], i[1][0], i[1][1], i[1][2], i[1][3] ]  )
         }
-
         arr.sort((a,b)=>( b[4]-a[4] ) )
-
         //console.log(arr)
-
         setAllInfo([...arr])
         category=[...new Set( arr.map( v=> v[3] ) )]
       })
     etc = allInfo.filter(v=>v[3]!="치킨"&&v[3]!="피자");
-    }else{
-      // if(sortValue==1){
-      //   setAllInfo( allInfo.slice().sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) ) )
-      // }else if(sortValue==2){
-      //   setAllInfo( allInfo.slice().sort((a,b)=>( `${b[0]}`.localeCompare(`${a[0]}`)) ) )
-      // }else if(sortValue==3){
-      //   setAllInfo( allInfo.slice().sort((a,b)=>( a[4]-b[4] ) ) )
-      // }else{
-      //   setAllInfo( allInfo.slice().sort((a,b)=>( b[4]-a[4] ) ) )
-      // }
     }
-  })
+  },[])
+
+  // if( (val[1]=="yogiyo"&&!filter.yogiyo) || (val[1]=='baemin'&&!filter.baemin) || (val[1]=='coupang'&&!filter.coupang) ){
+  //   return <View></View>
+  // }
+  
+  React.useEffect(()=>{
+    if(sortValue==1){
+      setAllInfo( allInfo.slice().sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) ) )
+    }else if(sortValue==2){
+      setAllInfo( allInfo.slice().sort((a,b)=>( `${b[0]}`.localeCompare(`${a[0]}`)) ) )
+    }else if(sortValue==3){
+      setAllInfo( allInfo.slice().sort((a,b)=>( a[4]-b[4] ) ) )
+    }else{
+      setAllInfo( allInfo.slice().sort((a,b)=>( b[4]-a[4] ) ) )
+    }
+  },[sortValue])
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <NavigationContainer style={{flex:3}}  >
         <Tab.Navigator style={{flex:4}} >
           <Tab.Screen 
@@ -63,7 +65,7 @@ function ContentsTab ({filter, sortValue}){
         </Tab.Navigator>
 
       </NavigationContainer>
-    </SafeAreaView>
+    </View>
   );
 }
 

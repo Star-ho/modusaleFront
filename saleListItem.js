@@ -1,10 +1,8 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
-const SaleListItem = ({val,filter}) => {
-  if( (val[1]=="yogiyo"&&!filter.yogiyo) || (val[1]=='baemin'&&!filter.baemin) || (val[1]=='coupang'&&!filter.coupang) ){
-    return <View></View>
-  }
+const SaleListItem = ({val}) => {
+
   
   return (
     <View style={styles.container}>
