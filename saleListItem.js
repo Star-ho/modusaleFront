@@ -2,8 +2,6 @@ import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 const SaleListItem = ({val}) => {
-
-  
   return (
     <View style={styles.container}>
       <HaveImage ImageName={val[2]}/>
@@ -28,7 +26,7 @@ const HaveImage = ({ImageName}) => {
   return <Image 
     style={styles.logo}
     source={{
-      uri: "http://192.168.1.171:3000/yunansikdang.png",
+      uri: "http://192.168.1.171:3000/undefiend.png",
     }}
     />
 }

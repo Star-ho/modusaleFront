@@ -3,12 +3,12 @@ import {StyleSheet, ScrollView, Text, View} from 'react-native';
 import SaleListItem from './saleListItem';
 
 
-const SaleList = ({infos,filter}) => {
+const SaleList = ({ViewInfo}) => {
   return (
     <View style={{flex:1}}>
       <ScrollView contentContainerStyle={styles.listContainer}>
-        {infos.map( (info,index) => (
-          <SaleListItem key={index} val={info} filter={filter} />
+        {ViewInfo.map( (info,index) => (
+          <SaleListItem key={index} val={info} />
           ))}
         <View style={{height:100}}></View>
       </ScrollView>
