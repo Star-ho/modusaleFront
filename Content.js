@@ -1,13 +1,18 @@
 import * as React from 'react';
-import { Text, View,SafeAreaView, StyleSheet, Button } from 'react-native';
+import { Text, View, ScrollView, SafeAreaView, StyleSheet, Button } from 'react-native';
 import SaleList from './saleList';
+import SaleListItem from './saleListItem';
 
 
-
-function Contents({ViewInfo,filter}) {
+function Contents({ViewInfo,cate}) {
     return (
       <View style={styles.card}>
-        <SaleList ViewInfo={ViewInfo} filter={filter} />
+        <ScrollView contentContainerStyle={styles.listContainer}>
+          {ViewInfo.map( (info,index) => (
+            <SaleListItem key={index} val={info} cate={cate} />
+            ))}
+          <View style={{height:100}}></View>
+        </ScrollView>
       </View>
     );
   } 
@@ -24,6 +29,9 @@ function Contents({ViewInfo,filter}) {
     menuBarTab:{
       width: 130,
       borderWidth: 0.5,
+    },
+    listContainer: {
+      alignItems: 'center',
     },
 
 });

@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { Text, View,SafeAreaView, StyleSheet, Button } from 'react-native';
+import {  Modal, Pressable, Text, View, StyleSheet, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Contents from "./Content.js"
+import PopupModal from "./PopupModal.js"
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -10,10 +11,12 @@ function ContentsTab ({filter, sortValue}){
   const [allInfo, setAllInfo] = React.useState([]);
   const [ViewInfo, setViewInfo] = React.useState([]);
   let category=["치킨","피자","한식","양식","기타"]
-  let error=false
+  const [error,setError]=React.useState(false);
   
+  const [modalVisible, setModalVisible] = React.useState(true);
+
   React.useEffect(()=>{
-      fetch("http://192.168.1.171:3000?ver=0.91").then(res=>res.json())
+      fetch("http://192.168.1.171:3000?ver=0.90").then(res=>res.json())
       .then(res=>{
         if(!res.error){
         let arr=[]
@@ -26,11 +29,11 @@ function ContentsTab ({filter, sortValue}){
         setViewInfo([...arr])
         category=[...new Set( arr.map( v=> v[3] ) )]
         }else{
-          error=true 
+          setError(true)
         }
       })
-    
   },[])
+
   React.useEffect(()=>{
     let temp
     if(sortValue==1){
@@ -60,6 +63,38 @@ function ContentsTab ({filter, sortValue}){
   },[filter.yogiyoSelected,filter.baeminSelected,filter.coupangSelected])
 
 
+  if(error){
+    return (
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>업데이트가 필요합니다!</Text>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.textStyle}>업데이트 하기</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+        <Pressable
+          style={[styles.button, styles.buttonOpen]}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.textStyle}>Show Modal</Text>
+        </Pressable>
+    </View>
+    )
+  }
   return (
     <View style={styles.container}>
       <NavigationContainer style={{flex:3}}  >
@@ -73,7 +108,7 @@ function ContentsTab ({filter, sortValue}){
               return <Tab.Screen 
               name={cate}
               key={index}
-              children={ () => <Contents ViewInfo={ViewInfo}  /> }
+              children={ () => <Contents ViewInfo={ViewInfo} cate={cate} /> }
               />
             }
           )}
@@ -89,21 +124,55 @@ const styles = StyleSheet.create({
   container: {
     flex:13,
   },
-  card: {
-    flex:13,
-    backgroundColor: '#abcd',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  menuScrollBar:{
-  },
   menuBarTab:{
     width: 130,
     borderWidth: 0.5,
   },
 
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    fontSize:20,
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    fontSize:30,
+    marginBottom: 15,
+    textAlign: "center"
+  }
 });
 
 export default ContentsTab;

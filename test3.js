@@ -1,15 +1,15 @@
 //val 값 [ 브랜드명, 출처(요기요, 배민), 이미지, 분류, 할인금액 ] 
 
 import React from 'react';
-import {SafeAreaView,View, Text, StyleSheet, Modal, Pressable, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Modal, Pressable, Image, TouchableOpacity} from 'react-native';
 
 const SaleListItem = ({val,cate}) => {
   const [modalVisible, setModalVisible] = React.useState(false);
 
   if(val[3]==cate||!cate){
     return (
-        <View style={{flex:1,flexDirection:'row'}}>
-          <Modal
+      <View style={{flex:1}}>
+        <Modal
           animationType="slide"
           transparent={true}
           visible={modalVisible}
@@ -37,8 +37,7 @@ const SaleListItem = ({val,cate}) => {
             </View>
           </View>
         </Modal>
-
-        <Pressable
+          <Pressable
           onPress={() => setModalVisible(!modalVisible)}
           style={{flex:1}}
           >
@@ -51,9 +50,11 @@ const SaleListItem = ({val,cate}) => {
               </View>
             </View>
         </Pressable>
-
-            </View>
+      </View>
     );
+
+
+
   }else{
     return <View></View>
   }
@@ -81,6 +82,8 @@ const styles = StyleSheet.create({
     borderBottomColor: 'black',
     borderBottomWidth: 1,
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding:10
   },
   sourceText: {

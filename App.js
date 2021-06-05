@@ -2,7 +2,7 @@
 //npm run android
 
 import * as React from 'react';
-import { View, Text, Button, StyleSheet, TouchableOpacity, CheckBox, SafeAreaView} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, CheckBox, SafeAreaView} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MenuDrawer from 'react-native-side-drawer'
 import ContentsTab from './ContentsTab.js'
@@ -81,7 +81,7 @@ export default function Example() {
  
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <MenuDrawer 
         open={drawerState} 
         drawerContent={drawerContent()}
@@ -117,7 +117,7 @@ export default function Example() {
           <ContentsTab filter={{yogiyoSelected,baeminSelected,coupangSelected}} sortValue={sortValue} />
         </View>
       </MenuDrawer>
-    </View>
+    </SafeAreaView>
   );
 }
  
@@ -127,9 +127,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 30,
+    marginTop: 40,
     zIndex: 0,
-    marginTop:30
   },
   animatedBox: {
     flex: 1,
