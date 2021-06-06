@@ -2,15 +2,23 @@
 //npm run android
 
 import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, CheckBox, SafeAreaView} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, CheckBox, SafeAreaView, Card} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MenuDrawer from 'react-native-side-drawer'
 import ContentsTab from './ContentsTab.js'
 import DropDownPicker from 'react-native-dropdown-picker';
 import DrawerIcon from "./DrawerIconSet.js"
 import { useEffect } from 'react';
+import {
+  AdMobBanner,
+  AdMobInterstitial,
+  PublisherBanner,
+  AdMobRewarded,
+  setTestDeviceIDAsync,
+} from 'expo-ads-admob';
 
-export default function Example() {
+
+export default function App() {
   const [yogiyoSelected, setyogiyoSelection] = React.useState(true);
   const [baeminSelected, setbaeminSelection] = React.useState(true);
   const [coupangSelected, setcoupangSelection] = React.useState(true);
@@ -37,7 +45,20 @@ export default function Example() {
   ]);
 
   useEffect(()=>{
-    filter={yogiyo:yogiyoSelected,baemin:baeminSelected,   coupang:coupangSelected}
+    setTestDeviceIDAsync('testdevice');
+  })
+
+  // useEffect(()=>{
+  //   (async ()=>{
+  //     // Display an interstitial
+  //     await AdMobInterstitial.setAdUnitID('ca-app-pub-5926200986625193/9265914417'); // Test ID, Replace with your-admob-unit-id
+  //     await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true});
+  //     await AdMobInterstitial.showAdAsync();
+  //   })();
+  // },[])
+
+  useEffect(()=>{
+    filter={yogiyo:yogiyoSelected,baemin:baeminSelected,coupang:coupangSelected}
   },[baeminSelected,yogiyoSelected,coupangSelected])
 
   const toggleOpen = () => {
@@ -47,12 +68,19 @@ export default function Example() {
     setdrawerState(false);
   };
 
+
   const drawerContent = () => {
     return (
         <View style={styles.animatedBox} >
           <TouchableOpacity onPress={()=>toggleClose()} style={{flex:1 }} >
             <Text>Close</Text>
           </TouchableOpacity>
+
+            <AdMobBanner
+              bannerSize="smartBannerPortrait"
+              adUnitID="ca-app-pub-5926200986625193~3275221130" // Test ID, Replace with your-admob-unit-id
+              servePersonalizedAds // true or false
+            />
           <View style={{flex:1, flexDirection:'row'}}>
             <CheckBox
               value={yogiyoSelected}
@@ -79,7 +107,6 @@ export default function Example() {
     );
   };
  
-
   return (
     <SafeAreaView style={styles.container}>
       <MenuDrawer 
@@ -142,4 +169,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F04812'
   }
 })
+
+
 

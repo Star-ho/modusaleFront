@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {  Modal, Pressable, Text, View, StyleSheet, Button } from 'react-native';
+import {  Modal, Pressable, Text, View, StyleSheet, Linking } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Contents from "./Content.js"
@@ -62,6 +62,19 @@ function ContentsTab ({filter, sortValue}){
     setViewInfo(temp)
   },[filter.yogiyoSelected,filter.baeminSelected,filter.coupangSelected])
 
+  const ToPlayStore=()=>{
+    const redirectURL = "market://details?id=com.fineapp.yogiyo"
+    const handlePress = React.useCallback(async () => {
+        await Linking.openURL(redirectURL);
+    }, [redirectURL]);
+    return ( 
+    <Pressable
+      style={[styles.button, styles.buttonClose,{marginRight:10}]}
+      onPress={() => handlePress()}
+    >
+      <Text style={styles.textStyle}>업데이트 하기</Text>
+    </Pressable>)
+  }
 
   if(error){
     return (
@@ -77,12 +90,7 @@ function ContentsTab ({filter, sortValue}){
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>업데이트가 필요합니다!</Text>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>업데이트 하기</Text>
-              </Pressable>
+              <ToPlayStore/>
             </View>
           </View>
         </Modal>
