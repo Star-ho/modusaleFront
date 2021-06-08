@@ -3,7 +3,6 @@ import {  Modal, Pressable, Text, View, StyleSheet, Linking } from 'react-native
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Contents from "./Content.js"
-import PopupModal from "./PopupModal.js"
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -58,6 +57,9 @@ function ContentsTab ({filter, sortValue}){
     }
     if(!filter.coupangSelected){
       temp=temp.filter(v=>v[1]!='coupang')
+    }
+    if(!filter.wemefSelected){
+      temp=temp.filter(v=>v[1]!='wemef')
     }
     setViewInfo(temp)
   },[filter.yogiyoSelected,filter.baeminSelected,filter.coupangSelected])

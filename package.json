@@ -30,7 +30,8 @@
     "react-native-web": "^0.16.3",
     "react-navigation": "^4.4.4",
     "react-navigation-drawer": "^2.7.1",
-    "expo-ads-admob": "~10.0.4"
+    "expo-ads-admob": "~10.0.4",
+    "expo-asset": "~8.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

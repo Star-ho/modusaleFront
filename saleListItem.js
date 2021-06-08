@@ -1,7 +1,11 @@
 //val 값 [ 브랜드명, 출처(요기요, 배민), 이미지, 분류, 할인금액 ] 
 
 import React from 'react';
-import { View, Linking, Text, StyleSheet, Modal, Pressable, Image, Alert } from 'react-native';
+import { View, Linking, Text, StyleSheet, Modal, Pressable, Image } from 'react-native';
+import {
+  AdMobBanner,
+  setTestDeviceIDAsync
+} from "expo-ads-admob";
 
 const SaleListItem = ({val,cate}) => {
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -11,7 +15,9 @@ const SaleListItem = ({val,cate}) => {
   const wemeURL = "cupping://doCommand";
   let resourceApp
   let playStoreLink
-
+  React.useEffect(() => {
+    setTestDeviceIDAsync("testdevice");
+ }, []);
   if(val[1]=='yogiyo'){
     resourceApp='요기요'
   }else if(val[1]=='baemin'){
@@ -19,9 +25,8 @@ const SaleListItem = ({val,cate}) => {
   }else if(val[1]=='coupang'){
     resourceApp='쿠팡잇츠'
   }else if(val[1]=='wemef'){
-    resourceApp='위메프오앱'
+    resourceApp='위메프오'
   }
-
   const LinkingAPP=({url})=>{
     if(url=='yogiyo'){
       redirectURL=yogiyoURL
@@ -46,16 +51,66 @@ const SaleListItem = ({val,cate}) => {
     }, [redirectURL]);
     return ( 
     <Pressable
-      style={[styles.button, styles.buttonClose,{marginRight:10}]}
+      style={[styles.button, styles.buttonClose,{marginRight:10,paddingHorizontal:20}]}
       onPress={() => handlePress()}
     >
       <Text style={styles.textStyle}>이동하기</Text>
     </Pressable>)
   }
+  function BrandName({val}){
+    if(val[1]=='yogiyo'){
+      return (
+        <View style={{flexDirection:'row',flex:1,marginTop:2}} >
+            <Image style={styles.brandlogo} source={require('./assets/yogiyo_logo.png')} />
+            <Text style={styles.sourceText}>  요기요</Text>
+        </View>
+      )
+    }else if(val[1]=='baemin'){
+      return (
+        <View style={{flexDirection:'row',flex:1,marginTop:2}} >
+          <Image style={styles.brandlogo} source={require('./assets/bamin_logo.png')} />
+          <Text style={styles.sourceText}>  배달의민족</Text>
+        </View>
+        )
+    }else if(val[1]=='coupang'){
+      return (
+        <View style={{flexDirection:'row',flex:1,marginTop:2}} >
+          <Image style={styles.brandlogo} source={require('./assets/coupang_logo.png')} />
+          <Text style={styles.sourceText}>  쿠팡잇츠</Text>
+        </View>
+      )
+    }else if(val[1]=='wemef'){
+      return (
+        <View style={{flexDirection:'row',flex:1,marginTop:2}} >
+          <Image style={styles.brandlogo} source={require('./assets/wemef_logo.png')} />
+          <Text style={styles.sourceText}>  위메프오</Text>
+        </View>
+      )
+    }
+  
+  }
+  function ItemName({val}){
+    if(val[1]=='coupang'){
+      return (
+        <View style={{flex:1, flexDirection:'row'}}>
+          <Text>
+            <Text style={styles.brandText}>{ val[0] }</Text>
+            <Text style={styles.addtionalText}>(한정수량)</Text>
+          </Text>
+        </View>
+      )
+    }else{
+      return (
+        <View style={{flex:1}}>
+          <Text style={styles.brandText}>{ val[0] }</Text>
+        </View>
+      )
+    }
 
+  }
   if(val[3]==cate||!cate){
-    return (
-        <View style={{flex:1,flexDirection:'row'}}>
+      return (
+        <View style={{flexDirection:'row',height:90}}>
           <Modal
           animationType="slide"
           transparent={true}
@@ -66,11 +121,18 @@ const SaleListItem = ({val,cate}) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>{resourceApp+"앱으로 이동하시겠습니까?"}</Text>
-              <View style={{flexDirection:'row'}}>
+              <Text style={styles.modalText}>{resourceApp+"앱으로 이동하시겠습니까?"}</Text>          
+
+          <AdMobBanner
+            bannerSize="mediumRectangle"
+            adUnitID="ca-app-pub-5926200986625193/9265914417" 
+            servePersonalizedAds={true}
+            onDidFailToReceiveAdWithError={(e) => console.log(e)}
+            />
+              <View style={{flexDirection:'row',marginTop:10}}>
               <LinkingAPP url={val[1]}/>
               <Pressable
-                style={[styles.button, styles.buttonClose]}
+                style={[styles.button, styles.buttonClose,{paddingHorizontal:30}]}
                 onPress={() => setModalVisible(!modalVisible)}
               >
                 <Text style={styles.textStyle}>취소</Text>
@@ -87,14 +149,16 @@ const SaleListItem = ({val,cate}) => {
             <View style={styles.container}>
               <HaveImage ImageName={val[2]}/>
               <View style={{flex:1, marginLeft:10}}>
-                <Text style={styles.sourceText}>{ resourceApp }</Text>
-                <Text style={styles.brandText}>{ val[0] }</Text>
-                <Text style={styles.priceText}>{ "최대 " +val[4]+"원 할인" }</Text>
+                <View style={{flex:0.5}}>
+                  <BrandName val={val} />
+                </View>
+                <ItemName val={val}/>
+                <View style={{flex:1}}>
+                <Text style={styles.priceText}>{ "최대 " +val[4]+"원 할인" }</Text></View>
               </View>
             </View>
         </Pressable>
-
-            </View>
+      </View>
     );
   }else{
     return <View></View>
@@ -113,7 +177,7 @@ const HaveImage = ({ImageName}) => {
   return <Image 
     style={styles.logo}
     source={{
-      uri: "http://192.168.1.171:3000/undefiend.png",
+      uri: "http://192.168.1.171:3000/undefined.png",
     }}
     />
 }
@@ -125,26 +189,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding:10
   },
-  sourceText: {
-    flex: 2,
-    fontWeight: '500',
-    fontSize: 10,
-  },
   brandText: {
-    flex: 5,
+    flex: 6,
     fontWeight: '500',
-    fontSize: 18,
+    fontSize: 23,
+  },
+  addtionalText: {
+    flex: 5,
+    fontWeight: '300',
+    fontSize: 10,
   },
   priceText: {
     flex: 2,
     fontWeight: '500',
-    fontSize: 10,
+    fontSize: 12,
   },
   logo: {
     width: 70,
     height: 70,
   },
-
+  brandlogo:{
+    width: 10,
+    height: 10,
+    marginTop:2
+  },
+  sourceText: {
+    flex: 2,
+    fontWeight: '500',
+    fontSize: 10,
+  },
 
   centeredView: {
     flex: 1,
@@ -185,7 +258,9 @@ const styles = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
+    fontWeight: '500',
+    fontSize: 20,
   }
 });
 

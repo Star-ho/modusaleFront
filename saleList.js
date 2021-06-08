@@ -1,17 +1,30 @@
 import React from 'react';
 import {StyleSheet, ScrollView, Text, View} from 'react-native';
 import SaleListItem from './saleListItem';
+import {
+  AdMobBanner,
+  setTestDeviceIDAsync
+} from "expo-ads-admob";
 
-
-const SaleList = ({ViewInfo}) => {
+const SaleList = ({val,cate,index}) => {
+  if(index==0){
+    return (
+      <View>
+        <SaleListItem key={index} index={index} val={val} cate={cate} />
+        <View style={styles.adView}>
+        <AdMobBanner
+            bannerSize="smartBanner"
+            adUnitID="ca-app-pub-5926200986625193/9265914417" 
+            onDidFailToReceiveAdWithError={(e) => console.log(e)}
+            servePersonalizedAds={true}
+            />
+          </View>
+      </View>
+    );  
+  }
   return (
-    <View style={{flex:1}}>
-      <ScrollView contentContainerStyle={styles.listContainer}>
-        {ViewInfo.map( (info,index) => (
-          <SaleListItem key={index} val={info} />
-          ))}
-        <View style={{height:100}}></View>
-      </ScrollView>
+    <View>
+      <SaleListItem key={index} index={index} val={val} cate={cate} />
     </View>
   );
 };
@@ -20,6 +33,10 @@ const styles = StyleSheet.create({
   listContainer: {
     alignItems: 'center',
   },
+  adView:{
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+  }
 });
 
 export default SaleList;

@@ -11,17 +11,16 @@ import DrawerIcon from "./DrawerIconSet.js"
 import { useEffect } from 'react';
 import {
   AdMobBanner,
-  AdMobInterstitial,
-  PublisherBanner,
-  AdMobRewarded,
-  setTestDeviceIDAsync,
-} from 'expo-ads-admob';
+  setTestDeviceIDAsync
+} from "expo-ads-admob";
 
 
 export default function App() {
   const [yogiyoSelected, setyogiyoSelection] = React.useState(true);
   const [baeminSelected, setbaeminSelection] = React.useState(true);
   const [coupangSelected, setcoupangSelection] = React.useState(true);
+  const [wemefSelected, setwemefSelection] = React.useState(true);
+
   const [drawerState, setdrawerState] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [sortValue, setsortValue] = React.useState(1);
@@ -44,22 +43,13 @@ export default function App() {
     }
   ]);
 
-  useEffect(()=>{
-    setTestDeviceIDAsync('testdevice');
-  })
-
-  // useEffect(()=>{
-  //   (async ()=>{
-  //     // Display an interstitial
-  //     await AdMobInterstitial.setAdUnitID('ca-app-pub-5926200986625193/9265914417'); // Test ID, Replace with your-admob-unit-id
-  //     await AdMobInterstitial.requestAdAsync({ servePersonalizedAds: true});
-  //     await AdMobInterstitial.showAdAsync();
-  //   })();
-  // },[])
+    React.useEffect(() => {
+       setTestDeviceIDAsync("testdevice");
+    }, []);
 
   useEffect(()=>{
-    filter={yogiyo:yogiyoSelected,baemin:baeminSelected,coupang:coupangSelected}
-  },[baeminSelected,yogiyoSelected,coupangSelected])
+    filter={yogiyo:yogiyoSelected,baemin:baeminSelected,coupang:coupangSelected,wemef:wemefSelected}
+  },[baeminSelected,yogiyoSelected,coupangSelected,wemefSelected])
 
   const toggleOpen = () => {
     setdrawerState(true);
@@ -75,12 +65,6 @@ export default function App() {
           <TouchableOpacity onPress={()=>toggleClose()} style={{flex:1 }} >
             <Text>Close</Text>
           </TouchableOpacity>
-
-            <AdMobBanner
-              bannerSize="smartBannerPortrait"
-              adUnitID="ca-app-pub-5926200986625193~3275221130" // Test ID, Replace with your-admob-unit-id
-              servePersonalizedAds // true or false
-            />
           <View style={{flex:1, flexDirection:'row'}}>
             <CheckBox
               value={yogiyoSelected}
@@ -108,7 +92,8 @@ export default function App() {
   };
  
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>          
+
       <MenuDrawer 
         open={drawerState} 
         drawerContent={drawerContent()}
@@ -118,6 +103,7 @@ export default function App() {
           opacity={1}
       >
            <View style={{ flex:1, flexDirection: 'row'}}>
+
              <Ionicons name="menu-outline" size={50} onPress={()=>toggleOpen()}/>
              <View style={{flex: 5, height: 50, }}>
              </View>
@@ -128,7 +114,11 @@ export default function App() {
                setOpen={setOpen}
                setValue={setsortValue}
                setItems={setItems}
-               containerStyle={{flex:2}}
+               containerStyle={{
+                 height:30,
+                 width:100,
+                 paddingTop:2
+                }}
                placeholder="정렬"
                arrowIconStyle={{
                  width: 10,
