@@ -15,9 +15,10 @@ const SaleListItem = ({val,cate}) => {
   const wemeURL = "cupping://doCommand";
   let resourceApp
   let playStoreLink
-  React.useEffect(() => {
-    setTestDeviceIDAsync("testdevice");
- }, []);
+  //테스트 앱 test app
+//   React.useEffect(() => {
+//     setTestDeviceIDAsync("testdevice");
+//  }, []);
   if(val[1]=='yogiyo'){
     resourceApp='요기요'
   }else if(val[1]=='baemin'){

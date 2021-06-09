@@ -3,7 +3,6 @@ import { Text, View, ScrollView, SafeAreaView, StyleSheet, Button } from 'react-
 import SaleListItem from './saleListItem';
 import {
   AdMobBanner,
-  setTestDeviceIDAsync
 } from "expo-ads-admob";
 
 function Contents({ViewInfo,cate}) {

@@ -42,10 +42,10 @@ export default function App() {
       icon: () => <DrawerIcon val={4} />
     }
   ]);
-
-    React.useEffect(() => {
-       setTestDeviceIDAsync("testdevice");
-    }, []);
+  //테스트기기설정
+    // React.useEffect(() => {
+    //    setTestDeviceIDAsync("testdevice");
+    // }, []);
 
   useEffect(()=>{
     filter={yogiyo:yogiyoSelected,baemin:baeminSelected,coupang:coupangSelected,wemef:wemefSelected}

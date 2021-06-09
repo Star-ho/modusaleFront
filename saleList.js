@@ -3,7 +3,6 @@ import {StyleSheet, ScrollView, Text, View} from 'react-native';
 import SaleListItem from './saleListItem';
 import {
   AdMobBanner,
-  setTestDeviceIDAsync
 } from "expo-ads-admob";
 
 const SaleList = ({val,cate,index}) => {
