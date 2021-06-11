@@ -20,7 +20,7 @@ function ContentsTab ({filter, sortValue}){
         if(!res.error){
         let arr=[]
         for(let i of Object.entries(res)){
-          arr.push( [ [ i[0] ], i[1][0], i[1][1], i[1][2], i[1][3] ]  )
+          arr.push( [ i[0], i[1][0], i[1][1], i[1][2], i[1][3], i[1][4] ]  )
         }
         arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
         //console.log(arr)

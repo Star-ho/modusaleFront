@@ -15,10 +15,12 @@ const SaleListItem = ({val,cate}) => {
   const wemeURL = "cupping://doCommand";
   let resourceApp
   let playStoreLink
+  const uriScheme=val[5]
   //테스트 앱 test app
 //   React.useEffect(() => {
 //     setTestDeviceIDAsync("testdevice");
 //  }, []);
+  
   if(val[1]=='yogiyo'){
     resourceApp='요기요'
   }else if(val[1]=='baemin'){
@@ -28,25 +30,32 @@ const SaleListItem = ({val,cate}) => {
   }else if(val[1]=='wemef'){
     resourceApp='위메프오'
   }
-  const LinkingAPP=({url})=>{
-    if(url=='yogiyo'){
+  const LinkingAPP=({source,url})=>{
+    console.log(uriScheme)
+    console.log(val)
+    if(source=='yogiyo'){
       redirectURL=yogiyoURL
       playStoreLink="market://details?id=com.fineapp.yogiyo"
-    }else if(url=='baemin'){
+    }else if(source=='baemin'){
       redirectURL=baeminURL
       playStoreLink="market://details?id=com.sampleapp"
-    }else if(url=='coupang'){
+    }else if(source=='coupang'){
       redirectURL=coupangURL
       playStoreLink="market://details?id=com.coupang.mobile.eats"
-    }else if(url=='wemef'){
+    }else if(source=='wemef'){
       redirectURL=wemeURL
       playStoreLink="market://details?id=com.wemakeprice.cupping"
     }
+
     const handlePress = React.useCallback(async () => {
       try{
-        await Linking.openURL(redirectURL);
+        await Linking.openURL(uriScheme);
       }catch{
-        await Linking.openURL(playStoreLink);
+        try{
+          await Linking.openURL(redirectURL);
+        }catch{
+          await Linking.openURL(playStoreLink);
+        }
       }
 
     }, [redirectURL]);
@@ -131,7 +140,7 @@ const SaleListItem = ({val,cate}) => {
             onDidFailToReceiveAdWithError={(e) => console.log(e)}
             />
               <View style={{flexDirection:'row',marginTop:10}}>
-              <LinkingAPP url={val[1]}/>
+              <LinkingAPP source={val[1]} url={val[5]} />
               <Pressable
                 style={[styles.button, styles.buttonClose,{paddingHorizontal:30}]}
                 onPress={() => setModalVisible(!modalVisible)}
