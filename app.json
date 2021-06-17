@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "salemoa",
+    "name": "할인모아",
     "slug": "salemoa",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -20,11 +20,13 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 1,
+      "package": "iof.processTA",
+      "permissions":[],
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "ad.sgsdc",
       "config": {
         "googleMobileAdsAppId":"ca-app-pub-5926200986625193~3275221130"
       }

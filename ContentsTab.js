@@ -15,7 +15,7 @@ function ContentsTab ({filter, sortValue}){
   const [modalVisible, setModalVisible] = React.useState(true);
 
   React.useEffect(()=>{
-      fetch("http://192.168.1.171:3000?ver=0.90").then(res=>res.json())
+      fetch("http://ec2-15-165-75-172.ap-northeast-2.compute.amazonaws.com?ver=0.90").then(res=>res.json())
       .then(res=>{
         if(!res.error){
         let arr=[]
