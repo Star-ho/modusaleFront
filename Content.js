@@ -1,18 +1,26 @@
 import * as React from 'react';
-import { Text, View, ScrollView, SafeAreaView, StyleSheet, Button } from 'react-native';
+import { Text, View, ScrollView, SafeAreaView, StyleSheet, Button, RefreshControl } from 'react-native';
 import SaleListItem from './saleListItem';
 import {
   AdMobBanner,
 } from "expo-ads-admob";
 
-function Contents({ViewInfo,cate}) {
+function Contents({ViewInfo,cate,refreshing, onRefresh}) {
+  
     return (
-      <ScrollView style={{backgroundColor:"#fff"}}>
+      <ScrollView 
+        style={{backgroundColor:"#fff"}}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />}
+        >
         <View style={styles.card}>
           <View style={styles.adView}>
             <AdMobBanner
                 bannerSize="smartBanner"
-                adUnitID="ca-app-pub-5926200986625193/9265914417" 
+                adUnitID="ca-app-pub-5926200986625193/7250011193" 
                 servePersonalizedAds={true}
                 onDidFailToReceiveAdWithError={(e) => console.log(e)}
                 />

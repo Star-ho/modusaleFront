@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "할인모아",
+    "name": "할인 모아",
     "slug": "salemoa",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -28,7 +28,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "config": {
-        "googleMobileAdsAppId":"ca-app-pub-5926200986625193~3275221130"
+        "googleMobileAdsAppId":"ca-app-pub-5926200986625193~8368679418"
       }
     },
     "web": {

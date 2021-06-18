@@ -1,21 +1,47 @@
 import * as React from 'react';
-import {  Modal, Pressable, Text, View, StyleSheet, Linking } from 'react-native';
+import {  Modal, Pressable, Text, View, StyleSheet, Linking, AppState } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Contents from "./Content.js"
 
 const Tab = createMaterialTopTabNavigator();
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 function ContentsTab ({filter, sortValue}){ 
+  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshData, setrefreshData]=React.useState(true);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    fetch("https://sailmoa.com/?ver=0.90").then(res=>res.json())
+    .then(res=>{
+      if(!res.error){
+      let arr=[]
+      for(let i of Object.entries(res)){
+        arr.push( [ i[0], i[1][0], i[1][1], i[1][2], i[1][3], i[1][4] ]  )
+      }
+      arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
+      //console.log(arr)
+      setAllInfo([...arr])
+      setViewInfo([...arr])
+      category=[...new Set( arr.map( v=> v[3] ) )]
+      }else{
+        setError(true)
+      }
+    })
+    setRefreshing(false)
+  }, []);
   const [allInfo, setAllInfo] = React.useState([]);
   const [ViewInfo, setViewInfo] = React.useState([]);
   let category=["치킨","피자","한식","양식","기타"]
   const [error,setError]=React.useState(false);
   
   const [modalVisible, setModalVisible] = React.useState(true);
+  
 
   React.useEffect(()=>{
-      fetch("http://ec2-15-165-75-172.ap-northeast-2.compute.amazonaws.com?ver=0.90").then(res=>res.json())
+      fetch("https://sailmoa.com/?ver=0.90").then(res=>res.json())
       .then(res=>{
         if(!res.error){
         let arr=[]
@@ -31,7 +57,7 @@ function ContentsTab ({filter, sortValue}){
           setError(true)
         }
       })
-  },[])
+  },[refreshData])
 
   React.useEffect(()=>{
     let temp
@@ -111,14 +137,15 @@ function ContentsTab ({filter, sortValue}){
         <Tab.Navigator style={{flex:4}} >
           <Tab.Screen 
             name="전체" 
-            children={ () => <Contents ViewInfo={ViewInfo}  /> }
+            children={ () => <Contents ViewInfo={ViewInfo} refreshing={refreshing} onRefresh={onRefresh} /> }
           />
           {category.map( (cate,index) => {
               let data = allInfo.filter(v=>v[3]==cate);
               return <Tab.Screen 
               name={cate}
               key={index}
-              children={ () => <Contents ViewInfo={ViewInfo} cate={cate} /> }
+              children={ () => <Contents ViewInfo={ViewInfo} cate={cate}   refreshing={refreshing} onRefresh={onRefresh}
+              /> }
               />
             }
           )}

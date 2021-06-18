@@ -2,7 +2,7 @@
 //npm run android
 
 import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, CheckBox, SafeAreaView, Card} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert,CheckBox, SafeAreaView, BackHandler, Modal,Pressable} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MenuDrawer from 'react-native-side-drawer'
 import ContentsTab from './ContentsTab.js'
@@ -11,11 +11,12 @@ import DrawerIcon from "./DrawerIconSet.js"
 import { useEffect } from 'react';
 import {
   AdMobBanner,
-  setTestDeviceIDAsync
+  //setTestDeviceIDAsync
 } from "expo-ads-admob";
 
 
 export default function App() {
+ 
   const [yogiyoSelected, setyogiyoSelection] = React.useState(true);
   const [baeminSelected, setbaeminSelection] = React.useState(true);
   const [coupangSelected, setcoupangSelection] = React.useState(true);
@@ -24,6 +25,7 @@ export default function App() {
   const [drawerState, setdrawerState] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const [sortValue, setsortValue] = React.useState(1);
+  const [modalVisible,setModalVisible]=React.useState(false);
   const [items, setItems] = React.useState([
     {
       value: '1',
@@ -58,7 +60,23 @@ export default function App() {
     setdrawerState(false);
   };
 
+  //앱 종료
+  useEffect(() => {
+    const backAction = () => {
+      setModalVisible(true)
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  }, []);
 
+  const closeApp=()=>{
+      BackHandler.exitApp()
+      setModalVisible(!modalVisible)
+  }
   const drawerContent = () => {
     return (
         <View style={styles.animatedBox} >
@@ -93,6 +111,42 @@ export default function App() {
  
   return (
     <SafeAreaView style={styles.container}>          
+
+    <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>{"앱을 종료하시겠습니까"}</Text>          
+
+        <AdMobBanner
+          bannerSize="mediumRectangle"
+          adUnitID="ca-app-pub-5926200986625193/7250011193" 
+          servePersonalizedAds={true}
+          onDidFailToReceiveAdWithError={(e) => console.log(e)}
+          />
+            <View style={{flexDirection:'row',marginTop:10}}>
+            <Pressable
+              style={[styles.button, styles.buttonClose,{paddingHorizontal:30, marginRight:20}]}
+              onPress={() => closeApp() }
+            >
+              <Text style={styles.textStyle}>종료</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.buttonClose,{paddingHorizontal:30}]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>취소</Text>
+            </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       <MenuDrawer 
         open={drawerState} 
@@ -157,6 +211,50 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#F04812'
+  },
+  
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontWeight: '500',
+    fontSize: 20,
   }
 })
 

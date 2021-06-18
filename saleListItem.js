@@ -26,13 +26,13 @@ const SaleListItem = ({val,cate}) => {
   }else if(val[1]=='baemin'){
     resourceApp='배달의민족'
   }else if(val[1]=='coupang'){
-    resourceApp='쿠팡잇츠'
+    resourceApp='쿠팡이츠'
   }else if(val[1]=='wemef'){
     resourceApp='위메프오'
   }
   const LinkingAPP=({source,url})=>{
-    console.log(uriScheme)
-    console.log(val)
+    //console.log(uriScheme)
+    //console.log(val)
     if(source=='yogiyo'){
       redirectURL=yogiyoURL
       playStoreLink="market://details?id=com.fineapp.yogiyo"
@@ -135,7 +135,7 @@ const SaleListItem = ({val,cate}) => {
 
           <AdMobBanner
             bannerSize="mediumRectangle"
-            adUnitID="ca-app-pub-5926200986625193/9265914417" 
+            adUnitID="ca-app-pub-5926200986625193/7250011193" 
             servePersonalizedAds={true}
             onDidFailToReceiveAdWithError={(e) => console.log(e)}
             />
@@ -180,14 +180,14 @@ const HaveImage = ({ImageName}) => {
     return <Image 
     style={styles.logo}
     source={{
-      uri: `http://192.168.1.171:3000/${ImageName}`,
+      uri: `https://sailmoa.com/${ImageName}`,
     }}
     />
   }
   return <Image 
     style={styles.logo}
     source={{
-      uri: "http://192.168.1.171:3000/undefined.png",
+      uri: "https://sailmoa.com/undefined.png",
     }}
     />
 }

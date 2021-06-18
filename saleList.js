@@ -13,7 +13,7 @@ const SaleList = ({val,cate,index}) => {
         <View style={styles.adView}>
         <AdMobBanner
             bannerSize="smartBanner"
-            adUnitID="ca-app-pub-5926200986625193/9265914417" 
+            adUnitID="ca-app-pub-5926200986625193/7250011193" 
             onDidFailToReceiveAdWithError={(e) => console.log(e)}
             servePersonalizedAds={true}
             />
