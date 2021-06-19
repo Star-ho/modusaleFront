@@ -102,7 +102,14 @@ export default function App() {
               value={coupangSelected}
               onValueChange={setcoupangSelection}
               style={styles.checkbox}
-            /><Text style={{flex:3, paddingTop:6 }} >쿠팡잇츠</Text>
+            /><Text style={{flex:3, paddingTop:6 }} >쿠팡이츠</Text>
+          </View>
+          <View style={{flex:1, flexDirection:'row'}}>
+            <CheckBox
+              value={wemefSelected}
+              onValueChange={setwemefSelection}
+              style={styles.checkbox}
+            /><Text style={{flex:3, paddingTop:6 }} >위메프오</Text>
           </View>
           <View style={{flex:13}}></View>
         </View>
@@ -185,7 +192,7 @@ export default function App() {
            </View>
 
         <View style={{flex:13}}>
-          <ContentsTab filter={{yogiyoSelected,baeminSelected,coupangSelected}} sortValue={sortValue} />
+          <ContentsTab filter={{yogiyoSelected,baeminSelected,coupangSelected,wemefSelected}} sortValue={sortValue} />
         </View>
       </MenuDrawer>
     </SafeAreaView>

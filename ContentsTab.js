@@ -5,16 +5,13 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Contents from "./Content.js"
 
 const Tab = createMaterialTopTabNavigator();
-const wait = (timeout) => {
-  return new Promise(resolve => setTimeout(resolve, timeout));
-}
 
 function ContentsTab ({filter, sortValue}){ 
   const [refreshing, setRefreshing] = React.useState(false);
   const [refreshData, setrefreshData]=React.useState(true);
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    fetch("https://sailmoa.com/?ver=0.90").then(res=>res.json())
+    fetch("http://192.168.1.171:3000/?ver=0.90").then(res=>res.json())
     .then(res=>{
       if(!res.error){
       let arr=[]
@@ -23,8 +20,19 @@ function ContentsTab ({filter, sortValue}){
       }
       arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
       //console.log(arr)
-      setAllInfo([...arr])
-      setViewInfo([...arr])
+      let temp=[...arr]
+      if(!filter.yogiyoSelected){
+        temp=temp.filter(v=>v[1]!='yogiyo')
+      }
+      if(!filter.baeminSelected){
+        temp=temp.filter(v=>v[1]!='baemin')
+      }
+      if(!filter.coupangSelected){
+        temp=temp.filter(v=>v[1]!='coupang')
+      }
+      if(!filter.wemefSelected){
+        temp=temp.filter(v=>v[1]!='wemef')
+      }
       category=[...new Set( arr.map( v=> v[3] ) )]
       }else{
         setError(true)
@@ -41,7 +49,7 @@ function ContentsTab ({filter, sortValue}){
   
 
   React.useEffect(()=>{
-      fetch("https://sailmoa.com/?ver=0.90").then(res=>res.json())
+      fetch("http://192.168.1.171:3000/?ver=0.90").then(res=>res.json())
       .then(res=>{
         if(!res.error){
         let arr=[]
@@ -57,7 +65,7 @@ function ContentsTab ({filter, sortValue}){
           setError(true)
         }
       })
-  },[refreshData])
+  },[])
 
   React.useEffect(()=>{
     let temp
@@ -88,7 +96,7 @@ function ContentsTab ({filter, sortValue}){
       temp=temp.filter(v=>v[1]!='wemef')
     }
     setViewInfo(temp)
-  },[filter.yogiyoSelected,filter.baeminSelected,filter.coupangSelected])
+  },[filter.yogiyoSelected,filter.baeminSelected,filter.coupangSelected,filter.wemefSelected])
 
   const ToPlayStore=()=>{
     const redirectURL = "market://details?id=com.fineapp.yogiyo"
