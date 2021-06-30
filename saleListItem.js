@@ -1,13 +1,13 @@
 //val 값 [ 브랜드명, 출처(요기요, 배민), 이미지, 분류, 할인금액 ] 
-
 import React from 'react';
 import { View, Linking, Text, StyleSheet, Modal, Pressable, Image } from 'react-native';
 import {
   AdMobBanner,
-  setTestDeviceIDAsync
+  //setTestDeviceIDAsync
 } from "expo-ads-admob";
 
 const SaleListItem = ({val,cate}) => {
+
   const [modalVisible, setModalVisible] = React.useState(false);
   const baeminURL = "baemin://";
   const yogiyoURL = "yogiyoapp://open";
@@ -20,7 +20,17 @@ const SaleListItem = ({val,cate}) => {
 //   React.useEffect(() => {
 //     setTestDeviceIDAsync("testdevice");
 //  }, []);
-  
+  if(val=='ad')  {
+    return(        <View style={styles.adView}>
+      <AdMobBanner
+        bannerSize="smartBanner"
+        adUnitID="ca-app-pub-5926200986625193/7250011193" 
+        servePersonalizedAds={true}
+        onDidFailToReceiveAdWithError={(e) => console.log(e)}
+      />
+  </View>)
+  }
+
   if(val[1]=='yogiyo'){
     resourceApp='요기요'
   }else if(val[1]=='baemin'){
@@ -271,6 +281,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: '500',
     fontSize: 20,
+  },
+  adView:{
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
   }
 });
 

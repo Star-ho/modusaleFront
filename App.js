@@ -130,13 +130,12 @@ export default function App() {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>{"앱을 종료하시겠습니까"}</Text>          
-
-        <AdMobBanner
-          bannerSize="mediumRectangle"
-          adUnitID="ca-app-pub-5926200986625193/7250011193" 
-          servePersonalizedAds={true}
-          onDidFailToReceiveAdWithError={(e) => console.log(e)}
-          />
+            <AdMobBanner
+              bannerSize="mediumRectangle"
+              adUnitID="ca-app-pub-5926200986625193/7250011193" 
+              servePersonalizedAds={true}
+              onDidFailToReceiveAdWithError={(e) => console.log(e)}
+              />
             <View style={{flexDirection:'row',marginTop:10}}>
             <Pressable
               style={[styles.button, styles.buttonClose,{paddingHorizontal:30, marginRight:20}]}
@@ -164,31 +163,29 @@ export default function App() {
           opacity={1}
       >
            <View style={{ flex:1, flexDirection: 'row'}}>
-
-             <Ionicons name="menu-outline" size={50} onPress={()=>toggleOpen()}/>
+             <Ionicons name="menu-outline" size={40} style={{margin:5}} onPress={()=>toggleOpen()}/>
              <View style={{flex: 5, height: 50, }}>
              </View>
-             <DropDownPicker
-               open={open}
-               value={sortValue}
-               items={items}
-               setOpen={setOpen}
-               setValue={setsortValue}
-               setItems={setItems}
-               containerStyle={{
-                 height:30,
-                 width:100,
-                 paddingTop:2
-                }}
-               placeholder="정렬"
-               arrowIconStyle={{
-                 width: 10,
-                 height: 10
-               }}
-               textStyle={{
-                 textAlign:"center"
-               }}
-             />  
+             <View style={{flex:1.5}}>
+                <DropDownPicker
+                  open={open}
+                  value={sortValue}
+                  items={items}
+                  setOpen={setOpen}
+                  setValue={setsortValue}
+                  setItems={setItems}
+                  style={{height:45,marginTop:4,marginRight:3}}
+                  
+                  placeholder="정렬"
+                  arrowIconStyle={{
+                    width: 10,
+                    height: 10
+                  }}
+                  textStyle={{
+                    textAlign:"center"
+                  }}
+                />  
+              </View>
            </View>
 
         <View style={{flex:13}}>

@@ -65,14 +65,14 @@ const HaveImage = ({ImageName}) => {
     return <Image 
     style={styles.logo}
     source={{
-      uri: `http://192.168.1.171:3000/${ImageName}`,
+      uri: `http://sailmoa.com/${ImageName}`,
     }}
     />
   }
   return <Image 
     style={styles.logo}
     source={{
-      uri: "http://192.168.1.171:3000/undefiend.png",
+      uri: "http://sailmoa.com/undefiend.png",
     }}
     />
 }

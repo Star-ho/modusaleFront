@@ -4,84 +4,52 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Contents from "./Content.js"
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createMaterialTopTabNavigator({
+  tabBarOptions: {
+    activeTintColor: 'tomato',
+    inactiveTintColor: 'gray',
+  },
+});
 
 function ContentsTab ({filter, sortValue}){ 
-  const [refreshing, setRefreshing] = React.useState(false);
-  const [refreshData, setrefreshData]=React.useState(true);
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    fetch("http://192.168.1.171:3000/?ver=0.90").then(res=>res.json())
-    .then(res=>{
-      if(!res.error){
-      let arr=[]
-      for(let i of Object.entries(res)){
-        arr.push( [ i[0], i[1][0], i[1][1], i[1][2], i[1][3], i[1][4] ]  )
-      }
-      arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
-      //console.log(arr)
-      let temp=[...arr]
-      if(!filter.yogiyoSelected){
-        temp=temp.filter(v=>v[1]!='yogiyo')
-      }
-      if(!filter.baeminSelected){
-        temp=temp.filter(v=>v[1]!='baemin')
-      }
-      if(!filter.coupangSelected){
-        temp=temp.filter(v=>v[1]!='coupang')
-      }
-      if(!filter.wemefSelected){
-        temp=temp.filter(v=>v[1]!='wemef')
-      }
-      category=[...new Set( arr.map( v=> v[3] ) )]
-      }else{
-        setError(true)
-      }
-    })
-    setRefreshing(false)
-  }, []);
   const [allInfo, setAllInfo] = React.useState([]);
   const [ViewInfo, setViewInfo] = React.useState([]);
   let category=["치킨","피자","한식","양식","기타"]
   const [error,setError]=React.useState(false);
-  
+
   const [modalVisible, setModalVisible] = React.useState(true);
-  
+  const appState = React.useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = React.useState(appState.current);
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  React.useEffect(()=>{
-      fetch("http://192.168.1.171:3000/?ver=0.90").then(res=>res.json())
-      .then(res=>{
-        if(!res.error){
-        let arr=[]
-        for(let i of Object.entries(res)){
-          arr.push( [ i[0], i[1][0], i[1][1], i[1][2], i[1][3], i[1][4] ]  )
-        }
-        arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
-        //console.log(arr)
-        setAllInfo([...arr])
-        setViewInfo([...arr])
-        category=[...new Set( arr.map( v=> v[3] ) )]
-        }else{
-          setError(true)
-        }
-      })
-  },[])
+  React.useEffect(() => {
+    AppState.addEventListener("change", _handleAppStateChange);
 
-  React.useEffect(()=>{
-    let temp
+    return () => {
+      AppState.removeEventListener("change", _handleAppStateChange);
+    };
+  }, []);
+
+  const _handleAppStateChange = (nextAppState) => {
+    appState.current = nextAppState;
+    setAppStateVisible(appState.current);
+  };
+
+  const sortData=()=>{
+    let temp=ViewInfo.slice()
     if(sortValue==1){
-      temp=ViewInfo.slice().sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
+      temp.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
     }else if(sortValue==2){
-      temp= ViewInfo.slice().sort((a,b)=>( `${b[0]}`.localeCompare(`${a[0]}`)) ) 
+      temp.sort((a,b)=>( `${b[0]}`.localeCompare(`${a[0]}`)) ) 
     }else if(sortValue==3){
-      temp= ViewInfo.slice().sort((a,b)=>( a[4]-b[4] ) ) 
+      temp.sort((a,b)=>( a[4]-b[4] ) ) 
     }else{
-      temp= ViewInfo.slice().sort((a,b)=>( b[4]-a[4] ) ) 
+      temp.sort((a,b)=>( b[4]-a[4] ) ) 
     }
     setViewInfo(temp)
-  },[sortValue])
-  
-  React.useEffect(()=>{
+  }
+
+  const filteringData=()=>{
     let temp=allInfo
     if(!filter.yogiyoSelected){
       temp=temp.filter(v=>v[1]!='yogiyo')
@@ -96,7 +64,71 @@ function ContentsTab ({filter, sortValue}){
       temp=temp.filter(v=>v[1]!='wemef')
     }
     setViewInfo(temp)
-  },[filter.yogiyoSelected,filter.baeminSelected,filter.coupangSelected,filter.wemefSelected])
+  }
+
+  const controllData=(isRefesh)=>{
+    fetch("http://sailmoa.com/?ver=0.90").then(res=>res.json())
+    .then(res=>{
+      if(!res.error){
+      let arr=[]
+      for(let i of Object.entries(res)){
+        arr.push( [ i[1][0], i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
+      }
+      arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
+      //console.log(arr)
+      setAllInfo([...arr])
+
+      let temp=[...arr].slice()
+      if(!filter.yogiyoSelected){
+        temp=temp.filter(v=>v[1]!='yogiyo')
+      }
+      if(!filter.baeminSelected){
+        temp=temp.filter(v=>v[1]!='baemin')
+      }
+      if(!filter.coupangSelected){
+        temp=temp.filter(v=>v[1]!='coupang')
+      }
+      if(!filter.wemefSelected){
+        temp=temp.filter(v=>v[1]!='wemef')
+      }
+
+      if(sortValue==1){
+        temp.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
+      }else if(sortValue==2){
+        temp.sort((a,b)=>( `${b[0]}`.localeCompare(`${a[0]}`)) ) 
+      }else if(sortValue==3){
+        temp.sort((a,b)=>( a[4]-b[4] ) ) 
+      }else{
+        temp.sort((a,b)=>( b[4]-a[4] ) ) 
+      }
+      setViewInfo(temp)
+      if(isRefesh){
+        setRefreshing(false)
+      }
+
+      }else{
+        setError(true)
+      }
+    })
+
+  }
+
+  React.useEffect(()=>{
+    controllData(false)
+  },[appStateVisible,refreshing])
+
+  React.useEffect(()=>{
+    sortData()
+  },[sortValue,appStateVisible,refreshing])
+  
+  React.useEffect(()=>{
+    filteringData()
+  },[filter.yogiyoSelected,filter.baeminSelected,filter.coupangSelected,filter.wemefSelected,appStateVisible,refreshing])
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    controllData(true)
+  }, []);
 
   const ToPlayStore=()=>{
     const redirectURL = "market://details?id=com.fineapp.yogiyo"

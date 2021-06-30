@@ -20,7 +20,7 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 3,
+      "versionCode": 8,
       "package": "iof.processTA",
       "permissions":[],
       "adaptiveIcon": {
