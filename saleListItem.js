@@ -15,6 +15,7 @@ const SaleListItem = ({val,cate}) => {
   const wemeURL = "cupping://doCommand";
   let resourceApp
   let playStoreLink
+  let redirectURL
   const uriScheme=val[5]
   //테스트 앱 test app
 //   React.useEffect(() => {
@@ -173,8 +174,8 @@ const SaleListItem = ({val,cate}) => {
                   <BrandName val={val} />
                 </View>
                 <ItemName val={val}/>
-                <View style={{flex:1}}>
-                <Text style={styles.priceText}>{ "최대 " +val[4]+"원 할인" }</Text></View>
+                <View style={{flex:1,flexDirection:'row'}}>
+                <Text style={styles.priceText}>{ "최대 " }</Text><Text style={styles.price}>{ val[4] }</Text><Text style={styles.priceText}>{"원 할인" }</Text></View>
               </View>
             </View>
         </Pressable>
@@ -204,7 +205,6 @@ const HaveImage = ({ImageName}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    borderBottomColor: 'black',
     borderBottomWidth: 1,
     flexDirection: 'row',
     padding:10
@@ -220,9 +220,13 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   priceText: {
-    flex: 2,
     fontWeight: '500',
     fontSize: 12,
+  },
+  price: {
+    fontWeight: '500',
+    fontSize: 12,
+    color:'#C10000'
   },
   logo: {
     width: 70,
@@ -283,7 +287,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   adView:{
-    borderBottomColor: 'black',
+    borderBottomColor: '#990200',
     borderBottomWidth: 1,
   }
 });

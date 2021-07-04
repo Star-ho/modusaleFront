@@ -4,27 +4,34 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Contents from "./Content.js"
 
-const Tab = createMaterialTopTabNavigator({
-  tabBarOptions: {
-    activeTintColor: 'tomato',
-    inactiveTintColor: 'gray',
-  },
-});
+const Tab = createMaterialTopTabNavigator();
 
-function ContentsTab ({filter, sortValue}){ 
+function ContentsTab ({searchText}){ 
+  const appState = React.useRef(AppState.currentState);
+
   const [allInfo, setAllInfo] = React.useState([]);
   const [ViewInfo, setViewInfo] = React.useState([]);
   let category=["치킨","피자","한식","양식","기타"]
   const [error,setError]=React.useState(false);
 
   const [modalVisible, setModalVisible] = React.useState(true);
-  const appState = React.useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = React.useState(appState.current);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [sortValue, setsortValue] = React.useState(1);
+
+  const [yogiyoSelected, setyogiyoSelection] = React.useState(true);
+  const [baeminSelected, setbaeminSelection] = React.useState(true);
+  const [coupangSelected, setcoupangSelection] = React.useState(true);
+  const [wemefSelected, setwemefSelection] = React.useState(true);
+  
+  let filter
+
+  React.useEffect(()=>{
+    filter={yogiyo:yogiyoSelected,baemin:baeminSelected,coupang:coupangSelected,wemef:wemefSelected}
+  },[baeminSelected,yogiyoSelected,coupangSelected,wemefSelected])
 
   React.useEffect(() => {
     AppState.addEventListener("change", _handleAppStateChange);
-
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange);
     };
@@ -65,6 +72,17 @@ function ContentsTab ({filter, sortValue}){
     }
     setViewInfo(temp)
   }
+
+  //검색어입력
+  React.useEffect(() => {
+      let res=allInfo.filter(v=>v[0].toLowerCase().includes(searchText.toLowerCase()))
+      // console.log('res:'+res)
+      // console.log('text:'+searchText)
+      setViewInfo(res)
+      //console.log(ViewInfo)
+      // ViewInfo.forEach(v=>console.log(v[0]))
+  }, [searchText]);
+
 
   const controllData=(isRefesh)=>{
     fetch("http://sailmoa.com/?ver=0.90").then(res=>res.json())
@@ -171,20 +189,21 @@ function ContentsTab ({filter, sortValue}){
     </View>
     )
   }
+
+
   return (
     <View style={styles.container}>
       <NavigationContainer style={{flex:3}}  >
         <Tab.Navigator style={{flex:4}} >
           <Tab.Screen 
             name="전체" 
-            children={ () => <Contents ViewInfo={ViewInfo} refreshing={refreshing} onRefresh={onRefresh} /> }
+            children={ () => <Contents sortValue={sortValue} setsortValue={setsortValue} ViewInfo={ViewInfo} refreshing={refreshing} onRefresh={onRefresh} /> }
           />
           {category.map( (cate,index) => {
-              let data = allInfo.filter(v=>v[3]==cate);
               return <Tab.Screen 
               name={cate}
               key={index}
-              children={ () => <Contents ViewInfo={ViewInfo} cate={cate}   refreshing={refreshing} onRefresh={onRefresh}
+              children={ () => <Contents sortValue={sortValue} setsortValue={setsortValue} ViewInfo={ViewInfo} cate={cate} refreshing={refreshing} onRefresh={onRefresh}
               /> }
               />
             }
@@ -205,8 +224,6 @@ const styles = StyleSheet.create({
     width: 130,
     borderWidth: 0.5,
   },
-
-
   centeredView: {
     flex: 1,
     justifyContent: "center",

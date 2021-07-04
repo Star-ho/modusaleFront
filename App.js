@@ -2,12 +2,11 @@
 //npm run android
 
 import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert,CheckBox, SafeAreaView, BackHandler, Modal,Pressable} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput,CheckBox, SafeAreaView, BackHandler, Modal,Pressable} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MenuDrawer from 'react-native-side-drawer'
 import ContentsTab from './ContentsTab.js'
-import DropDownPicker from 'react-native-dropdown-picker';
-import DrawerIcon from "./DrawerIconSet.js"
+
 import { useEffect } from 'react';
 import {
   AdMobBanner,
@@ -16,49 +15,30 @@ import {
 
 
 export default function App() {
- 
-  const [yogiyoSelected, setyogiyoSelection] = React.useState(true);
-  const [baeminSelected, setbaeminSelection] = React.useState(true);
-  const [coupangSelected, setcoupangSelection] = React.useState(true);
-  const [wemefSelected, setwemefSelection] = React.useState(true);
-
-  const [drawerState, setdrawerState] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-  const [sortValue, setsortValue] = React.useState(1);
+  const [searchText, setSearchText] = React.useState("");
   const [modalVisible,setModalVisible]=React.useState(false);
-  const [items, setItems] = React.useState([
-    {
-      value: '1',
-      icon: () => <DrawerIcon val={1} />
-    },
-    {
-      value: '2',
-      icon: () => <DrawerIcon val={2} />
-    },
-    {
-      value: '3',
-      icon: () => <DrawerIcon val={3} />
-    },
-    {
-      value: '4',
-      icon: () => <DrawerIcon val={4} />
+  
+  const [visibleSearchBar,setVisibleSearchBar]=React.useState(false);
+
+  const ShowSearchBar=()=>{
+    if(visibleSearchBar){
+      return <View></View>
+    }else{
+      return (
+      <TextInput
+      style={{flex:1,borderBottomWidth:1,paddingRight:10,fontSize:20}}
+      onChangeText={setSearchText}
+      placeholder={'검색어를입력해주세요'}
+      value={searchText}
+      >
+     </TextInput>)
     }
-  ]);
+  }
+
   //테스트기기설정
     // React.useEffect(() => {
     //    setTestDeviceIDAsync("testdevice");
     // }, []);
-
-  useEffect(()=>{
-    filter={yogiyo:yogiyoSelected,baemin:baeminSelected,coupang:coupangSelected,wemef:wemefSelected}
-  },[baeminSelected,yogiyoSelected,coupangSelected,wemefSelected])
-
-  const toggleOpen = () => {
-    setdrawerState(true);
-  };
-  const toggleClose = () => {
-    setdrawerState(false);
-  };
 
   //앱 종료
   useEffect(() => {
@@ -77,48 +57,9 @@ export default function App() {
       BackHandler.exitApp()
       setModalVisible(!modalVisible)
   }
-  const drawerContent = () => {
-    return (
-        <View style={styles.animatedBox} >
-          <TouchableOpacity onPress={()=>toggleClose()} style={{flex:1 }} >
-            <Text>Close</Text>
-          </TouchableOpacity>
-          <View style={{flex:1, flexDirection:'row'}}>
-            <CheckBox
-              value={yogiyoSelected}
-              onValueChange={setyogiyoSelection}
-              style={styles.checkbox}
-            /><Text style={{flex:3, paddingTop:6}} >요기요</Text>
-          </View>
-          <View style={{flex:1, flexDirection:'row'}}>
-            <CheckBox
-              value={baeminSelected}
-              onValueChange={setbaeminSelection}
-              style={styles.checkbox}
-            /><Text style={{flex:3, paddingTop:6 }} >배달의민족</Text>
-          </View>
-          <View style={{flex:1, flexDirection:'row'}}>
-            <CheckBox
-              value={coupangSelected}
-              onValueChange={setcoupangSelection}
-              style={styles.checkbox}
-            /><Text style={{flex:3, paddingTop:6 }} >쿠팡이츠</Text>
-          </View>
-          <View style={{flex:1, flexDirection:'row'}}>
-            <CheckBox
-              value={wemefSelected}
-              onValueChange={setwemefSelection}
-              style={styles.checkbox}
-            /><Text style={{flex:3, paddingTop:6 }} >위메프오</Text>
-          </View>
-          <View style={{flex:13}}></View>
-        </View>
-    );
-  };
  
   return (
-    <SafeAreaView style={styles.container}>          
-
+    <SafeAreaView style={styles.container}> 
     <Modal
         animationType="slide"
         transparent={true}
@@ -153,45 +94,20 @@ export default function App() {
           </View>
         </View>
       </Modal>
-
-      <MenuDrawer 
-        open={drawerState} 
-        drawerContent={drawerContent()}
-          drawerPercentage={45}
-          animationTime={250}
-          overlay={true}
-          opacity={1}
-      >
-           <View style={{ flex:1, flexDirection: 'row'}}>
-             <Ionicons name="menu-outline" size={40} style={{margin:5}} onPress={()=>toggleOpen()}/>
-             <View style={{flex: 5, height: 50, }}>
-             </View>
-             <View style={{flex:1.5}}>
-                <DropDownPicker
-                  open={open}
-                  value={sortValue}
-                  items={items}
-                  setOpen={setOpen}
-                  setValue={setsortValue}
-                  setItems={setItems}
-                  style={{height:45,marginTop:4,marginRight:3}}
-                  
-                  placeholder="정렬"
-                  arrowIconStyle={{
-                    width: 10,
-                    height: 10
-                  }}
-                  textStyle={{
-                    textAlign:"center"
-                  }}
-                />  
-              </View>
-           </View>
-
-        <View style={{flex:13}}>
-          <ContentsTab filter={{yogiyoSelected,baeminSelected,coupangSelected,wemefSelected}} sortValue={sortValue} />
+      <View style={{ flex:1, flexDirection: 'row',backgroundColor:'#8A0602',zIndex: 999}}>
+      <View style={{flex: 1, height: 50, }}></View>
+        <View style={{flex: 5, height: 50, }}>
+        {/* <ShowSearchBar/> */}
         </View>
-      </MenuDrawer>
+        <View style={{flex:1}}>
+        <Ionicons name="search" size={30} style={{margin:10}} onPress={()=>setVisibleSearchBar}/>
+      </View>
+      </View>
+
+      <View style={{flex:13}}>
+        
+        <ContentsTab searchText={searchText} />
+      </View>
     </SafeAreaView>
   );
 }
