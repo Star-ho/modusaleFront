@@ -23,6 +23,8 @@ function Contents({ViewInfo,cate,refreshing, sortValue,setsortValue, onRefresh})
   if(len>40){
     data.splice(data.length*Math.random(),0,'ad')
   }
+  data.push('null')
+  data.push('null')
 
   const [open, setOpen] = React.useState(false);
   const [items, setItems] = React.useState([
@@ -37,10 +39,6 @@ function Contents({ViewInfo,cate,refreshing, sortValue,setsortValue, onRefresh})
     {
       value: '3',
       icon: () => <DrawerIcon val={3} />
-    },
-    {
-      value: '4',
-      icon: () => <DrawerIcon val={4} />
     }
   ]);
 
@@ -71,7 +69,7 @@ function Contents({ViewInfo,cate,refreshing, sortValue,setsortValue, onRefresh})
             style={styles.brandButton}>
             <Text>위메프오</Text>
           </TouchableOpacity>
-          <View >
+{/*           
           <DropDownPicker
             open={open}
             value={sortValue}
@@ -79,17 +77,19 @@ function Contents({ViewInfo,cate,refreshing, sortValue,setsortValue, onRefresh})
             setOpen={setOpen}
             setValue={setsortValue}
             setItems={setItems}
-            style={{height:45,marginTop:4,marginRight:3,backgroundColor:'#B20200',zIndex: 999}}
-            placeholder="정렬"
+            style={{height:45,marginTop:4,marginRight:3,inputAndroid: { color: 'black' }}}
+            useNativeAndroidPickerStyle={false}
+            dropDownContainerStyle={{ backgroundColor: 'white',zIndex: 1000, elevation: 1000 }}
+            placeholder="정123렬"
             arrowIconStyle={{
               width: 10,
               height: 10
             }}
             textStyle={{
-              textAlign:"center"
+              textAlign:"center",
+              color:'black'
             }}
-          />  
-                </View>
+          />   */}
         </ScrollView>
       </View>
       <FlatList

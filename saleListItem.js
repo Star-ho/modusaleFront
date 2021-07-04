@@ -32,6 +32,13 @@ const SaleListItem = ({val,cate}) => {
   </View>)
   }
 
+  if(val=='null')  {
+    return(  <View style={styles.nullView}>
+
+  </View>)
+  }
+
+
   if(val[1]=='yogiyo'){
     resourceApp='요기요'
   }else if(val[1]=='baemin'){
@@ -182,6 +189,7 @@ const SaleListItem = ({val,cate}) => {
       </View>
     );
   }else{
+    // console.log(cate)
     return <View></View>
   }
 };
@@ -289,6 +297,9 @@ const styles = StyleSheet.create({
   adView:{
     borderBottomColor: '#990200',
     borderBottomWidth: 1,
+  },
+  nullView:{
+    height:60
   }
 });
 

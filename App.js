@@ -4,7 +4,6 @@
 import * as React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput,CheckBox, SafeAreaView, BackHandler, Modal,Pressable} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MenuDrawer from 'react-native-side-drawer'
 import ContentsTab from './ContentsTab.js'
 
 import { useEffect } from 'react';
@@ -17,49 +16,36 @@ import {
 export default function App() {
   const [searchText, setSearchText] = React.useState("");
   const [modalVisible,setModalVisible]=React.useState(false);
-  
-  const [visibleSearchBar,setVisibleSearchBar]=React.useState(false);
-
-  const ShowSearchBar=()=>{
-    if(visibleSearchBar){
-      return <View></View>
-    }else{
-      return (
-      <TextInput
-      style={{flex:1,borderBottomWidth:1,paddingRight:10,fontSize:20}}
-      onChangeText={setSearchText}
-      placeholder={'검색어를입력해주세요'}
-      value={searchText}
-      >
-     </TextInput>)
-    }
-  }
 
   //테스트기기설정
     // React.useEffect(() => {
     //    setTestDeviceIDAsync("testdevice");
     // }, []);
 
+  // useEffect(()=>{
+  //   filter={yogiyo:yogiyoSelected,baemin:baeminSelected,coupang:coupangSelected,wemef:wemefSelected}
+  // },[baeminSelected,yogiyoSelected,coupangSelected,wemefSelected])
+
   //앱 종료
-  useEffect(() => {
-    const backAction = () => {
-      setModalVisible(true)
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-    return () => backHandler.remove();
-  }, []);
+  // useEffect(() => {
+  //   const backAction = () => {
+  //     setModalVisible(true)
+  //     return true;
+  //   };
+  //   const backHandler = BackHandler.addEventListener(
+  //     "hardwareBackPress",
+  //     backAction
+  //   );
+  //   return () => backHandler.remove();
+  // }, []);
 
   const closeApp=()=>{
       BackHandler.exitApp()
       setModalVisible(!modalVisible)
   }
- 
+
   return (
-    <SafeAreaView style={styles.container}> 
+    <SafeAreaView style={styles.container}>          
     <Modal
         animationType="slide"
         transparent={true}
@@ -90,24 +76,26 @@ export default function App() {
             >
               <Text style={styles.textStyle}>취소</Text>
             </Pressable>
-            </View>
           </View>
         </View>
-      </Modal>
+      </View>
+    </Modal>
       <View style={{ flex:1, flexDirection: 'row',backgroundColor:'#8A0602',zIndex: 999}}>
-      <View style={{flex: 1, height: 50, }}></View>
-        <View style={{flex: 5, height: 50, }}>
-        {/* <ShowSearchBar/> */}
+        <View style={{flex: 1, height: 50, }}></View>
+          <View style={{flex: 5, height: 50, }}>
+            <TextInput
+            style={{flex:1,borderBottomWidth:1,paddingRight:10,fontSize:20}}
+            onChangeText={setSearchText}
+            placeholder={'검색어를입력해주세요'}
+            value={searchText}
+            >
+            </TextInput>
+          </View>
+          <View style={{flex:1.5}}>
+          <Ionicons name="search" size={30} style={{margin:5}} onPress={()=>toggleOpen()}/>
         </View>
-        <View style={{flex:1}}>
-        <Ionicons name="search" size={30} style={{margin:10}} onPress={()=>setVisibleSearchBar}/>
       </View>
-      </View>
-
-      <View style={{flex:13}}>
-        
-        <ContentsTab searchText={searchText} />
-      </View>
+      <ContentsTab searchText={searchText} />
     </SafeAreaView>
   );
 }
@@ -130,7 +118,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F04812'
   },
   
   centeredView: {

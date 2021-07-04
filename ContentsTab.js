@@ -6,15 +6,14 @@ import Contents from "./Content.js"
 
 const Tab = createMaterialTopTabNavigator();
 
-function ContentsTab ({searchText}){ 
-  const appState = React.useRef(AppState.currentState);
-
+function ContentsTab ({ searchText}){ 
   const [allInfo, setAllInfo] = React.useState([]);
   const [ViewInfo, setViewInfo] = React.useState([]);
   let category=["치킨","피자","한식","양식","기타"]
   const [error,setError]=React.useState(false);
 
   const [modalVisible, setModalVisible] = React.useState(true);
+  const appState = React.useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = React.useState(appState.current);
   const [refreshing, setRefreshing] = React.useState(false);
   const [sortValue, setsortValue] = React.useState(1);
@@ -23,15 +22,10 @@ function ContentsTab ({searchText}){
   const [baeminSelected, setbaeminSelection] = React.useState(true);
   const [coupangSelected, setcoupangSelection] = React.useState(true);
   const [wemefSelected, setwemefSelection] = React.useState(true);
-  
-  let filter
-
-  React.useEffect(()=>{
-    filter={yogiyo:yogiyoSelected,baemin:baeminSelected,coupang:coupangSelected,wemef:wemefSelected}
-  },[baeminSelected,yogiyoSelected,coupangSelected,wemefSelected])
 
   React.useEffect(() => {
     AppState.addEventListener("change", _handleAppStateChange);
+
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange);
     };
@@ -56,34 +50,30 @@ function ContentsTab ({searchText}){
     setViewInfo(temp)
   }
 
-  const filteringData=()=>{
-    let temp=allInfo
-    if(!filter.yogiyoSelected){
-      temp=temp.filter(v=>v[1]!='yogiyo')
-    }
-    if(!filter.baeminSelected){
-      temp=temp.filter(v=>v[1]!='baemin')
-    }
-    if(!filter.coupangSelected){
-      temp=temp.filter(v=>v[1]!='coupang')
-    }
-    if(!filter.wemefSelected){
-      temp=temp.filter(v=>v[1]!='wemef')
-    }
-    setViewInfo(temp)
-  }
+  // const filteringData=()=>{
+  //   let temp=allInfo
+  //   if(!filter.yogiyoSelected){
+  //     temp=temp.filter(v=>v[1]!='yogiyo')
+  //   }
+  //   if(!filter.baeminSelected){
+  //     temp=temp.filter(v=>v[1]!='baemin')
+  //   }
+  //   if(!filter.coupangSelected){
+  //     temp=temp.filter(v=>v[1]!='coupang')
+  //   }
+  //   if(!filter.wemefSelected){
+  //     temp=temp.filter(v=>v[1]!='wemef')
+  //   }
+  //   setViewInfo(temp)
+  // }
 
   //검색어입력
   React.useEffect(() => {
       let res=allInfo.filter(v=>v[0].toLowerCase().includes(searchText.toLowerCase()))
-      // console.log('res:'+res)
-      // console.log('text:'+searchText)
       setViewInfo(res)
-      //console.log(ViewInfo)
-      // ViewInfo.forEach(v=>console.log(v[0]))
   }, [searchText]);
 
-
+    
   const controllData=(isRefesh)=>{
     fetch("http://sailmoa.com/?ver=0.90").then(res=>res.json())
     .then(res=>{
@@ -97,18 +87,18 @@ function ContentsTab ({searchText}){
       setAllInfo([...arr])
 
       let temp=[...arr].slice()
-      if(!filter.yogiyoSelected){
-        temp=temp.filter(v=>v[1]!='yogiyo')
-      }
-      if(!filter.baeminSelected){
-        temp=temp.filter(v=>v[1]!='baemin')
-      }
-      if(!filter.coupangSelected){
-        temp=temp.filter(v=>v[1]!='coupang')
-      }
-      if(!filter.wemefSelected){
-        temp=temp.filter(v=>v[1]!='wemef')
-      }
+      // if(!filter.yogiyoSelected){
+      //   temp=temp.filter(v=>v[1]!='yogiyo')
+      // }
+      // if(!filter.baeminSelected){
+      //   temp=temp.filter(v=>v[1]!='baemin')
+      // }
+      // if(!filter.coupangSelected){
+      //   temp=temp.filter(v=>v[1]!='coupang')
+      // }
+      // if(!filter.wemefSelected){
+      //   temp=temp.filter(v=>v[1]!='wemef')
+      // }
 
       if(sortValue==1){
         temp.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
@@ -139,9 +129,9 @@ function ContentsTab ({searchText}){
     sortData()
   },[sortValue,appStateVisible,refreshing])
   
-  React.useEffect(()=>{
-    filteringData()
-  },[filter.yogiyoSelected,filter.baeminSelected,filter.coupangSelected,filter.wemefSelected,appStateVisible,refreshing])
+  // React.useEffect(()=>{
+  //   filteringData()
+  // },[filter.yogiyoSelected,filter.baeminSelected,filter.coupangSelected,filter.wemefSelected,appStateVisible,refreshing])
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -149,7 +139,7 @@ function ContentsTab ({searchText}){
   }, []);
 
   const ToPlayStore=()=>{
-    const redirectURL = "market://details?id=com.fineapp.yogiyo"
+    const redirectURL = "market://details?id=iof.processTA"
     const handlePress = React.useCallback(async () => {
         await Linking.openURL(redirectURL);
     }, [redirectURL]);
@@ -189,27 +179,27 @@ function ContentsTab ({searchText}){
     </View>
     )
   }
-
-
   return (
     <View style={styles.container}>
-      <NavigationContainer style={{flex:3}}  >
-        <Tab.Navigator style={{flex:4}} >
+      <NavigationContainer  >
+        <Tab.Navigator  >
+          
           <Tab.Screen 
             name="전체" 
-            children={ () => <Contents sortValue={sortValue} setsortValue={setsortValue} ViewInfo={ViewInfo} refreshing={refreshing} onRefresh={onRefresh} /> }
+            children={ () => <Contents ViewInfo={ViewInfo} refreshing={refreshing} onRefresh={onRefresh} /> }
           />
-          {category.map( (cate,index) => {
+           {category.map( (cate,index) => {
               return <Tab.Screen 
               name={cate}
               key={index}
-              children={ () => <Contents sortValue={sortValue} setsortValue={setsortValue} ViewInfo={ViewInfo} cate={cate} refreshing={refreshing} onRefresh={onRefresh}
+              children={ () => <Contents ViewInfo={ViewInfo} cate={cate}   refreshing={refreshing} onRefresh={onRefresh}
               /> }
               />
             }
           )}
         </Tab.Navigator>
       </NavigationContainer>
+      
     </View>
   );
 }
@@ -219,10 +209,6 @@ function ContentsTab ({searchText}){
 const styles = StyleSheet.create({
   container: {
     flex:13,
-  },
-  menuBarTab:{
-    width: 130,
-    borderWidth: 0.5,
   },
   centeredView: {
     flex: 1,
