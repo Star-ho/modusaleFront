@@ -1,15 +1,9 @@
 import * as React from 'react';
-import { Text, View, ScrollView, SafeAreaView, StyleSheet, Button, RefreshControl, FlatList, TouchableOpacity } from 'react-native';
+import { View,  StyleSheet, RefreshControl, FlatList, TouchableOpacity } from 'react-native';
 import SaleListItem from './saleListItem';
-import DropDownPicker from 'react-native-dropdown-picker';
-import DrawerIcon from "./DrawerIconSet.js"
 
-function Contents({ViewInfo,cate,refreshing, sortValue,setsortValue, onRefresh}) {
+function Contents({ViewInfo,cate,refreshing, onRefresh}) {
   let data
-  const buttonClickedHandler = () => {
-    console.log('You have been clicked a button!');
-    // do something
-  };
   if(cate){
     data=[...ViewInfo].filter(v=>v[3]==cate)
   }else{
@@ -26,69 +20,9 @@ function Contents({ViewInfo,cate,refreshing, sortValue,setsortValue, onRefresh})
   data.push('null')
   data.push('null')
 
-  const [open, setOpen] = React.useState(false);
-  const [items, setItems] = React.useState([
-    {
-      value: '1',
-      icon: () => <DrawerIcon val={1} />
-    },
-    {
-      value: '2',
-      icon: () => <DrawerIcon val={2} />
-    },
-    {
-      value: '3',
-      icon: () => <DrawerIcon val={3} />
-    }
-  ]);
 
   return (    
-    <View style={styles.container}>
-      <View style={{borderBottomWidth:1, borderBottomColor: '#990200'}}>
-        <ScrollView
-          
-          horizontal={true}
-          >
-          <TouchableOpacity
-            onPress={buttonClickedHandler}
-            style={styles.brandButton}>
-            <Text>배달의민족</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={buttonClickedHandler}
-            style={styles.brandButton}>
-            <Text>요기요</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={buttonClickedHandler}
-            style={styles.brandButton}>
-            <Text>쿠팡잇츠</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={buttonClickedHandler}
-            style={styles.brandButton}>
-            <Text>위메프오</Text>
-          </TouchableOpacity>
-          
-          <DropDownPicker
-            open={open}
-            value={sortValue}
-            items={items}
-            setOpen={setOpen}
-            setValue={setsortValue}
-            setItems={setItems}
-            placeholder="123"
-            arrowIconStyle={{
-              width: 10,
-              height: 10
-            }}
-            textStyle={{
-              textAlign:"center",
-              color:'black'
-            }}
-          />  
-        </ScrollView>
-      </View>
+    <View style={{flex:1,height:100}}>
       <FlatList
         disableVirtualization={false} 
         refreshControl={
@@ -97,6 +31,7 @@ function Contents({ViewInfo,cate,refreshing, sortValue,setsortValue, onRefresh})
               onRefresh={onRefresh}
             />} 
         data={data}
+        style={{zIndex:-1}}
         renderItem={({item}) => 
         <View>
           <SaleListItem val={item} cate={cate} />
@@ -108,22 +43,9 @@ function Contents({ViewInfo,cate,refreshing, sortValue,setsortValue, onRefresh})
   );
 } 
 
-  const styles = StyleSheet.create({
-    card: {
-      flex:13,
-    },
-    brandButton:{
-      flex:1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 10,
-      borderRadius: 50,
-      marginHorizontal:1,
-      marginVertical:3
-      
-    }
+const equalComparison = (prevProps, nextProps) =>
+  JSON.stringify(prevProps.ViewInfo) == JSON.stringify(nextProps.ViewInfo)
 
+export default React.memo(Contents, equalComparison);
 
-});
-export default Contents;
 

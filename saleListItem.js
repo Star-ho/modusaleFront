@@ -210,9 +210,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor:'white',
-    borderBottomWidth: 1,
     flexDirection: 'row',
-    padding:10
+    padding:10,
+    borderBottomColor: '#990200',
+    borderBottomWidth: 1,
+
   },
   brandText: {
     flex: 6,

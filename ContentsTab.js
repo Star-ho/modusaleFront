@@ -1,8 +1,12 @@
 import * as React from 'react';
-import {  Modal, Pressable, Text, View, StyleSheet, Linking, AppState, Dimensions  } from 'react-native';
+import {  Text, View, StyleSheet, AppState,TouchableOpacity, Dimensions  } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Contents from "./Content.js"
+import DropDownPicker from 'react-native-dropdown-picker';
+import ErrorModal from './ErrorModal.js'
+import DrawerIcon from './DrawerIconSet.js';
+
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -12,16 +16,33 @@ function ContentsTab ({ searchText}){
   let category=["치킨","피자","한식","양식","기타"]
   const [error,setError]=React.useState(false);
 
-  const [modalVisible, setModalVisible] = React.useState(true);
   const appState = React.useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = React.useState(appState.current);
   const [refreshing, setRefreshing] = React.useState(false);
   const [sortValue, setsortValue] = React.useState(1);
 
-  const [yogiyoSelected, setyogiyoSelection] = React.useState(true);
-  const [baeminSelected, setbaeminSelection] = React.useState(true);
-  const [coupangSelected, setcoupangSelection] = React.useState(true);
-  const [wemefSelected, setwemefSelection] = React.useState(true);
+  const [yogiyoSelected, setyogiyoSelected] = React.useState(true);
+  const [baeminSelected, setbaeminSelected] = React.useState(true);
+  const [coupangSelected, setcoupangSelected] = React.useState(true);
+  const [wemefSelected, setwemefSelected] = React.useState(true);
+
+  
+  const [open, setOpen]=React.useState(false)
+  
+  const [items, setItems] = React.useState([
+    {
+      value: '1',
+      icon: () => <DrawerIcon val={1} />
+    },
+    {
+      value: '2',
+      icon: () => <DrawerIcon val={2} />
+    },
+    {
+      value: '3',
+      icon: () => <DrawerIcon val={3} />
+    }
+  ]);
 
   React.useEffect(() => {
     AppState.addEventListener("change", _handleAppStateChange);
@@ -41,30 +62,36 @@ function ContentsTab ({ searchText}){
       temp.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
     }else if(sortValue==2){
       temp.sort((a,b)=>( `${b[0]}`.localeCompare(`${a[0]}`)) ) 
-    }else if(sortValue==3){
-      temp.sort((a,b)=>( a[4]-b[4] ) ) 
     }else{
       temp.sort((a,b)=>( b[4]-a[4] ) ) 
     }
     setViewInfo(temp)
   }
 
-  // const filteringData=()=>{
-  //   let temp=allInfo
-  //   if(!filter.yogiyoSelected){
-  //     temp=temp.filter(v=>v[1]!='yogiyo')
-  //   }
-  //   if(!filter.baeminSelected){
-  //     temp=temp.filter(v=>v[1]!='baemin')
-  //   }
-  //   if(!filter.coupangSelected){
-  //     temp=temp.filter(v=>v[1]!='coupang')
-  //   }
-  //   if(!filter.wemefSelected){
-  //     temp=temp.filter(v=>v[1]!='wemef')
-  //   }
-  //   setViewInfo(temp)
-  // }
+  const filteringData=()=>{
+    let temp=allInfo
+    if(!yogiyoSelected){
+      temp=temp.filter(v=>v[1]!='yogiyo')
+    }
+    if(!baeminSelected){
+      temp=temp.filter(v=>v[1]!='baemin')
+    }
+    if(!coupangSelected){
+      temp=temp.filter(v=>v[1]!='coupang')
+    }
+    if(!wemefSelected){
+      temp=temp.filter(v=>v[1]!='wemef')
+    }
+    if(sortValue==1){
+      temp.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
+    }else if(sortValue==2){
+      temp.sort((a,b)=>( `${b[0]}`.localeCompare(`${a[0]}`)) ) 
+    }else{
+      temp.sort((a,b)=>( b[4]-a[4] ) ) 
+    }
+    setViewInfo(temp)
+    
+  }
 
   //검색어입력
   React.useEffect(() => {
@@ -86,25 +113,23 @@ function ContentsTab ({ searchText}){
       setAllInfo([...arr])
 
       let temp=[...arr].slice()
-      // if(!filter.yogiyoSelected){
-      //   temp=temp.filter(v=>v[1]!='yogiyo')
-      // }
-      // if(!filter.baeminSelected){
-      //   temp=temp.filter(v=>v[1]!='baemin')
-      // }
-      // if(!filter.coupangSelected){
-      //   temp=temp.filter(v=>v[1]!='coupang')
-      // }
-      // if(!filter.wemefSelected){
-      //   temp=temp.filter(v=>v[1]!='wemef')
-      // }
+      if(!yogiyoSelected){
+        temp=temp.filter(v=>v[1]!='yogiyo')
+      }
+      if(!baeminSelected){
+        temp=temp.filter(v=>v[1]!='baemin')
+      }
+      if(!coupangSelected){
+        temp=temp.filter(v=>v[1]!='coupang')
+      }
+      if(!wemefSelected){
+        temp=temp.filter(v=>v[1]!='wemef')
+      }
 
       if(sortValue==1){
         temp.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
       }else if(sortValue==2){
         temp.sort((a,b)=>( `${b[0]}`.localeCompare(`${a[0]}`)) ) 
-      }else if(sortValue==3){
-        temp.sort((a,b)=>( a[4]-b[4] ) ) 
       }else{
         temp.sort((a,b)=>( b[4]-a[4] ) ) 
       }
@@ -126,61 +151,136 @@ function ContentsTab ({ searchText}){
 
   React.useEffect(()=>{
     sortData()
-  },[sortValue,appStateVisible,refreshing])
+  },[sortValue])
   
-  // React.useEffect(()=>{
-  //   filteringData()
-  // },[filter.yogiyoSelected,filter.baeminSelected,filter.coupangSelected,filter.wemefSelected,appStateVisible,refreshing])
+  React.useEffect(()=>{
+    filteringData()
+  },[yogiyoSelected,baeminSelected,coupangSelected,wemefSelected,appStateVisible,refreshing])
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
     controllData(true)
   }, []);
 
-  const ToPlayStore=()=>{
-    const redirectURL = "market://details?id=iof.processTA"
-    const handlePress = React.useCallback(async () => {
-        await Linking.openURL(redirectURL);
-    }, [redirectURL]);
-    return ( 
-    <Pressable
-      style={[styles.button, styles.buttonClose,{marginRight:10}]}
-      onPress={() => handlePress()}
-    >
-      <Text style={styles.textStyle}>업데이트 하기</Text>
-    </Pressable>)
-  }
 
   if(error){
     return (
-      <View style={styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>업데이트가 필요합니다!</Text>
-              <ToPlayStore/>
-            </View>
-          </View>
-        </Modal>
-        <Pressable
-          style={[styles.button, styles.buttonOpen]}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.textStyle}>Show Modal</Text>
-        </Pressable>
-    </View>
+      <ErrorModal/>
     )
   }
+
+
+  const filterApp=(appname)=>{
+    if(appname=='baemin'){
+      setbaeminSelected(!baeminSelected)
+    }
+    if(appname=='yogiyo'){
+      setyogiyoSelected(!yogiyoSelected)
+    }
+    if(appname=='wemef'){
+      setwemefSelected(!wemefSelected)
+    }
+    if(appname=='coupang'){
+      setcoupangSelected(!coupangSelected)
+    }
+  }
+
+  const AppButton=({appname})=>{
+    let textName
+    if(appname=='baemin'){
+      if(baeminSelected){
+        return (<TouchableOpacity
+          onPress={()=>filterApp(appname)}
+          style={styles[appname]}>
+          <Text style={styles.buttonText}>배달의민족</Text>
+        </TouchableOpacity>)
+      }else{
+        return (<TouchableOpacity
+          onPress={()=>filterApp(appname)}
+          style={styles[appname]}>
+          <Text style={styles.delButtonText}>배달의민족</Text>
+        </TouchableOpacity>)
+      }
+    }else if(appname=='yogiyo'){
+      if(yogiyoSelected){
+        return (<TouchableOpacity
+          onPress={()=>filterApp(appname)}
+          style={styles[appname]}>
+          <Text style={styles.buttonText}>요기요</Text>
+        </TouchableOpacity>)
+      }else{
+        return (<TouchableOpacity
+          onPress={()=>filterApp(appname)}
+          style={styles[appname]}>
+          <Text style={styles.delButtonText}>요기요</Text>
+        </TouchableOpacity>)
+      }
+    }else if(appname=='wemef'){
+      if(wemefSelected){
+        return (<TouchableOpacity
+          onPress={()=>filterApp(appname)}
+          style={styles[appname]}>
+          <Text style={styles.buttonText}>위메프오</Text>
+        </TouchableOpacity>)
+      }else{
+        return (<TouchableOpacity
+          onPress={()=>filterApp(appname)}
+          style={styles[appname]}>
+          <Text style={styles.delButtonText}>위메프오</Text>
+        </TouchableOpacity>)
+      }
+    }else{
+      if(coupangSelected){
+        return (<TouchableOpacity
+          onPress={()=>filterApp(appname)}
+          style={styles[appname]}>
+          <Text style={styles.buttonText}>쿠팡잇츠</Text>
+        </TouchableOpacity>)
+      }else{
+        return (<TouchableOpacity
+          onPress={()=>filterApp(appname)}
+          style={styles[appname]}>
+          <Text style={styles.delButtonText}>쿠팡잇츠</Text>
+        </TouchableOpacity>)
+      }
+    }
+  }
+
+  const TobUnderBar=()=>{
+    return(
+    <View style={{height:40, borderBottomWidth:1, borderBottomColor: '#990200',flexDirection:'row',backgroundColor:'white',zIndex:9999}}>
+        <View style={{flexDirection:'row',flex:3}}>
+          <AppButton appname='baemin'/>
+          <AppButton appname='yogiyo'/>
+          <AppButton appname='coupang'/>
+          <AppButton appname='wemef'/>
+        </View>
+
+          <View style={{flex: 1.7,flexDirection:'row-reverse'}}> 
+              <DropDownPicker
+                open={open}
+                value={sortValue}
+                items={items}
+                setOpen={setOpen}
+                showArrowIcon={false}
+                style={{height:32,width:100}}
+                containerStyle={{width:100,margin:4}}
+                setValue={setsortValue}
+                setItems={setItems}
+                labelStyle={{borderRadius:30}}
+                placeholder="이름순"
+                textStyle={{
+                  textAlign:'center',
+                  color:'black',
+                }}
+              />  
+          </View>
+      </View>)
+  }
+  
   return (
     <View style={styles.container}>
-      <NavigationContainer  >
+      <NavigationContainer>
         <Tab.Navigator  
             tabBarOptions={{
               style: {
@@ -190,24 +290,24 @@ function ContentsTab ({ searchText}){
                 fontSize: 12,
               },
               indicatorStyle: {
-                 borderBottomColor: 'red',
+                 borderBottomColor: '#990200',
                   borderBottomWidth: 2,
               },
-                activeTintColor: 'red',
+                activeTintColor: '#990200',
                 inactiveTintColor: "lightgray",
             }}
-
+            
         >
           <Tab.Screen 
             name="전체" 
-            children={ () => <Contents ViewInfo={ViewInfo} refreshing={refreshing} onRefresh={onRefresh} /> }
+            children={ () => <View style={{flex:1}}><TobUnderBar/><Contents ViewInfo={ViewInfo} refreshing={refreshing} onRefresh={onRefresh} /></View> }
           />
            {category.map( (cate,index) => {
               return <Tab.Screen 
                 name={cate}
                 key={index}
-              children={ () => <Contents ViewInfo={ViewInfo} cate={cate}   refreshing={refreshing} onRefresh={onRefresh}
-              /> }
+              children={ () => <View style={{flex:1}} ><TobUnderBar/><Contents ViewInfo={ViewInfo} cate={cate}   refreshing={refreshing} onRefresh={onRefresh}
+              /></View> }
               />
             }
           )}
@@ -217,6 +317,7 @@ function ContentsTab ({ searchText}){
     </View>
   );
 }
+
 
 
 
@@ -267,7 +368,57 @@ const styles = StyleSheet.create({
     fontSize:30,
     marginBottom: 15,
     textAlign: "center"
+  },
+  buttonText:{
+    fontSize:12
+  },
+  delButtonText:{
+    fontSize:12,
+    color:'gray',
+    textDecorationLine: 'line-through', 
+    textDecorationStyle: 'solid'
+  },
+  coupang:{
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 2,
+    borderRadius: 50,
+    marginHorizontal:1,
+    marginVertical:3,
+    borderWidth:1
+  },
+  wemef:{
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 2,
+    borderRadius: 50,
+    marginHorizontal:1,
+    marginVertical:3,
+    borderWidth:1
+  },
+  yogiyo:{
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 2,
+    borderRadius: 50,
+    marginHorizontal:1,
+    marginVertical:3,
+    borderWidth:1
+  },
+  baemin:{
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 8,
+    borderRadius: 50,
+    marginHorizontal:1,
+    marginVertical:3,
+    borderWidth:1
   }
+
 });
 
 export default ContentsTab;

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, TextInput,CheckBox, SafeAreaView, BackHandler, Modal,Pressable} from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import { View, Text, StyleSheet, Image, SafeAreaView, BackHandler, Modal,Pressable} from 'react-native';
 import ContentsTab from './ContentsTab.js'
 import { SearchBar } from 'react-native-elements';
 import { useEffect } from 'react';
@@ -18,10 +17,6 @@ export default function App() {
     // React.useEffect(() => {
     //    setTestDeviceIDAsync("testdevice");
     // }, []);
-
-  // useEffect(()=>{
-  //   filter={yogiyo:yogiyoSelected,baemin:baeminSelected,coupang:coupangSelected,wemef:wemefSelected}
-  // },[baeminSelected,yogiyoSelected,coupangSelected,wemefSelected])
 
   //앱 종료
   
@@ -80,19 +75,21 @@ export default function App() {
       </View>
     </Modal>
       <View style={{ flex:1, flexDirection: 'row',backgroundColor:'#8A0602',height:200}}>
-        <View style={{flex: 2 }}></View>
+        <View style={{flex: 1.5 }}>
+        <Image style={{width:45,height:45,margin:5}} source={require('./assets/homelogo.png')} />
+        </View>
 
-          <View style={{flex: 5 }}>
-            <SearchBar
-              placeholder="브랜드명을 입력해주세요"
-              onChangeText={setSearchText}
-              value={searchText}
-              
-              containerStyle={{backgroundColor:'#8A0602',height:20,flex:1,padding:1,paddingTop:2}}
-              inputContainerStyle={{backgroundColor:'white',margin:0,padding:1,borderRadius:20}}
-              style={{backgroundColor:'white',margin:0,padding:0}}
-              cancelIcon ={true}
-            />
+        <View style={{flex: 5 }}>
+          <SearchBar
+            placeholder="브랜드명을 입력해주세요"
+            onChangeText={setSearchText}
+            value={searchText}
+            containerStyle={{backgroundColor:'#8A0602',flex:1,padding:1,paddingTop:2}}
+            inputContainerStyle={{backgroundColor:'white',margin:0,padding:1,marginTop:5,borderRadius:20,height:40}}
+            style={{backgroundColor:'white',margin:0,padding:0}}
+            cancelIcon ={true}
+          />
+
           </View>
           <View style={{flex:1.5}}></View>
       </View>
@@ -109,16 +106,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 40,
     zIndex: 0,
-  },
-  animatedBox: {
-    flex: 1,
-    backgroundColor: "white",
-    padding: 10
-  },
-  body: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   
   centeredView: {
@@ -146,9 +133,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
   },
   buttonClose: {
     backgroundColor: "#2196F3",

@@ -5,13 +5,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function DrawerIcon ({val}) {
     if(val==1){
-        return <View flexDirection="row"><Text>이름순</Text><Ionicons name="arrow-down-outline" size={17} /></View>
+        return <View flexDirection="row"><Text>이름순</Text></View>
     }else if(val==2){
-        return <View flexDirection="row"><Text>이름역순</Text><Ionicons name="arrow-up-outline" size={17} /></View>
+        return <View flexDirection="row"><Text>이름역순</Text></View>
     }else{
-        return <View flexDirection="row"><Text>할인금액순</Text><Ionicons name="arrow-down-outline" size={17} /></View>
+        return <View flexDirection="row"><Text>할인금액순</Text></View>
     }
-    // else{
-    //     return <View flexDirection="row"><Text></Text><Ionicons name="arrow-up-outline" size={17} /></View>
-    // }
 }
