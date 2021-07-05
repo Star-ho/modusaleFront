@@ -1,11 +1,8 @@
-//npx babel-node --presets @babel/env index.js
-//npm run android
-
 import * as React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput,CheckBox, SafeAreaView, BackHandler, Modal,Pressable} from 'react-native';
+import { View, Text, StyleSheet, KeyboardAvoidingView, TextInput,CheckBox, SafeAreaView, BackHandler, Modal,Pressable} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ContentsTab from './ContentsTab.js'
-
+import { SearchBar } from 'react-native-elements';
 import { useEffect } from 'react';
 import {
   AdMobBanner,
@@ -27,22 +24,24 @@ export default function App() {
   // },[baeminSelected,yogiyoSelected,coupangSelected,wemefSelected])
 
   //앱 종료
-  // useEffect(() => {
-  //   const backAction = () => {
-  //     setModalVisible(true)
-  //     return true;
-  //   };
-  //   const backHandler = BackHandler.addEventListener(
-  //     "hardwareBackPress",
-  //     backAction
-  //   );
-  //   return () => backHandler.remove();
-  // }, []);
+  
+  useEffect(() => {
+    const backAction = () => {
+      setModalVisible(true)
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+  }, []);
 
   const closeApp=()=>{
       BackHandler.exitApp()
       setModalVisible(!modalVisible)
   }
+
 
   return (
     <SafeAreaView style={styles.container}>          
@@ -80,20 +79,22 @@ export default function App() {
         </View>
       </View>
     </Modal>
-      <View style={{ flex:1, flexDirection: 'row',backgroundColor:'#8A0602',zIndex: 999}}>
-        <View style={{flex: 1, height: 50, }}></View>
-          <View style={{flex: 5, height: 50, }}>
-            <TextInput
-            style={{flex:1,borderBottomWidth:1,paddingRight:10,fontSize:20}}
-            onChangeText={setSearchText}
-            placeholder={'검색어를입력해주세요'}
-            value={searchText}
-            >
-            </TextInput>
+      <View style={{ flex:1, flexDirection: 'row',backgroundColor:'#8A0602',height:200}}>
+        <View style={{flex: 2 }}></View>
+
+          <View style={{flex: 5 }}>
+            <SearchBar
+              placeholder="브랜드명을 입력해주세요"
+              onChangeText={setSearchText}
+              value={searchText}
+              
+              containerStyle={{backgroundColor:'#8A0602',height:20,flex:1,padding:1,paddingTop:2}}
+              inputContainerStyle={{backgroundColor:'white',margin:0,padding:1,borderRadius:20}}
+              style={{backgroundColor:'white',margin:0,padding:0}}
+              cancelIcon ={true}
+            />
           </View>
-          <View style={{flex:1.5}}>
-          <Ionicons name="search" size={30} style={{margin:5}} onPress={()=>toggleOpen()}/>
-        </View>
+          <View style={{flex:1.5}}></View>
       </View>
       <ContentsTab searchText={searchText} />
     </SafeAreaView>

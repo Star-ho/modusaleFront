@@ -5,17 +5,17 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import DrawerIcon from "./DrawerIconSet.js"
 
 function Contents({ViewInfo,cate,refreshing, sortValue,setsortValue, onRefresh}) {
-  let data=[...ViewInfo]
+  let data
   const buttonClickedHandler = () => {
     console.log('You have been clicked a button!');
     // do something
   };
-  let len
   if(cate){
-    len=data.filter(v=>v[3]==cate).length
+    data=[...ViewInfo].filter(v=>v[3]==cate)
   }else{
-    len=data.length
+    data=[...ViewInfo]
   }
+  let len=data.length
   data.splice(data.length*Math.random(),0,'ad')
   if(len>20){
     data.splice(data.length*Math.random(),0,'ad')
@@ -46,7 +46,7 @@ function Contents({ViewInfo,cate,refreshing, sortValue,setsortValue, onRefresh})
     <View style={styles.container}>
       <View style={{borderBottomWidth:1, borderBottomColor: '#990200'}}>
         <ScrollView
-          style={{zIndex: 999}}
+          
           horizontal={true}
           >
           <TouchableOpacity
@@ -69,7 +69,7 @@ function Contents({ViewInfo,cate,refreshing, sortValue,setsortValue, onRefresh})
             style={styles.brandButton}>
             <Text>위메프오</Text>
           </TouchableOpacity>
-{/*           
+          
           <DropDownPicker
             open={open}
             value={sortValue}
@@ -77,10 +77,7 @@ function Contents({ViewInfo,cate,refreshing, sortValue,setsortValue, onRefresh})
             setOpen={setOpen}
             setValue={setsortValue}
             setItems={setItems}
-            style={{height:45,marginTop:4,marginRight:3,inputAndroid: { color: 'black' }}}
-            useNativeAndroidPickerStyle={false}
-            dropDownContainerStyle={{ backgroundColor: 'white',zIndex: 1000, elevation: 1000 }}
-            placeholder="정123렬"
+            placeholder="123"
             arrowIconStyle={{
               width: 10,
               height: 10
@@ -89,7 +86,7 @@ function Contents({ViewInfo,cate,refreshing, sortValue,setsortValue, onRefresh})
               textAlign:"center",
               color:'black'
             }}
-          />   */}
+          />  
         </ScrollView>
       </View>
       <FlatList

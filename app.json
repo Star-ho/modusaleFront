@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "modusaleFront",
-    "slug": "modusaleFront",
+    "name": "할인 모아",
+    "slug": "salemoa",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,13 +20,20 @@
       "supportsTablet": true
     },
     "android": {
+      "versionCode": 10,
+      "package": "iof.processTA",
+      "permissions":[],      
+      "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-ads-admob"
+    ]
   }
 }

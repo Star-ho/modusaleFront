@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {  Modal, Pressable, Text, View, StyleSheet, Linking, AppState } from 'react-native';
+import {  Modal, Pressable, Text, View, StyleSheet, Linking, AppState, Dimensions  } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Contents from "./Content.js"
@@ -25,7 +25,6 @@ function ContentsTab ({ searchText}){
 
   React.useEffect(() => {
     AppState.addEventListener("change", _handleAppStateChange);
-
     return () => {
       AppState.removeEventListener("change", _handleAppStateChange);
     };
@@ -182,16 +181,31 @@ function ContentsTab ({ searchText}){
   return (
     <View style={styles.container}>
       <NavigationContainer  >
-        <Tab.Navigator  >
-          
+        <Tab.Navigator  
+            tabBarOptions={{
+              style: {
+                backgroundColor: 'white',
+              },
+              labelStyle: {
+                fontSize: 12,
+              },
+              indicatorStyle: {
+                 borderBottomColor: 'red',
+                  borderBottomWidth: 2,
+              },
+                activeTintColor: 'red',
+                inactiveTintColor: "lightgray",
+            }}
+
+        >
           <Tab.Screen 
             name="전체" 
             children={ () => <Contents ViewInfo={ViewInfo} refreshing={refreshing} onRefresh={onRefresh} /> }
           />
            {category.map( (cate,index) => {
               return <Tab.Screen 
-              name={cate}
-              key={index}
+                name={cate}
+                key={index}
               children={ () => <Contents ViewInfo={ViewInfo} cate={cate}   refreshing={refreshing} onRefresh={onRefresh}
               /> }
               />
@@ -209,6 +223,7 @@ function ContentsTab ({ searchText}){
 const styles = StyleSheet.create({
   container: {
     flex:13,
+    width:Dimensions.get('screen').width 
   },
   centeredView: {
     flex: 1,

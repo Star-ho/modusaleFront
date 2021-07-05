@@ -136,7 +136,7 @@ const SaleListItem = ({val,cate}) => {
     }
 
   }
-  if(val[3]==cate||!cate){
+
       return (
         <View style={{flexDirection:'row',height:90}}>
           <Modal
@@ -188,10 +188,6 @@ const SaleListItem = ({val,cate}) => {
         </Pressable>
       </View>
     );
-  }else{
-    // console.log(cate)
-    return <View></View>
-  }
 };
 
 const HaveImage = ({ImageName}) => { 
@@ -213,6 +209,7 @@ const HaveImage = ({ImageName}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:'white',
     borderBottomWidth: 1,
     flexDirection: 'row',
     padding:10
