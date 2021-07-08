@@ -20,13 +20,16 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 10,
+      "versionCode": 12,
       "package": "iof.processTA",
       "permissions":[],      
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleMobileAdsAppId":"ca-app-pub-5926200986625193~8368679418"
       }
     },
     "web": {

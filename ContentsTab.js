@@ -6,12 +6,18 @@ import Contents from "./Content.js"
 import DropDownPicker from 'react-native-dropdown-picker';
 import ErrorModal from './ErrorModal.js'
 import DrawerIcon from './DrawerIconSet.js';
+import { useFonts } from 'expo-font';
 
 
 const Tab = createMaterialTopTabNavigator();
 
-function ContentsTab ({ searchText}){ 
+function ContentsTab ({ searchText,setSearchText}){ 
+  const [loaded] = useFonts({
+    BMJUA_ttf: require('./assets/fonts/BMJUA_ttf.ttf'),
+  });
+
   const [allInfo, setAllInfo] = React.useState([]);
+  const [filterInfo, setFilterInfo] = React.useState([]);
   const [ViewInfo, setViewInfo] = React.useState([]);
   let category=["치킨","피자","한식","양식","기타"]
   const [error,setError]=React.useState(false);
@@ -19,14 +25,14 @@ function ContentsTab ({ searchText}){
   const appState = React.useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = React.useState(appState.current);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [sortValue, setsortValue] = React.useState(1);
+  const [sortValue, setsortValue] = React.useState('1');
 
   const [yogiyoSelected, setyogiyoSelected] = React.useState(true);
   const [baeminSelected, setbaeminSelected] = React.useState(true);
   const [coupangSelected, setcoupangSelected] = React.useState(true);
   const [wemefSelected, setwemefSelected] = React.useState(true);
-
-  
+  const [flag, setFlag]=React.useState(1)
+  let a=0
   const [open, setOpen]=React.useState(false)
   
   const [items, setItems] = React.useState([
@@ -56,20 +62,21 @@ function ContentsTab ({ searchText}){
     setAppStateVisible(appState.current);
   };
 
-  const sortData=()=>{
-    let temp=ViewInfo.slice()
-    if(sortValue==1){
+  function sortData(){
+    let temp=filterInfo.slice()
+    if(sortValue==='1'){
       temp.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
-    }else if(sortValue==2){
+    }else if(sortValue==='2'){
       temp.sort((a,b)=>( `${b[0]}`.localeCompare(`${a[0]}`)) ) 
     }else{
       temp.sort((a,b)=>( b[4]-a[4] ) ) 
     }
+    setFilterInfo(temp)
     setViewInfo(temp)
   }
 
-  const filteringData=()=>{
-    let temp=allInfo
+  function filteringData(){
+    let temp=allInfo.slice()
     if(!yogiyoSelected){
       temp=temp.filter(v=>v[1]!='yogiyo')
     }
@@ -82,71 +89,52 @@ function ContentsTab ({ searchText}){
     if(!wemefSelected){
       temp=temp.filter(v=>v[1]!='wemef')
     }
-    if(sortValue==1){
+    if(sortValue==='1'){
       temp.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
-    }else if(sortValue==2){
+    }else if(sortValue==='2'){
       temp.sort((a,b)=>( `${b[0]}`.localeCompare(`${a[0]}`)) ) 
     }else{
       temp.sort((a,b)=>( b[4]-a[4] ) ) 
     }
+    setFilterInfo(temp)
     setViewInfo(temp)
-    
+
   }
 
-  //검색어입력
-  React.useEffect(() => {
-      let res=allInfo.filter(v=>v[0].toLowerCase().includes(searchText.toLowerCase()))
-      setViewInfo(res)
-  }, [searchText]);
-
-    
-  const controllData=(isRefesh)=>{
+  
+  function controllData(){
     fetch("http://sailmoa.com/?ver=0.90").then(res=>res.json())
     .then(res=>{
       if(!res.error){
       let arr=[]
       for(let i of Object.entries(res)){
-        arr.push( [ i[1][0], i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
+        arr.push( [ i[1][0].toUpperCase(), i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
       }
-      arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
       //console.log(arr)
-      setAllInfo([...arr])
-
-      let temp=[...arr].slice()
-      if(!yogiyoSelected){
-        temp=temp.filter(v=>v[1]!='yogiyo')
-      }
-      if(!baeminSelected){
-        temp=temp.filter(v=>v[1]!='baemin')
-      }
-      if(!coupangSelected){
-        temp=temp.filter(v=>v[1]!='coupang')
-      }
-      if(!wemefSelected){
-        temp=temp.filter(v=>v[1]!='wemef')
-      }
-
-      if(sortValue==1){
-        temp.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
-      }else if(sortValue==2){
-        temp.sort((a,b)=>( `${b[0]}`.localeCompare(`${a[0]}`)) ) 
+      arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
+      setAllInfo(arr)
+      setFilterInfo(arr)
+      setViewInfo(arr)
+      setSearchText('')
+      if(flag!=1){
+        filteringData()
       }else{
-        temp.sort((a,b)=>( b[4]-a[4] ) ) 
+        setFlag(2)
       }
-      setViewInfo(temp)
-      if(isRefesh){
-        setRefreshing(false)
-      }
-
       }else{
         setError(true)
       }
     })
-
   }
 
+  //검색어입력
+  React.useEffect(() => {
+      let res=filterInfo.filter(v=>v[0].toLowerCase().includes(searchText.toLowerCase()))
+      setViewInfo(res)
+  }, [searchText]);
+
   React.useEffect(()=>{
-    controllData(false)
+    controllData()
   },[appStateVisible,refreshing])
 
   React.useEffect(()=>{
@@ -155,13 +143,7 @@ function ContentsTab ({ searchText}){
   
   React.useEffect(()=>{
     filteringData()
-  },[yogiyoSelected,baeminSelected,coupangSelected,wemefSelected,appStateVisible,refreshing])
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    controllData(true)
-  }, []);
-
+  },[yogiyoSelected,baeminSelected,coupangSelected,wemefSelected,allInfo,refreshing,appStateVisible])
 
   if(error){
     return (
@@ -186,7 +168,6 @@ function ContentsTab ({ searchText}){
   }
 
   const AppButton=({appname})=>{
-    let textName
     if(appname=='baemin'){
       if(baeminSelected){
         return (<TouchableOpacity
@@ -246,7 +227,7 @@ function ContentsTab ({ searchText}){
     }
   }
 
-  const TobUnderBar=()=>{
+  const TobUnderBar=({sortValue})=>{
     return(
     <View style={{height:40, borderBottomWidth:1, borderBottomColor: '#990200',flexDirection:'row',backgroundColor:'white',zIndex:9999}}>
         <View style={{flexDirection:'row',flex:3}}>
@@ -263,11 +244,14 @@ function ContentsTab ({ searchText}){
                 items={items}
                 setOpen={setOpen}
                 showArrowIcon={false}
-                style={{height:32,width:100}}
+                style={{height:32,width:100 }}
                 containerStyle={{width:100,margin:4}}
+                zIndex={100}
                 setValue={setsortValue}
                 setItems={setItems}
-                labelStyle={{borderRadius:30}}
+                listItemContainerStyle={{height:40}}
+                bottomOffset={100}
+                listMode='MODAL'
                 placeholder="이름순"
                 textStyle={{
                   textAlign:'center',
@@ -287,26 +271,30 @@ function ContentsTab ({ searchText}){
                 backgroundColor: 'white',
               },
               labelStyle: {
-                fontSize: 12,
+                fontSize: 15,
+                fontFamily:'BMJUA_ttf', 
+
               },
               indicatorStyle: {
-                 borderBottomColor: '#990200',
-                  borderBottomWidth: 2,
+                borderBottomColor: '#990200',
+                borderBottomWidth: 2,
+
               },
                 activeTintColor: '#990200',
                 inactiveTintColor: "lightgray",
+
             }}
             
         >
           <Tab.Screen 
             name="전체" 
-            children={ () => <View style={{flex:1}}><TobUnderBar/><Contents ViewInfo={ViewInfo} refreshing={refreshing} onRefresh={onRefresh} /></View> }
+            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} refreshing={refreshing} setRefreshing={setRefreshing} /></View> }
           />
            {category.map( (cate,index) => {
               return <Tab.Screen 
                 name={cate}
                 key={index}
-              children={ () => <View style={{flex:1}} ><TobUnderBar/><Contents ViewInfo={ViewInfo} cate={cate}   refreshing={refreshing} onRefresh={onRefresh}
+              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} cate={cate}   refreshing={refreshing} setRefreshing={setRefreshing}
               /></View> }
               />
             }
@@ -362,7 +350,7 @@ const styles = StyleSheet.create({
     fontSize:20,
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
   },
   modalText: {
     fontSize:30,
@@ -370,7 +358,7 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   buttonText:{
-    fontSize:12
+    fontSize:12,
   },
   delButtonText:{
     fontSize:12,

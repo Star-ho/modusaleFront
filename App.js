@@ -81,11 +81,11 @@ export default function App() {
 
         <View style={{flex: 5 }}>
           <SearchBar
-            placeholder="브랜드명을 입력해주세요"
+            placeholder="어떤 가게를 찾으시나요?"
             onChangeText={setSearchText}
             value={searchText}
             containerStyle={{backgroundColor:'#8A0602',flex:1,padding:1,paddingTop:2}}
-            inputContainerStyle={{backgroundColor:'white',margin:0,padding:1,marginTop:5,borderRadius:20,height:40}}
+            inputContainerStyle={{backgroundColor:'white',margin:0,padding:1,marginTop:5,borderRadius:20,height:40,fontSize:10}}
             style={{backgroundColor:'white',margin:0,padding:0}}
             cancelIcon ={true}
           />
@@ -93,7 +93,7 @@ export default function App() {
           </View>
           <View style={{flex:1.5}}></View>
       </View>
-      <ContentsTab searchText={searchText} />
+      <ContentsTab searchText={searchText} setSearchText={setSearchText} />
     </SafeAreaView>
   );
 }

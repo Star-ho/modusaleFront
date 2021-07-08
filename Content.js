@@ -2,13 +2,20 @@ import * as React from 'react';
 import { View,  StyleSheet, RefreshControl, FlatList, TouchableOpacity } from 'react-native';
 import SaleListItem from './saleListItem';
 
-function Contents({ViewInfo,cate,refreshing, onRefresh}) {
+function Contents({ViewInfo,cate,refreshing, setRefreshing}) {
   let data
   if(cate){
     data=[...ViewInfo].filter(v=>v[3]==cate)
   }else{
     data=[...ViewInfo]
   }
+  const [tabRefreshing,tabOnRefresh]=React.useState(false)
+  const onTabRefresh = React.useCallback(() => {
+    tabOnRefresh(true);
+    setRefreshing(!refreshing)
+    setTimeout(()=>{tabOnRefresh(false)},1500)
+    
+  }, []);
   let len=data.length
   data.splice(data.length*Math.random(),0,'ad')
   if(len>20){
@@ -22,16 +29,16 @@ function Contents({ViewInfo,cate,refreshing, onRefresh}) {
 
 
   return (    
-    <View style={{flex:1,height:100}}>
+    <View style={{flex:1}}>
       <FlatList
         disableVirtualization={false} 
         refreshControl={
             <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
+              refreshing={tabRefreshing}
+              onRefresh={onTabRefresh}
             />} 
         data={data}
-        style={{zIndex:-1}}
+        
         renderItem={({item}) => 
         <View>
           <SaleListItem val={item} cate={cate} />
