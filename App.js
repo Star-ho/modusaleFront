@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     fontWeight: '500',
-    fontSize: 20,
+    fontSize: RFValue(20),//20,
   }
 })
 

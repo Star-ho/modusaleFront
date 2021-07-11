@@ -8,10 +8,12 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-picker/picker": "1.16.1",
     "@react-navigation/material-top-tabs": "next",
-    "@react-navigation/native": "^5.9.4",
+    "@react-navigation/native": "next",
     "expo": "~42.0.0",
     "expo-ads-admob": "~10.1.2",
+    "expo-font": "~9.2.1",
     "expo-status-bar": "~1.0.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -20,13 +22,12 @@
     "react-native-elements": "^3.4.2",
     "react-native-pager-view": "5.0.12",
     "react-native-picker": "^4.3.7",
+    "react-native-responsive-fontsize": "^0.5.0",
     "react-native-tab-view": "^3.0.1",
     "react-native-vector-icons": "^8.1.0",
-    "react-native-web": "~0.13.12",
+    "react-native-web": "^0.17.1",
     "react-navigation": "^4.4.4",
-    "unimodules-permissions-interface": "^6.1.0",
-    "@react-native-picker/picker": "1.16.1",
-    "expo-font": "~9.2.1"
+    "unimodules-permissions-interface": "^6.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

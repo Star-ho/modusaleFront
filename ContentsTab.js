@@ -7,6 +7,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import ErrorModal from './ErrorModal.js'
 import DrawerIcon from './DrawerIconSet.js';
 import { useFonts } from 'expo-font';
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -32,7 +33,6 @@ function ContentsTab ({ searchText,setSearchText}){
   const [coupangSelected, setcoupangSelected] = React.useState(true);
   const [wemefSelected, setwemefSelected] = React.useState(true);
   const [flag, setFlag]=React.useState(1)
-  let a=0
   const [open, setOpen]=React.useState(false)
   
   const [items, setItems] = React.useState([
@@ -271,7 +271,7 @@ function ContentsTab ({ searchText,setSearchText}){
                 backgroundColor: 'white',
               },
               labelStyle: {
-                fontSize: 15,
+                fontSize: RFValue(15),//15,
                 fontFamily:'BMJUA_ttf', 
 
               },
@@ -347,21 +347,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#2196F3",
   },
   textStyle: {
-    fontSize:20,
+    fontSize: RFValue(20),//20,
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
   },
   modalText: {
-    fontSize:30,
+    fontSize: RFValue(30),//30,
     marginBottom: 15,
     textAlign: "center"
   },
   buttonText:{
-    fontSize:12,
+    fontSize: RFValue(11),//12,
   },
   delButtonText:{
-    fontSize:12,
+    fontSize: RFValue(12),//12,
     color:'gray',
     textDecorationLine: 'line-through', 
     textDecorationStyle: 'solid'

@@ -1,4 +1,5 @@
 //val 값 [ 브랜드명, 출처(요기요, 배민), 이미지, 분류, 할인금액 ] 
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import React from 'react';
 import { View, Linking, Text, StyleSheet, Modal, Pressable, Image } from 'react-native';
 import { useFonts } from 'expo-font';
@@ -27,7 +28,7 @@ const SaleListItem = ({val}) => {
 //     setTestDeviceIDAsync("testdevice");
 //  }, []);
   if(val=='ad')  {
-    return(        <View style={styles.adView}>
+    return( <View style={styles.adView}>
       <AdMobBanner
         bannerSize="smartBanner"
         adUnitID="ca-app-pub-5926200986625193/7250011193" 
@@ -208,23 +209,17 @@ const styles = StyleSheet.create({
   },
   brandText: {
     flex: 6,
-    // fontWeight: '500',
-    fontSize: 27,
+    fontSize: RFValue(28),//27,
     fontFamily:'BMHANNAPro'
-  },
-  addtionalText: {
-    flex: 5,
-    fontWeight: '300',
-    fontSize: 10,
   },
   priceText: {
     fontWeight: '500',
-    fontSize: 12,
+    fontSize: RFValue(12),//12,
     fontFamily:'BMHANNAPro'
   },
   price: {
     fontWeight: '500',
-    fontSize: 12,
+    fontSize: RFValue(12),//12,
     color:'#C10000',
     fontFamily:'BMHANNAPro'
   },
@@ -241,7 +236,7 @@ const styles = StyleSheet.create({
   sourceText: {
     flex: 2,
     fontWeight: '500',
-    fontSize: 9.5,
+    fontSize: RFValue(9),//9.5,
     fontFamily:'BMHANNAPro',
     marginTop:1,
     marginLeft:-2
@@ -288,7 +283,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     fontWeight: '500',
-    fontSize: 20,
+    fontSize: RFValue(20),//20,
   },
   adView:{
     borderBottomColor: '#f4e5e5',
