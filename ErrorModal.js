@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {  Modal, Pressable, Text, View, StyleSheet,Linking, Dimensions  } from 'react-native';
+import { fontSizeFlex } from './fontSizeFlex';
 const {
   width: SCREEN_WIDTH,
   height: SCREEN_HEIGHT,
@@ -89,18 +90,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#2196F3",
   },
   textStyle: {
-    fontSize:widthScale*15,
+    fontSize:fontSizeFlex(13.125),
     color: "white",
     fontWeight: "bold",
     textAlign: "center"
   },
   modalText: {
-    fontSize:widthScale*22.5,
+    fontSize:fontSizeFlex(19.6),
     marginBottom: 15,
     textAlign: "center"
   },
   bottunText:{
-    fontSize:widthScale*9
+    fontSize:fontSizeFlex(7.8)
     ,textDecorationLine: 'line-through', textDecorationStyle: 'solid'
   }
 });

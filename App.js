@@ -7,14 +7,7 @@ import {
   AdMobBanner,
   //setTestDeviceIDAsync
 } from "expo-ads-admob";
-
-const {
-  width: SCREEN_WIDTH,
-  height: SCREEN_HEIGHT,
-} = Dimensions.get('window');
-const widthScale=SCREEN_WIDTH/320
-const heigthScale=SCREEN_HEIGHT/320
-
+import { fontSizeFlex } from "./fontSizeFlex.js";
 
 export default function App() {
   const [searchText, setSearchText] = React.useState("");
@@ -81,9 +74,9 @@ export default function App() {
         </View>
       </View>
     </Modal>
-      <View style={{ flex:1, flexDirection: 'row',backgroundColor:'#8A0602'}}>
+      <View style={{ flex:1.1, flexDirection: 'row',backgroundColor:'#8A0602'}}>
         <View style={{flex: 1.5 }}>
-        <Image style={{width:widthScale*40,height:heigthScale*20,margin:5}} source={require('./assets/homelogo.png')} />
+        <Image style={{width:fontSizeFlex(40),height:fontSizeFlex(40),margin:fontSizeFlex(7)}} source={require('./assets/homelogo.png')} />
         </View>
 
         <View style={{flex: 5 }}>
@@ -91,9 +84,9 @@ export default function App() {
             placeholder="어떤 가게를 찾으시나요?"
             onChangeText={setSearchText}
             value={searchText}
-            containerStyle={{backgroundColor:'#8A0602',flex:1,padding:1,paddingTop:3}}
-            inputContainerStyle={{backgroundColor:'white',margin:0,padding:1,borderRadius:20,fontSize:widthScale*10}}
-            style={{backgroundColor:'white',margin:0,padding:1,fontSize:widthScale*12}}
+            containerStyle={{backgroundColor:'#8A0602',flex:1,margin:fontSizeFlex(1)}}
+            inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(15)}}
+            style={{backgroundColor:'white',margin:0,padding:1,fontSize:fontSizeFlex(15)}}
             cancelIcon ={true}
           />
 
@@ -153,7 +146,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     fontWeight: '500',
-    fontSize: widthScale*15,//20,
+    fontSize: fontSizeFlex(3),//20,
   }
 })
 

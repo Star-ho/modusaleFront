@@ -7,14 +7,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import ErrorModal from './ErrorModal.js'
 import DrawerIcon from './DrawerIconSet.js';
 import { useFonts } from 'expo-font';
-
-const {
-  width: SCREEN_WIDTH,
-  height: SCREEN_HEIGHT,
-} = Dimensions.get('window');
-const widthScale=SCREEN_WIDTH/320
-const heigthScale=SCREEN_HEIGHT/320
-
+import { fontSizeFlex } from "./fontSizeFlex.js";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -235,7 +228,7 @@ function ContentsTab ({ searchText,setSearchText}){
 
   const TobUnderBar=({sortValue})=>{
     return(
-    <View style={{height:heigthScale*17, borderBottomWidth:1, borderBottomColor: '#990200',flexDirection:'row',backgroundColor:'white',zIndex:9999}}>
+    <View style={{height:fontSizeFlex(33), borderBottomWidth:1, borderBottomColor: '#990200',flexDirection:'row',backgroundColor:'white',zIndex:9999}}>
         <View style={{flexDirection:'row',flex:3}}>
           <AppButton appname='baemin'/>
           <AppButton appname='yogiyo'/>
@@ -250,8 +243,8 @@ function ContentsTab ({ searchText,setSearchText}){
                 items={items}
                 setOpen={setOpen}
                 showArrowIcon={false}
-                style={{height:32,width:widthScale*80 }}
-                containerStyle={{width:widthScale*80,margin:4}}
+                style={{height:32,width:fontSizeFlex(70) }}
+                containerStyle={{width:fontSizeFlex(70),margin:4}}
                 zIndex={100}
                 setValue={setsortValue}
                 setItems={setItems}
@@ -262,10 +255,10 @@ function ContentsTab ({ searchText,setSearchText}){
                 textStyle={{
                   textAlign:'center',
                   color:'black',
-                  fontSize:widthScale*11.25
+                  fontSize:fontSizeFlex(9)
                 }}
                 labelStyle={{
-                  fontSize:widthScale*15
+                  fontSize:fontSizeFlex(13)
                 }}
               />  
           </View>
@@ -281,7 +274,7 @@ function ContentsTab ({ searchText,setSearchText}){
                 backgroundColor: 'white',
               },
               labelStyle: {
-                fontSize: widthScale*11,//15,
+                fontSize: fontSizeFlex(9.6),//15,
                 fontFamily:'BMJUA_ttf', 
 
               },
@@ -360,15 +353,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modalText: {
-    fontSize: widthScale*22.5,//30,
+    fontSize: fontSizeFlex(19),//30,
     marginBottom: 15,
     textAlign: "center"
   },
   buttonText:{
-    fontSize: widthScale*7,//12,
+    fontSize: fontSizeFlex(11),//12,
   },
   delButtonText:{
-    fontSize: widthScale*7,//12,
+    fontSize: fontSizeFlex(11),//12,
     color:'gray',
     textDecorationLine: 'line-through', 
     textDecorationStyle: 'solid'

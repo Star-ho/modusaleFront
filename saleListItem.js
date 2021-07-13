@@ -1,19 +1,15 @@
 //val 값 [ 브랜드명, 출처(요기요, 배민), 이미지, 분류, 할인금액 ] 
+
+//내일 엄마 폰으로 테스트
+//https://www.codegrepper.com/code-examples/javascript/responsive+font+size+react+native
 import React from 'react';
 import { View, Linking, Text, StyleSheet, Modal, Pressable, Image,Dimensions } from 'react-native';
 import { useFonts } from 'expo-font';
+import { fontSizeFlex } from "./fontSizeFlex.js";
 import {
   AdMobBanner,
   //setTestDeviceIDAsync
 } from "expo-ads-admob";
-
-const {
-  width: SCREEN_WIDTH,
-  height: SCREEN_HEIGHT,
-} = Dimensions.get('window');
-const widthScale=SCREEN_WIDTH/320
-const heigthScale=SCREEN_HEIGHT/320
-
 
 const SaleListItem = ({val}) => {
   const [loaded] = useFonts({
@@ -215,34 +211,34 @@ const styles = StyleSheet.create({
   },
   brandText: {
     flex: 6,
-    fontSize: widthScale*20,//27,
+    fontSize: fontSizeFlex(26),
     fontFamily:'BMHANNAPro'
   },
   priceText: {
     fontWeight: '500',
-    fontSize: widthScale*10,//12,
+    fontSize: fontSizeFlex(12.5),//12,
     fontFamily:'BMHANNAPro'
   },
   price: {
     fontWeight: '500',
-    fontSize: widthScale*10,//12,
+    fontSize: fontSizeFlex(12.5),//12,
     color:'#C10000',
     fontFamily:'BMHANNAPro'
   },
   logo: {
     marginVertical:5,
-    width: widthScale*55,
-    height: heigthScale*30,
+    width: fontSizeFlex(60),
+    height: fontSizeFlex(60),
   },
   brandlogo:{
-    width: widthScale*8,
-    height: widthScale*8,
+    width: fontSizeFlex(9),
+    height: fontSizeFlex(9),
     marginTop:1
   },
   sourceText: {
     flex: 2,
     fontWeight: '500',
-    fontSize: widthScale*6,//9.5,
+    fontSize: fontSizeFlex(9),//9.5,
     fontFamily:'BMHANNAPro',
     marginTop:1,
     marginLeft:-2
@@ -289,7 +285,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     fontWeight: '500',
-    fontSize: widthScale*15,//20,
+    fontSize: fontSizeFlex(16),//20,
   },
   adView:{
     borderBottomColor: '#f4e5e5',
