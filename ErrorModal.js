@@ -1,5 +1,12 @@
 import * as React from 'react';
 import {  Modal, Pressable, Text, View, StyleSheet,Linking, Dimensions  } from 'react-native';
+const {
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT,
+} = Dimensions.get('window');
+const widthScale=SCREEN_WIDTH/320
+const heigthScale=SCREEN_HEIGHT/320
+
 
 function ErrorModal (){ 
   const [modalVisible, setModalVisible] = React.useState(true);
@@ -82,18 +89,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#2196F3",
   },
   textStyle: {
-    fontSize:20,
+    fontSize:widthScale*15,
     color: "white",
     fontWeight: "bold",
     textAlign: "center"
   },
   modalText: {
-    fontSize:30,
+    fontSize:widthScale*22.5,
     marginBottom: 15,
     textAlign: "center"
   },
   bottunText:{
-    fontSize:12
+    fontSize:widthScale*9
     ,textDecorationLine: 'line-through', textDecorationStyle: 'solid'
   }
 });

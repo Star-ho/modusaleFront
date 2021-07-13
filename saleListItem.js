@@ -1,13 +1,19 @@
 //val 값 [ 브랜드명, 출처(요기요, 배민), 이미지, 분류, 할인금액 ] 
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import React from 'react';
-import { View, Linking, Text, StyleSheet, Modal, Pressable, Image } from 'react-native';
+import { View, Linking, Text, StyleSheet, Modal, Pressable, Image,Dimensions } from 'react-native';
 import { useFonts } from 'expo-font';
-
 import {
   AdMobBanner,
   //setTestDeviceIDAsync
 } from "expo-ads-admob";
+
+const {
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT,
+} = Dimensions.get('window');
+const widthScale=SCREEN_WIDTH/320
+const heigthScale=SCREEN_HEIGHT/320
+
 
 const SaleListItem = ({val}) => {
   const [loaded] = useFonts({
@@ -209,34 +215,34 @@ const styles = StyleSheet.create({
   },
   brandText: {
     flex: 6,
-    fontSize: RFValue(28),//27,
+    fontSize: widthScale*20,//27,
     fontFamily:'BMHANNAPro'
   },
   priceText: {
     fontWeight: '500',
-    fontSize: RFValue(12),//12,
+    fontSize: widthScale*10,//12,
     fontFamily:'BMHANNAPro'
   },
   price: {
     fontWeight: '500',
-    fontSize: RFValue(12),//12,
+    fontSize: widthScale*10,//12,
     color:'#C10000',
     fontFamily:'BMHANNAPro'
   },
   logo: {
     marginVertical:5,
-    width: 70,
-    height: 70,
+    width: widthScale*55,
+    height: heigthScale*30,
   },
   brandlogo:{
-    width: 10,
-    height: 10,
+    width: widthScale*8,
+    height: widthScale*8,
     marginTop:1
   },
   sourceText: {
     flex: 2,
     fontWeight: '500',
-    fontSize: RFValue(9),//9.5,
+    fontSize: widthScale*6,//9.5,
     fontFamily:'BMHANNAPro',
     marginTop:1,
     marginLeft:-2
@@ -283,7 +289,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     fontWeight: '500',
-    fontSize: RFValue(20),//20,
+    fontSize: widthScale*15,//20,
   },
   adView:{
     borderBottomColor: '#f4e5e5',
