@@ -7,7 +7,7 @@ import {
   AdMobBanner,
   //setTestDeviceIDAsync
 } from "expo-ads-admob";
-import { fontSizeFlex } from "./fontSizeFlex.js";
+import { fontSizeFlex,heightSize } from "./fontSizeFlex.js";
 
 export default function App() {
   const [searchText, setSearchText] = React.useState("");
@@ -76,7 +76,7 @@ export default function App() {
     </Modal>
       <View style={{ flex:1.1, flexDirection: 'row',backgroundColor:'#8A0602'}}>
         <View style={{flex: 1.5 }}>
-        <Image style={{width:fontSizeFlex(40),height:fontSizeFlex(40),margin:fontSizeFlex(7)}} source={require('./assets/homelogo.png')} />
+        <Image style={{width:heightSize(40),height:heightSize(40),margin:heightSize(7)}} source={require('./assets/homelogo.png')} />
         </View>
 
         <View style={{flex: 5 }}>
@@ -84,7 +84,8 @@ export default function App() {
             placeholder="어떤 가게를 찾으시나요?"
             onChangeText={setSearchText}
             value={searchText}
-            containerStyle={{backgroundColor:'#8A0602',flex:1,margin:fontSizeFlex(1)}}
+            allowFontScaling={false} 
+            containerStyle={{backgroundColor:'#8A0602',flex:1,margin:heightSize(1)}}
             inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(15)}}
             style={{backgroundColor:'white',margin:0,padding:1,fontSize:fontSizeFlex(15)}}
             cancelIcon ={true}

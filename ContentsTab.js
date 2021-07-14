@@ -7,7 +7,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import ErrorModal from './ErrorModal.js'
 import DrawerIcon from './DrawerIconSet.js';
 import { useFonts } from 'expo-font';
-import { fontSizeFlex } from "./fontSizeFlex.js";
+import { fontSizeFlex, heightSize } from "./fontSizeFlex.js";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -172,13 +172,13 @@ function ContentsTab ({ searchText,setSearchText}){
         return (<TouchableOpacity
           onPress={()=>filterApp(appname)}
           style={styles[appname]}>
-          <Text style={styles.buttonText}>배달의민족</Text>
+          <Text allowFontScaling={false} style={styles.buttonText}>배달의민족</Text>
         </TouchableOpacity>)
       }else{
         return (<TouchableOpacity
           onPress={()=>filterApp(appname)}
           style={styles[appname]}>
-          <Text style={styles.delButtonText}>배달의민족</Text>
+          <Text allowFontScaling={false} style={styles.delButtonText}>배달의민족</Text>
         </TouchableOpacity>)
       }
     }else if(appname=='yogiyo'){
@@ -186,13 +186,13 @@ function ContentsTab ({ searchText,setSearchText}){
         return (<TouchableOpacity
           onPress={()=>filterApp(appname)}
           style={styles[appname]}>
-          <Text style={styles.buttonText}>요기요</Text>
+          <Text allowFontScaling={false} style={styles.buttonText}>요기요</Text>
         </TouchableOpacity>)
       }else{
         return (<TouchableOpacity
           onPress={()=>filterApp(appname)}
           style={styles[appname]}>
-          <Text style={styles.delButtonText}>요기요</Text>
+          <Text allowFontScaling={false} style={styles.delButtonText}>요기요</Text>
         </TouchableOpacity>)
       }
     }else if(appname=='wemef'){
@@ -200,13 +200,13 @@ function ContentsTab ({ searchText,setSearchText}){
         return (<TouchableOpacity
           onPress={()=>filterApp(appname)}
           style={styles[appname]}>
-          <Text style={styles.buttonText}>위메프오</Text>
+          <Text allowFontScaling={false} style={styles.buttonText}>위메프오</Text>
         </TouchableOpacity>)
       }else{
         return (<TouchableOpacity
           onPress={()=>filterApp(appname)}
           style={styles[appname]}>
-          <Text style={styles.delButtonText}>위메프오</Text>
+          <Text allowFontScaling={false} style={styles.delButtonText}>위메프오</Text>
         </TouchableOpacity>)
       }
     }else{
@@ -214,13 +214,13 @@ function ContentsTab ({ searchText,setSearchText}){
         return (<TouchableOpacity
           onPress={()=>filterApp(appname)}
           style={styles[appname]}>
-          <Text style={styles.buttonText}>쿠팡잇츠</Text>
+          <Text allowFontScaling={false} style={styles.buttonText}>쿠팡잇츠</Text>
         </TouchableOpacity>)
       }else{
         return (<TouchableOpacity
           onPress={()=>filterApp(appname)}
           style={styles[appname]}>
-          <Text style={styles.delButtonText}>쿠팡잇츠</Text>
+          <Text allowFontScaling={false} style={styles.delButtonText}>쿠팡잇츠</Text>
         </TouchableOpacity>)
       }
     }
@@ -228,7 +228,7 @@ function ContentsTab ({ searchText,setSearchText}){
 
   const TobUnderBar=({sortValue})=>{
     return(
-    <View style={{height:fontSizeFlex(33), borderBottomWidth:1, borderBottomColor: '#990200',flexDirection:'row',backgroundColor:'white',zIndex:9999}}>
+    <View style={{height:heightSize(33), borderBottomWidth:1, borderBottomColor: '#990200',flexDirection:'row',backgroundColor:'white',zIndex:9999}}>
         <View style={{flexDirection:'row',flex:3}}>
           <AppButton appname='baemin'/>
           <AppButton appname='yogiyo'/>
@@ -243,8 +243,8 @@ function ContentsTab ({ searchText,setSearchText}){
                 items={items}
                 setOpen={setOpen}
                 showArrowIcon={false}
-                style={{height:32,width:fontSizeFlex(70) }}
-                containerStyle={{width:fontSizeFlex(70),margin:4}}
+                style={{height:32,width:heightSize(70) }}
+                containerStyle={{width:heightSize(70),margin:4}}
                 zIndex={100}
                 setValue={setsortValue}
                 setItems={setItems}
@@ -252,6 +252,7 @@ function ContentsTab ({ searchText,setSearchText}){
                 bottomOffset={100}
                 listMode='MODAL'
                 placeholder="이름순"
+                allowFontScaling={false} 
                 textStyle={{
                   textAlign:'center',
                   color:'black',

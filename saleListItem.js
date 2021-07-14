@@ -5,7 +5,7 @@
 import React from 'react';
 import { View, Linking, Text, StyleSheet, Modal, Pressable, Image,Dimensions } from 'react-native';
 import { useFonts } from 'expo-font';
-import { fontSizeFlex } from "./fontSizeFlex.js";
+import { fontSizeFlex,heightSize } from "./fontSizeFlex.js";
 import {
   AdMobBanner,
   //setTestDeviceIDAsync
@@ -98,28 +98,28 @@ const SaleListItem = ({val}) => {
       return (
         <View style={{flexDirection:'row',marginBottom:1}} >
             <Image style={styles.brandlogo} source={require('./assets/yogiyo_logo.png')} />
-            <Text style={styles.sourceText}>  요기요</Text>
+            <Text allowFontScaling={false} style={styles.sourceText}>  요기요</Text>
         </View>
       )
     }else if(val[1]=='baemin'){
       return (
         <View style={{flexDirection:'row',marginBottom:1}} >
           <Image style={styles.brandlogo} source={require('./assets/bamin_logo.png')} />
-          <Text style={styles.sourceText}>  배달의민족</Text>
+          <Text allowFontScaling={false} style={styles.sourceText}>  배달의민족</Text>
         </View>
         )
     }else if(val[1]=='coupang'){
       return (
         <View style={{flexDirection:'row',marginBottom:1}} >
           <Image style={styles.brandlogo} source={require('./assets/coupang_logo.png')} />
-          <Text style={styles.sourceText}>  쿠팡잇츠</Text>
+          <Text allowFontScaling={false}  style={styles.sourceText}>  쿠팡잇츠</Text>
         </View>
       )
     }else if(val[1]=='wemef'){
       return (
         <View style={{flexDirection:'row',marginBottom:1}} >
           <Image style={styles.brandlogo} source={require('./assets/wemef_logo.png')} />
-          <Text style={styles.sourceText}>  위메프오</Text>
+          <Text allowFontScaling={false} style={styles.sourceText}>  위메프오</Text>
         </View>
       )
     }
@@ -170,10 +170,10 @@ const SaleListItem = ({val}) => {
                   <BrandName val={val}  />
                 </View>
                 <View style={{height:30}}>
-                  <Text style={styles.brandText}>{ val[0] }</Text>
+                  <Text allowFontScaling={false} style={styles.brandText}>{ val[0] }</Text>
                 </View>
                 <View style={{flex:0.5,flexDirection:'row'}}>
-                  <Text style={styles.priceText}>{ "최대 " }</Text><Text style={styles.price}>{ val[4] }</Text><Text style={styles.priceText}>{"원 할인" }</Text>
+                  <Text allowFontScaling={false}  style={styles.priceText}>{ "최대 " }</Text><Text allowFontScaling={false} style={styles.price}>{ val[4] }</Text><Text allowFontScaling={false}  style={styles.priceText}>{"원 할인" }</Text>
                 </View>
               </View>
 
@@ -227,12 +227,12 @@ const styles = StyleSheet.create({
   },
   logo: {
     marginVertical:5,
-    width: fontSizeFlex(60),
-    height: fontSizeFlex(60),
+    width: heightSize(60),
+    height: heightSize(60),
   },
   brandlogo:{
-    width: fontSizeFlex(9),
-    height: fontSizeFlex(9),
+    width: heightSize(9),
+    height: heightSize(9),
     marginTop:1
   },
   sourceText: {
