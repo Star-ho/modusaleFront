@@ -20,7 +20,7 @@
       "supportsTablet": true
     },
     "android": {
-      "versionCode": 12,
+      "versionCode": 13,
       "package": "iof.processTA",
       "permissions":[],      
       "softwareKeyboardLayoutMode": "pan",
