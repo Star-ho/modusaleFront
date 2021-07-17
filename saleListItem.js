@@ -1,7 +1,5 @@
 //val 값 [ 브랜드명, 출처(요기요, 배민), 이미지, 분류, 할인금액 ] 
 
-//내일 엄마 폰으로 테스트
-//https://www.codegrepper.com/code-examples/javascript/responsive+font+size+react+native
 import React from 'react';
 import { View, Linking, Text, StyleSheet, Modal, Pressable, Image,Dimensions } from 'react-native';
 import { useFonts } from 'expo-font';
@@ -123,7 +121,6 @@ const SaleListItem = ({val}) => {
         </View>
       )
     }
-  
   }
 
       return (
@@ -176,9 +173,9 @@ const SaleListItem = ({val}) => {
                   <Text allowFontScaling={false}  style={styles.priceText}>{ "최대 " }</Text><Text allowFontScaling={false} style={styles.price}>{ val[4] }</Text><Text allowFontScaling={false}  style={styles.priceText}>{"원 할인" }</Text>
                 </View>
               </View>
-
             </View>
         </Pressable>
+        
       </View>
     );
 };
