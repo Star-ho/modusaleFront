@@ -54,7 +54,7 @@ export default function App() {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{"앱을 종료하시겠습니까"}</Text>          
+            <Text style={styles.modalText}>{"앱을 종료하시겠습니까??"}</Text>          
             <AdMobBanner
               bannerSize="mediumRectangle"
               adUnitID="ca-app-pub-5926200986625193/7250011193" 
@@ -85,13 +85,13 @@ export default function App() {
 
         <View style={{flex: 5 }}>
           <SearchBar
-            placeholder="어떤 가게를 찾으시나요?"
+            placeholder="어떤 브랜드를 찾으시나요?"
             onChangeText={setSearchText}
             value={searchText}
             allowFontScaling={false} 
             containerStyle={{backgroundColor:'#8A0602',flex:1,margin:heightSize(1)}}
-            inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(15)}}
-            style={{backgroundColor:'white',margin:0,padding:1,fontSize:fontSizeFlex(15)}}
+            inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(13)}}
+            style={{backgroundColor:'white',margin:0,padding:1,fontSize:fontSizeFlex(13)}}
             cancelIcon ={true}
           />
 
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     fontWeight: '500',
-    fontSize: fontSizeFlex(3),//20,
+    fontSize: fontSizeFlex(19),//30,
   }
 })
 

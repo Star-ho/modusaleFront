@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View,  StyleSheet, RefreshControl, FlatList, TouchableOpacity } from 'react-native';
 import SaleListItem from './saleListItem';
 
-function Contents({ViewInfo,cate,refreshing, setRefreshing}) {
+function Contents({ViewInfo,cate,refreshing, setRefreshing,redirectModalVisible,setRedirectModalVisible, setModalVal}) {
   let data
   if(cate){
     data=[...ViewInfo].filter(v=>v[3]==cate)
@@ -23,22 +23,22 @@ function Contents({ViewInfo,cate,refreshing, setRefreshing}) {
     data.splice(7*Math.random(),0,'ad')
   }
   if(len>14){
-    data.splice(14*Math.random(),0,'ad')
+    data.splice(7*Math.random()+7,0,'ad')
   }
   if(len>21){
-    data.splice(21*Math.random(),0,'ad')
+    data.splice(7*Math.random()+14,0,'ad')
   }
   if(len>28){
-    data.splice(28*Math.random(),0,'ad')
+    data.splice(7*Math.random()+21,0,'ad')
   }
   if(len>35){
-    data.splice(35*Math.random(),0,'ad')
+    data.splice(7*Math.random()+28,0,'ad')
   }
   if(len>42){
-    data.splice(42*Math.random(),0,'ad')
+    data.splice(7*Math.random()+35,0,'ad')
   }
   if(len>49){
-    data.splice(49*Math.random(),0,'ad')
+    data.splice(7*Math.random()+42,0,'ad')
   }
   data.push('null')
   data.push('null')
@@ -57,7 +57,7 @@ function Contents({ViewInfo,cate,refreshing, setRefreshing}) {
         
         renderItem={({item}) => 
         <View>
-          <SaleListItem val={item} cate={cate} />
+          <SaleListItem val={item} cate={cate} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} setModalVal={setModalVal} />
         </View>
       }
       keyExtractor={(item, index) => index.toString()}
@@ -66,8 +66,11 @@ function Contents({ViewInfo,cate,refreshing, setRefreshing}) {
   );
 } 
 
-const equalComparison = (prevProps, nextProps) =>
-  JSON.stringify(prevProps.ViewInfo) == JSON.stringify(nextProps.ViewInfo)
+const equalComparison = (prevProps, nextProps) =>{
+  // console.log(JSON.stringify(prevProps.ViewInfo) === JSON.stringify(nextProps.ViewInfo)) 
+  console.log(prevProps.ViewInfo[0])
+  return JSON.stringify(prevProps.ViewInfo) === JSON.stringify(nextProps.ViewInfo)
+}
 
 export default React.memo(Contents, equalComparison);
 

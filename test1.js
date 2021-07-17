@@ -1,3 +1,3 @@
-let a = {aa:12,bb:23,cc:45}
+let a = [{aa:'a12',bb:'23',cc:'45'}]
 let d='aa'
-console.log(a[d])
+console.log(JSON.stringify(a)+11)

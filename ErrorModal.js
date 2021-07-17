@@ -1,12 +1,6 @@
 import * as React from 'react';
 import {  Modal, Pressable, Text, View, StyleSheet,Linking, Dimensions  } from 'react-native';
 import { fontSizeFlex } from './fontSizeFlex';
-const {
-  width: SCREEN_WIDTH,
-  height: SCREEN_HEIGHT,
-} = Dimensions.get('window');
-const widthScale=SCREEN_WIDTH/320
-const heigthScale=SCREEN_HEIGHT/320
 
 
 function ErrorModal (){ 

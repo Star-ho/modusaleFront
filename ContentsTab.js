@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {  Text, View, StyleSheet, AppState,TouchableOpacity, Dimensions  } from 'react-native';
+import {  Text, View, StyleSheet, AppState,TouchableOpacity, Dimensions, Modal, Pressable, Linking  } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Contents from "./Content.js"
@@ -8,6 +8,10 @@ import ErrorModal from './ErrorModal.js'
 import DrawerIcon from './DrawerIconSet.js';
 import { useFonts } from 'expo-font';
 import { fontSizeFlex, heightSize } from "./fontSizeFlex.js";
+import {
+  AdMobBanner,
+  //setTestDeviceIDAsync
+} from "expo-ads-admob";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -21,6 +25,7 @@ function ContentsTab ({ searchText,setSearchText}){
   const [ViewInfo, setViewInfo] = React.useState([]);
   let category=["치킨","피자","한식","양식","기타"]
   const [error,setError]=React.useState(false);
+  const [redirectModalVisible, setRedirectModalVisible] = React.useState(false);
 
   const appState = React.useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = React.useState(appState.current);
@@ -33,7 +38,7 @@ function ContentsTab ({ searchText,setSearchText}){
   const [wemefSelected, setwemefSelected] = React.useState(true);
   const [flag, setFlag]=React.useState(1)
   const [open, setOpen]=React.useState(false)
-  
+  const [modalVal, setModalVal]=React.useState(['','',''])
   const [items, setItems] = React.useState([
     {
       value: '1',
@@ -264,8 +269,89 @@ function ContentsTab ({ searchText,setSearchText}){
       </View>)
   }
 
+  const LinkingAPP=()=>{
+    //console.log(uriScheme)
+    //console.log(val)
+    let redirectURL
+    const baeminURL = "baemin://";
+    const yogiyoURL = "yogiyoapp://open";
+    const coupangURL = "coupangeats://";
+    const wemeURL = "cupping://doCommand";
+    let playStoreLink
+
+    if(modalVal[1]=='yogiyo'){
+      redirectURL=yogiyoURL
+      playStoreLink="market://details?id=com.fineapp.yogiyo"
+    }else if(modalVal[1]=='baemin'){
+      redirectURL=baeminURL
+      playStoreLink="market://details?id=com.sampleapp"
+    }else if(modalVal[1]=='coupang'){
+      redirectURL=coupangURL
+      playStoreLink="market://details?id=com.coupang.mobile.eats"
+    }else if(modalVal[1]=='wemef'){
+      redirectURL=wemeURL
+      playStoreLink="market://details?id=com.wemakeprice.cupping"
+    }
+
+    const handlePress = React.useCallback(async () => {
+      try{
+        await Linking.openURL(modalVal[2]);
+      }catch{
+        try{
+          await Linking.openURL(redirectURL);
+        }catch{
+          await Linking.openURL(playStoreLink);
+        }
+      }
+
+    }, [redirectURL]);
+
+    return ( 
+    <Pressable
+      style={[styles.button, styles.buttonClose,{marginRight:10,paddingHorizontal:20}]}
+      onPress={() => handlePress()}
+    >
+      <Text style={styles.textStyle}>이동하기</Text>
+    </Pressable>)
+  }
+
+  const ItemModal=()=>{
+    return(
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={redirectModalVisible}
+        onRequestClose={() => {
+          setRedirectModalVisible(false);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>{modalVal[0]+"앱으로 이동하시겠습니까?"}</Text>          
+            <AdMobBanner
+              bannerSize="mediumRectangle"
+              adUnitID="ca-app-pub-5926200986625193/7250011193" 
+              servePersonalizedAds={true}
+              onDidFailToReceiveAdWithError={(e) => console.log(e)}
+            />
+            <View style={{flexDirection:'row',marginTop:10}}>
+            <LinkingAPP source={modalVal[1]} url={modalVal[2]} />
+            <Pressable
+              style={[styles.button, styles.buttonClose,{paddingHorizontal:30}]}
+              onPress={() => setRedirectModalVisible(false)}
+            >
+              <Text style={styles.textStyle}>취소</Text>
+            </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    )
+  }
+
   return (
     <View style={styles.container}>
+      <ItemModal/>
       <NavigationContainer>
         <Tab.Navigator  
             screenOptions={{
@@ -295,13 +381,13 @@ function ContentsTab ({ searchText,setSearchText}){
         >
           <Tab.Screen 
             name="전체" 
-            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} refreshing={refreshing} setRefreshing={setRefreshing} /></View> }
+            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} refreshing={refreshing} setRefreshing={setRefreshing} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} /></View> }
           />
            {category.map( (cate,index) => {
               return <Tab.Screen 
                 name={cate}
                 key={index}
-              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} cate={cate}   refreshing={refreshing} setRefreshing={setRefreshing}
+              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} cate={cate}   refreshing={refreshing} setRefreshing={setRefreshing} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible}
               /></View> }
               />
             }

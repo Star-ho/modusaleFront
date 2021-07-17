@@ -7,7 +7,7 @@ const {
 
      // based on iphone 5s's scale
      const scale = SCREEN_WIDTH / 320   ;
-console.log(SCREEN_WIDTH)
+// console.log(SCREEN_WIDTH)
 export function fontSizeFlex(size) {
     const newSize = size * scale 
     if (Platform.OS === 'ios') {

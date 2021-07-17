@@ -1,7 +1,7 @@
 //val 값 [ 브랜드명, 출처(요기요, 배민), 이미지, 분류, 할인금액 ] 
 
 import React from 'react';
-import { View, Linking, Text, StyleSheet, Modal, Pressable, Image,Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Image, Animated } from 'react-native';
 import { useFonts } from 'expo-font';
 import { fontSizeFlex,heightSize } from "./fontSizeFlex.js";
 import {
@@ -9,20 +9,17 @@ import {
   //setTestDeviceIDAsync
 } from "expo-ads-admob";
 
-const SaleListItem = ({val}) => {
+import { AntDesign } from '@expo/vector-icons';
+
+
+const SaleListItem = ({val,redirectModalVisible,setRedirectModalVisible, setModalVal}) => {
   const [loaded] = useFonts({
     BMHANNAPro: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
 
-  const [modalVisible, setModalVisible] = React.useState(false);
-  const baeminURL = "baemin://";
-  const yogiyoURL = "yogiyoapp://open";
-  const coupangURL = "coupangeats://";
-  const wemeURL = "cupping://doCommand";
+  
   let resourceApp
-  let playStoreLink
-  let redirectURL
-  const uriScheme=val[5]
+
   //테스트 앱 test app
 //   React.useEffect(() => {
 //     setTestDeviceIDAsync("testdevice");
@@ -43,8 +40,6 @@ const SaleListItem = ({val}) => {
 
   </View>)
   }
-
-
   if(val[1]=='yogiyo'){
     resourceApp='요기요'
   }else if(val[1]=='baemin'){
@@ -54,43 +49,7 @@ const SaleListItem = ({val}) => {
   }else if(val[1]=='wemef'){
     resourceApp='위메프오'
   }
-  const LinkingAPP=({source,url})=>{
-    //console.log(uriScheme)
-    //console.log(val)
-    if(source=='yogiyo'){
-      redirectURL=yogiyoURL
-      playStoreLink="market://details?id=com.fineapp.yogiyo"
-    }else if(source=='baemin'){
-      redirectURL=baeminURL
-      playStoreLink="market://details?id=com.sampleapp"
-    }else if(source=='coupang'){
-      redirectURL=coupangURL
-      playStoreLink="market://details?id=com.coupang.mobile.eats"
-    }else if(source=='wemef'){
-      redirectURL=wemeURL
-      playStoreLink="market://details?id=com.wemakeprice.cupping"
-    }
 
-    const handlePress = React.useCallback(async () => {
-      try{
-        await Linking.openURL(uriScheme);
-      }catch{
-        try{
-          await Linking.openURL(redirectURL);
-        }catch{
-          await Linking.openURL(playStoreLink);
-        }
-      }
-
-    }, [redirectURL]);
-    return ( 
-    <Pressable
-      style={[styles.button, styles.buttonClose,{marginRight:10,paddingHorizontal:20}]}
-      onPress={() => handlePress()}
-    >
-      <Text style={styles.textStyle}>이동하기</Text>
-    </Pressable>)
-  }
   function BrandName({val}){
     if(val[1]=='yogiyo'){
       return (
@@ -123,61 +82,63 @@ const SaleListItem = ({val}) => {
     }
   }
 
-      return (
-        <View style={{flexDirection:'row',height:90}}>
-          <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>{resourceApp+"앱으로 이동하시겠습니까?"}</Text>          
+  function itemButtonClick(){
+    setModalVal([resourceApp,val[1],val[5]])
+    setRedirectModalVisible(true)
+  }
 
-          <AdMobBanner
-            bannerSize="mediumRectangle"
-            adUnitID="ca-app-pub-5926200986625193/7250011193" 
-            servePersonalizedAds={true}
-            onDidFailToReceiveAdWithError={(e) => console.log(e)}
-            />
-              <View style={{flexDirection:'row',marginTop:10}}>
-              <LinkingAPP source={val[1]} url={val[5]} />
-              <Pressable
-                style={[styles.button, styles.buttonClose,{paddingHorizontal:30}]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>취소</Text>
-              </Pressable>
+  const BrandNameText=()=>{
+    if(val[0].length<10){
+      return <Text allowFontScaling={false} style={styles.brandText}>{ val[0] }</Text>
+    }else{
+      return <Text allowFontScaling={false} style={styles.longbrandText}>{ val[0] }</Text>
+    }
+  }
+
+  return (
+    <View style={{flexDirection:'row',height:90,    borderBottomColor: '#f4e5e5',
+    borderBottomWidth: 1,}}>
+      {/* 클릭 */}
+      <Pressable
+        onPress={itemButtonClick}
+        style={{flex:1}}
+        >
+          <View style={styles.container}>
+            <HaveImage ImageName={val[2]}/>
+            <View style={{flex:1, marginLeft:10}}>
+              <View style={{flex:0.5,flexDirection:'column-reverse'}}>
+                <BrandName val={val}  />
+              </View>
+              <View style={{height:30}}>
+                <BrandNameText/>
+              </View>
+              <View style={{flex:0.5,flexDirection:'row'}}>
+                <Text allowFontScaling={false}  style={styles.priceText}>{ "최대 " }</Text><Text allowFontScaling={false} style={styles.price}>{ val[4] }</Text><Text allowFontScaling={false}  style={styles.priceText}>{"원 할인" }</Text>
               </View>
             </View>
           </View>
-        </Modal>
-
+      </Pressable>
+      {/* 브랜드 숨기기 */}
+      <Animated.View style={[{flex:0.15},[]]}>
         <Pressable
           onPress={() => setModalVisible(!modalVisible)}
-          style={{flex:1}}
-          >
-            <View style={styles.container}>
-              <HaveImage ImageName={val[2]}/>
-              <View style={{flex:1, marginLeft:10}}>
-                <View style={{flex:0.5,flexDirection:'column-reverse'}}>
-                  <BrandName val={val}  />
-                </View>
-                <View style={{height:30}}>
-                  <Text allowFontScaling={false} style={styles.brandText}>{ val[0] }</Text>
-                </View>
-                <View style={{flex:0.5,flexDirection:'row'}}>
-                  <Text allowFontScaling={false}  style={styles.priceText}>{ "최대 " }</Text><Text allowFontScaling={false} style={styles.price}>{ val[4] }</Text><Text allowFontScaling={false}  style={styles.priceText}>{"원 할인" }</Text>
-                </View>
-              </View>
-            </View>
+          style={{flex:1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor:'white'}}
+        >
+          <View style={{
+            flex: 1,
+            backgroundColor:'white',
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
+            <AntDesign name="minuscircleo" size={fontSizeFlex(30)} color="red" />
+          </View>
         </Pressable>
-        
-      </View>
-    );
+      </Animated.View>
+    </View>
+  );
 };
 
 const HaveImage = ({ImageName}) => { 
@@ -202,13 +163,17 @@ const styles = StyleSheet.create({
     backgroundColor:'white',
     flexDirection: 'row',
     padding:5,
-    borderBottomColor: '#f4e5e5',
-    borderBottomWidth: 1,
+
 
   },
   brandText: {
     flex: 6,
     fontSize: fontSizeFlex(26),
+    fontFamily:'BMHANNAPro'
+  },
+  longbrandText: {
+    flex: 6,
+    fontSize: fontSizeFlex(23),
     fontFamily:'BMHANNAPro'
   },
   priceText: {
