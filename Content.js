@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View,  StyleSheet, RefreshControl, FlatList, TouchableOpacity } from 'react-native';
 import SaleListItem from './saleListItem';
 
-function Contents({ViewInfo,cate,refreshing, setRefreshing,redirectModalVisible,setRedirectModalVisible, setModalVal}) {
+function Contents({ViewInfo,cate,refeshData,redirectModalVisible,setRedirectModalVisible, setModalVal}) {
   let data
   if(cate){
     data=[...ViewInfo].filter(v=>v[3]==cate)
@@ -10,11 +10,12 @@ function Contents({ViewInfo,cate,refreshing, setRefreshing,redirectModalVisible,
     data=[...ViewInfo]
   }
   const [tabRefreshing,tabOnRefresh]=React.useState(false)
+    
   const onTabRefresh = React.useCallback(() => {
     tabOnRefresh(true);
-    setRefreshing(!refreshing)
     setTimeout(()=>{tabOnRefresh(false)},1500)
   }, []);
+
   let len=data.length
   if(len<7){
     data.push('ad')
@@ -47,11 +48,11 @@ function Contents({ViewInfo,cate,refreshing, setRefreshing,redirectModalVisible,
   return (    
     <View style={{flex:1}}>
       <FlatList
-        disableVirtualization={false} 
+        disableVirtualization={true} 
         refreshControl={
             <RefreshControl
               refreshing={tabRefreshing}
-              onRefresh={onTabRefresh}
+              onRefresh={refeshData}
             />} 
         data={data}
         
@@ -67,11 +68,10 @@ function Contents({ViewInfo,cate,refreshing, setRefreshing,redirectModalVisible,
 } 
 
 const equalComparison = (prevProps, nextProps) =>{
-  // console.log(JSON.stringify(prevProps.ViewInfo) === JSON.stringify(nextProps.ViewInfo)) 
-  console.log(prevProps.ViewInfo[0])
   return JSON.stringify(prevProps.ViewInfo) === JSON.stringify(nextProps.ViewInfo)
 }
 
 export default React.memo(Contents, equalComparison);
+
 
 

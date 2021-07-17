@@ -119,7 +119,7 @@ const SaleListItem = ({val,redirectModalVisible,setRedirectModalVisible, setModa
           </View>
       </Pressable>
       {/* 브랜드 숨기기 */}
-      <Animated.View style={[{flex:0.15},[]]}>
+      {/* <Animated.View style={[{flex:0.15},[]]}>
         <Pressable
           onPress={() => setModalVisible(!modalVisible)}
           style={{flex:1,
@@ -136,7 +136,7 @@ const SaleListItem = ({val,redirectModalVisible,setRedirectModalVisible, setModa
             <AntDesign name="minuscircleo" size={fontSizeFlex(30)} color="red" />
           </View>
         </Pressable>
-      </Animated.View>
+      </Animated.View> */}
     </View>
   );
 };

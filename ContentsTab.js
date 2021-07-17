@@ -106,6 +106,31 @@ function ContentsTab ({ searchText,setSearchText}){
   }
 
   
+  const refeshData=()=>{
+    fetch("http://sailmoa.com/?ver=0.91").then(res=>res.json())
+    .then(res=>{
+      if(!res.error){
+      let arr=[]
+      for(let i of Object.entries(res)){
+        arr.push( [ i[1][0].toUpperCase(), i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
+      }
+      //console.log(arr)
+      arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
+      setAllInfo(arr)
+      setFilterInfo(arr)
+      setViewInfo(arr)
+      setSearchText('')
+      if(flag!=1){
+        filteringData()
+      }else{
+        setFlag(2)
+      }
+      }else{
+        setError(true)
+      }
+    })
+  }
+
   function controllData(){
     fetch("http://sailmoa.com/?ver=0.91").then(res=>res.json())
     .then(res=>{
@@ -381,13 +406,13 @@ function ContentsTab ({ searchText,setSearchText}){
         >
           <Tab.Screen 
             name="전체" 
-            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} refreshing={refreshing} setRefreshing={setRefreshing} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} /></View> }
+            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} refeshData={refeshData}  setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} /></View> }
           />
            {category.map( (cate,index) => {
               return <Tab.Screen 
                 name={cate}
                 key={index}
-              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} cate={cate}   refreshing={refreshing} setRefreshing={setRefreshing} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible}
+              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} cate={cate}   refeshData={refeshData} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible}
               /></View> }
               />
             }
