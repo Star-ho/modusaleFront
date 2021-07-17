@@ -8,6 +8,10 @@ import {
   //setTestDeviceIDAsync
 } from "expo-ads-admob";
 import { fontSizeFlex,heightSize } from "./fontSizeFlex.js";
+import * as Facebook from 'expo-facebook';
+
+
+Facebook.initializeAsync({appId:'1284519921980066'})
 
 export default function App() {
   const [searchText, setSearchText] = React.useState("");

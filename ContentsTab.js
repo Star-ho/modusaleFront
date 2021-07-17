@@ -19,7 +19,7 @@ function ContentsTab ({ searchText,setSearchText}){
   const [allInfo, setAllInfo] = React.useState([]);
   const [filterInfo, setFilterInfo] = React.useState([]);
   const [ViewInfo, setViewInfo] = React.useState([]);
-  let category=["치킨","피자","한식","양식","기타"]
+  let category=["치킨","피자","한식","양식","기타","앱할인"]
   const [error,setError]=React.useState(false);
 
   const appState = React.useRef(AppState.currentState);
@@ -102,7 +102,7 @@ function ContentsTab ({ searchText,setSearchText}){
 
   
   function controllData(){
-    fetch("http://sailmoa.com/?ver=0.90").then(res=>res.json())
+    fetch("http://sailmoa.com/?ver=0.91").then(res=>res.json())
     .then(res=>{
       if(!res.error){
       let arr=[]
@@ -243,8 +243,8 @@ function ContentsTab ({ searchText,setSearchText}){
                 items={items}
                 setOpen={setOpen}
                 showArrowIcon={false}
-                style={{height:32,width:heightSize(70) }}
-                containerStyle={{width:heightSize(70),margin:4}}
+                style={{height:32,width:heightSize(80) }}
+                containerStyle={{width:heightSize(80),margin:4}}
                 zIndex={100}
                 setValue={setsortValue}
                 setItems={setItems}
@@ -254,9 +254,7 @@ function ContentsTab ({ searchText,setSearchText}){
                 placeholder="이름순"
                 allowFontScaling={false} 
                 textStyle={{
-                  textAlign:'center',
                   color:'black',
-                  fontSize:fontSizeFlex(9)
                 }}
                 labelStyle={{
                   fontSize:fontSizeFlex(13)
@@ -265,30 +263,35 @@ function ContentsTab ({ searchText,setSearchText}){
           </View>
       </View>)
   }
-  
+
   return (
     <View style={styles.container}>
       <NavigationContainer>
         <Tab.Navigator  
-            tabBarOptions={{
-              style: {
-                backgroundColor: 'white',
+            screenOptions={{
+              tabBarScrollEnabled:true,
+              tabBarActiveTintColor: "#990200",
+              tabBarInactiveTintColor: "lightgray",
+              tabBarLabelStyle: {
+                fontSize: fontSizeFlex(13),//15,
+                fontFamily: "BMJUA_ttf",
+                padding:0,
+                margin:0,
+                width:fontSizeFlex(100)
               },
-              labelStyle: {
-                fontSize: fontSizeFlex(9.6),//15,
-                fontFamily:'BMJUA_ttf', 
-
-              },
-              indicatorStyle: {
-                borderBottomColor: '#990200',
+              tabBarIndicatorStyle: {
+                borderBottomColor: "#990200",
                 borderBottomWidth: 2,
-
               },
-                activeTintColor: '#990200',
-                inactiveTintColor: "lightgray",
+
+              tabBarStyle: {
+                backgroundColor: "white",
+              },
+              tabBarItemStyle:{
+                width:fontSizeFlex(60)
+              },
 
             }}
-            
         >
           <Tab.Screen 
             name="전체" 
