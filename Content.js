@@ -14,15 +14,31 @@ function Contents({ViewInfo,cate,refreshing, setRefreshing}) {
     tabOnRefresh(true);
     setRefreshing(!refreshing)
     setTimeout(()=>{tabOnRefresh(false)},1500)
-    
   }, []);
   let len=data.length
-  data.splice(data.length*Math.random(),0,'ad')
-  if(len>20){
-    data.splice(data.length*Math.random(),0,'ad')
+  if(len<7){
+    data.push('ad')
   }
-  if(len>40){
-    data.splice(data.length*Math.random(),0,'ad')
+  if(len>7){
+    data.splice(7*Math.random(),0,'ad')
+  }
+  if(len>14){
+    data.splice(14*Math.random(),0,'ad')
+  }
+  if(len>21){
+    data.splice(21*Math.random(),0,'ad')
+  }
+  if(len>28){
+    data.splice(28*Math.random(),0,'ad')
+  }
+  if(len>35){
+    data.splice(35*Math.random(),0,'ad')
+  }
+  if(len>42){
+    data.splice(42*Math.random(),0,'ad')
+  }
+  if(len>49){
+    data.splice(49*Math.random(),0,'ad')
   }
   data.push('null')
   data.push('null')

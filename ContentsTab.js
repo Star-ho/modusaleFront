@@ -19,7 +19,7 @@ function ContentsTab ({ searchText,setSearchText}){
   const [allInfo, setAllInfo] = React.useState([]);
   const [filterInfo, setFilterInfo] = React.useState([]);
   const [ViewInfo, setViewInfo] = React.useState([]);
-  let category=["치킨","피자","한식","양식","기타","앱할인"]
+  let category=["치킨","피자","한식","양식","기타"]
   const [error,setError]=React.useState(false);
 
   const appState = React.useRef(AppState.currentState);
@@ -269,7 +269,7 @@ function ContentsTab ({ searchText,setSearchText}){
       <NavigationContainer>
         <Tab.Navigator  
             screenOptions={{
-              tabBarScrollEnabled:true,
+              // tabBarScrollEnabled:true,
               tabBarActiveTintColor: "#990200",
               tabBarInactiveTintColor: "lightgray",
               tabBarLabelStyle: {
@@ -277,7 +277,7 @@ function ContentsTab ({ searchText,setSearchText}){
                 fontFamily: "BMJUA_ttf",
                 padding:0,
                 margin:0,
-                width:fontSizeFlex(100)
+                // width:fontSizeFlex(100)
               },
               tabBarIndicatorStyle: {
                 borderBottomColor: "#990200",
@@ -288,7 +288,7 @@ function ContentsTab ({ searchText,setSearchText}){
                 backgroundColor: "white",
               },
               tabBarItemStyle:{
-                width:fontSizeFlex(60)
+                // width:fontSizeFlex(60)
               },
 
             }}
