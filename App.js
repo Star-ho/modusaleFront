@@ -10,9 +10,11 @@ import {
 } from "expo-ads-admob";
 import { fontSizeFlex,heightSize } from "./fontSizeFlex.js";
 import * as Facebook from 'expo-facebook';
+import * as SQLite from 'expo-sqlite';
 
-
+const db = SQLite.openDatabase('hideDB.db');
 Facebook.initializeAsync({appId:'1284519921980066'})
+
 
 export default function App() {
   const [searchText, setSearchText] = React.useState("");
@@ -28,8 +30,36 @@ export default function App() {
     //    setTestDeviceIDAsync("testdevice");
     // }, []);
 
-  //앱 종료
+
+
+  const createTable=`PRAGMA encoding = "UTF-8";
+    CREATE TABLE IF NOT EXISTS
+    hideitem(brandName TEXT PRIMARY KEY); `
+
+  db.transaction((tx)=>{
+    tx.executeSql(createTable);
+    tx.executeSql('insert into hideitem(brandName) VALUES("1asdf")');
+    tx.executeSql('select * from hideitem',[],(_,{rows})=>{
+      console.log(rows,123)
+    })
+  })
+
+  // db.transaction([{ sql: createTable, args: [] }], true, (res) =>
+  //   console.log(res,'res') ,(error)=>console.log(error,'error')
+  // );  
+  // db.exec([{ sql: 'insert into hideitem(brandName) VALUES("1asdf")', args: [] }], true, (res) =>
+  //   console.log(res,'res') ,(error)=>console.log(error,'error')
+  // );
+
+  // db.transaction(tx => {
+  //   tx.executeSql(
+  //     `select * from HideItem;`,
+  //     0,
+  //     (_, { rows: { _array } }) => console.log(_array,1)
+  //   );
+  // });
   
+  //앱 종료
   useEffect(() => {
     const backAction = () => {
       setModalVisible(true)
