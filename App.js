@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Image, SafeAreaView, BackHandler, Modal,Pressable,Dimensions} from 'react-native';
+import { View, Text, StyleSheet, Image, SafeAreaView, BackHandler, Modal,Pressable,Dimensions,Animated} from 'react-native';
 import ContentsTab from './ContentsTab.js'
 import { SearchBar } from 'react-native-elements';
 import { useEffect } from 'react';
+import { useFonts } from 'expo-font';
 import {
   AdMobBanner,
   //setTestDeviceIDAsync
@@ -16,6 +17,11 @@ Facebook.initializeAsync({appId:'1284519921980066'})
 export default function App() {
   const [searchText, setSearchText] = React.useState("");
   const [modalVisible,setModalVisible]=React.useState(false);
+  const fadeAnim = React.useRef(new Animated.Value(0)).current;
+  const [isHide, setIsHide] = React.useState(true)
+  const [loaded] = useFonts({
+    BMHANNAPro: require('./assets/fonts/BMJUA_ttf.ttf'),
+  });
 
   //테스트기기설정
     // React.useEffect(() => {
@@ -41,10 +47,108 @@ export default function App() {
       setModalVisible(!modalVisible)
   }
 
+  const fadeIn = () => {
+    setIsHide(false)
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 250,
+      useNativeDriver: true, 
+    }).start();
+  };
+  const fadeOut = () => {
+    setIsHide(true)
+    // Will change fadeAnim value to 0 in 3 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 250,
+      useNativeDriver: true, 
+    }).start();
+  };
+
+  const HideButton =()=>{
+    if(isHide){
+      return(
+        <View style={{flex:7.5,flexDirection:'row'}}>
+          <View style={{flex: 5 }}>
+            <SearchBar
+              placeholder="어떤 브랜드를 찾으시나요?"
+              onChangeText={setSearchText}
+              value={searchText}
+              allowFontScaling={false} 
+              containerStyle={{backgroundColor:'#8A0602',
+              borderBottomColor: 'transparent',
+              borderTopColor: 'transparent',
+              padding:fontSizeFlex(6)
+              }}
+              inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(13)}}
+              style={{backgroundColor:'white',fontSize:fontSizeFlex(13)}}
+              cancelIcon ={true}
+            />
+          </View>
+          <Pressable 
+            style={{flex:1.5,alignItems:'center',justifyContent:'center'}}
+            onPress={fadeIn}
+            >
+            <Text 
+              allowFontScaling={false} 
+              style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
+            >
+              숨기기
+            </Text>
+          </Pressable>
+        </View>
+       )
+    }else{
+      return(
+        <View style={{flex:7.5,flexDirection:'row'}}>
+          <View style={{flex: 7 }}>
+          <SearchBar
+              placeholder="어떤 브랜드를 찾으시나요?"
+              onChangeText={setSearchText}
+              value={searchText}
+              allowFontScaling={false} 
+              containerStyle={{backgroundColor:'#8A0602',
+              borderBottomColor: 'transparent',
+              borderTopColor: 'transparent',
+              padding:fontSizeFlex(6)
+              }}
+              inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(13)}}
+              style={{backgroundColor:'white',fontSize:fontSizeFlex(13)}}
+              cancelIcon ={true}
+            />
+          </View>
+          <Pressable 
+          style={{flex:1.5,alignContent:'center',justifyContent:'center'}}
+          onPress={fadeOut}
+          >
+          <Text 
+            allowFontScaling={false} 
+            style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
+          >
+            목록
+          </Text>
+        </Pressable>
+          <Pressable 
+          style={{flex:1.5,alignContent:'center',justifyContent:'center'}}
+          onPress={fadeOut}
+          >
+          <Text 
+            allowFontScaling={false} 
+            style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
+          >
+            취소
+          </Text>
+        </Pressable>
+      </View>
+      )
+    }
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>          
-    <Modal
+      <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -83,22 +187,10 @@ export default function App() {
         <Image style={{width:heightSize(40),height:heightSize(40),margin:heightSize(7)}} source={require('./assets/homelogo.png')} />
         </View>
 
-        <View style={{flex: 5 }}>
-          <SearchBar
-            placeholder="어떤 브랜드를 찾으시나요?"
-            onChangeText={setSearchText}
-            value={searchText}
-            allowFontScaling={false} 
-            containerStyle={{backgroundColor:'#8A0602',flex:1,margin:heightSize(1)}}
-            inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(13)}}
-            style={{backgroundColor:'white',margin:0,padding:1,fontSize:fontSizeFlex(13)}}
-            cancelIcon ={true}
-          />
-
-          </View>
-          <View style={{flex:1.5}}></View>
+        
+          <HideButton/>
       </View>
-      <ContentsTab searchText={searchText} setSearchText={setSearchText} />
+      <ContentsTab searchText={searchText} setSearchText={setSearchText} fadeAnim={fadeAnim} isHide={isHide} />
     </SafeAreaView>
   );
 }

@@ -9,10 +9,8 @@ import {
   //setTestDeviceIDAsync
 } from "expo-ads-admob";
 
-import { AntDesign } from '@expo/vector-icons';
 
-
-const SaleListItem = ({val,redirectModalVisible,setRedirectModalVisible, setModalVal}) => {
+const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide}) => {
   const [loaded] = useFonts({
     BMHANNAPro: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
@@ -94,9 +92,13 @@ const SaleListItem = ({val,redirectModalVisible,setRedirectModalVisible, setModa
       return <Text allowFontScaling={false} style={styles.longbrandText}>{ val[0] }</Text>
     }
   }
-
+  const pushHide=()=>{
+    if(!isHide){
+      console.log(val[0],1)
+    }
+  }
   return (
-    <View style={{flexDirection:'row',height:90,    borderBottomColor: '#f4e5e5',
+    <View style={{flexDirection:'row',height:90, borderBottomColor: '#f4e5e5', backgroundColor:'white',
     borderBottomWidth: 1,}}>
       {/* 클릭 */}
       <Pressable
@@ -119,9 +121,9 @@ const SaleListItem = ({val,redirectModalVisible,setRedirectModalVisible, setModa
           </View>
       </Pressable>
       {/* 브랜드 숨기기 */}
-      {/* <Animated.View style={[{flex:0.15},[]]}>
+      <Animated.View style={[{flex:0.23},{opacity:fadeAnim}]}>
         <Pressable
-          onPress={() => setModalVisible(!modalVisible)}
+          onPress={() => pushHide()}
           style={{flex:1,
             justifyContent: "center",
             alignItems: "center",
@@ -133,10 +135,10 @@ const SaleListItem = ({val,redirectModalVisible,setRedirectModalVisible, setModa
             justifyContent: "center",
             alignItems: "center",
           }}>
-            <AntDesign name="minuscircleo" size={fontSizeFlex(30)} color="red" />
+            <Text allowFontScaling={false} style={{fontSize: fontSizeFlex(17),fontFamily:'BMHANNAPro'}} >숨기기</Text>
           </View>
         </Pressable>
-      </Animated.View> */}
+      </Animated.View>
     </View>
   );
 };
@@ -160,11 +162,8 @@ const HaveImage = ({ImageName}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:'white',
     flexDirection: 'row',
     padding:5,
-
-
   },
   brandText: {
     flex: 6,
