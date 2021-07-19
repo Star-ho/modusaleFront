@@ -8,9 +8,11 @@ import {
   AdMobBanner,
   //setTestDeviceIDAsync
 } from "expo-ads-admob";
+import * as SQLite from 'expo-sqlite';
 
+const db = SQLite.openDatabase('hideDB.db');
 
-const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide}) => {
+const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide, hideItem,setHideItem,ViewInfo,setViewInfo}) => {
   const [loaded] = useFonts({
     BMHANNAPro: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
@@ -92,11 +94,18 @@ const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide
       return <Text allowFontScaling={false} style={styles.longbrandText}>{ val[0] }</Text>
     }
   }
-  const pushHide=()=>{
-    if(!isHide){
-      console.log(val[0],1)
-    }
+
+  const hideFunc=()=>{
+    // if(isHide){
+      db.transaction((tx)=>{
+        tx.executeSql("INSERT INTO hidetable(item) VALUES(?)",[val[0]],()=>{
+          setHideItem([...hideItem,val[0]])
+          // console.log("insert")
+        },()=>console.log('fuCKKKKKKKKKKKKKKK'))
+      })
+    // }
   }
+
   return (
     <View style={{flexDirection:'row',height:90, borderBottomColor: '#f4e5e5', backgroundColor:'white',
     borderBottomWidth: 1,}}>
@@ -123,7 +132,7 @@ const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide
       {/* 브랜드 숨기기 */}
       <Animated.View style={[{flex:0.23},{opacity:fadeAnim}]}>
         <Pressable
-          onPress={() => pushHide()}
+          onPress={() => hideFunc()}
           style={{flex:1,
             justifyContent: "center",
             alignItems: "center",

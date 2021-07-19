@@ -12,10 +12,13 @@ import {
   AdMobBanner,
   //setTestDeviceIDAsync
 } from "expo-ads-admob";
+import * as SQLite from 'expo-sqlite';
+
 
 const Tab = createMaterialTopTabNavigator();
+const db = SQLite.openDatabase('hideDB.db');
 
-function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide}){ 
+function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem}){ 
   const [loaded] = useFonts({
     BMJUA_ttf: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
@@ -115,7 +118,9 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide}){
         arr.push( [ i[1][0].toUpperCase(), i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
       }
       //console.log(arr)
+      arr=arr.filter(v=>!hideItem.includes(v[0]))
       arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
+      
       setAllInfo(arr)
       setFilterInfo(arr)
       setViewInfo(arr)
@@ -140,7 +145,9 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide}){
         arr.push( [ i[1][0].toUpperCase(), i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
       }
       //console.log(arr)
+      arr=arr.filter(v=>!hideItem.includes(v[0]))
       arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
+      
       setAllInfo(arr)
       setFilterInfo(arr)
       setViewInfo(arr)
@@ -155,6 +162,15 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide}){
       }
     })
   }
+  React.useEffect(() => {
+    // console.log(hideItem)
+    setViewInfo(ViewInfo.filter(v=>!hideItem.includes(v[0])))
+    // ViewInfo.forEach(v=>{
+    //   if(hideItem.includes(v[0])){
+    //     console.log(v)
+    //   }
+    // })
+}, [hideItem]);
 
   //검색어입력
   React.useEffect(() => {
@@ -336,7 +352,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide}){
       style={[styles.button, styles.buttonClose,{marginRight:10,paddingHorizontal:20}]}
       onPress={() => handlePress()}
     >
-      <Text style={styles.textStyle}>이동하기</Text>
+      <Text allowFontScaling={false} style={styles.textStyle}>이동하기</Text>
     </Pressable>)
   }
 
@@ -352,7 +368,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide}){
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{modalVal[0]+"앱으로 이동하시겠습니까?"}</Text>          
+            <Text allowFontScaling={false} style={styles.modalText}>{modalVal[0]+"앱으로 이동하시겠습니까?"}</Text>          
             <AdMobBanner
               bannerSize="mediumRectangle"
               adUnitID="ca-app-pub-5926200986625193/7250011193" 
@@ -365,7 +381,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide}){
               style={[styles.button, styles.buttonClose,{paddingHorizontal:30}]}
               onPress={() => setRedirectModalVisible(false)}
             >
-              <Text style={styles.textStyle}>취소</Text>
+              <Text allowFontScaling={false} style={styles.textStyle}>취소</Text>
             </Pressable>
             </View>
           </View>
@@ -406,13 +422,13 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide}){
         >
           <Tab.Screen 
             name="전체" 
-            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} refeshData={refeshData}  setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} /></View> }
+            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} refeshData={refeshData}  setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} /></View> }
           />
            {category.map( (cate,index) => {
               return <Tab.Screen 
                 name={cate}
                 key={index}
-              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} cate={cate}   refeshData={refeshData} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide}
+              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} cate={cate}   refeshData={refeshData} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem}
               /></View> }
               />
             }

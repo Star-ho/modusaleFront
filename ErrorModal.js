@@ -15,7 +15,7 @@ function ErrorModal (){
       style={[styles.button, styles.buttonClose,{marginRight:10}]}
       onPress={() => handlePress()}
     >
-      <Text style={styles.textStyle}>업데이트 하기</Text>
+      <Text allowFontScaling={false} style={styles.textStyle}>업데이트 하기</Text>
     </Pressable>)
   }
 
@@ -33,7 +33,7 @@ function ErrorModal (){
             >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                <Text style={styles.modalText}>업데이트가 필요합니다!</Text>
+                <Text allowFontScaling={false} style={styles.modalText}>업데이트가 필요합니다!</Text>
                 <ToPlayStore/>
                 </View>
             </View>
@@ -42,7 +42,7 @@ function ErrorModal (){
             style={[styles.button, styles.buttonOpen]}
             onPress={() => setModalVisible(true)}
             >
-            <Text style={styles.textStyle}>Show Modal</Text>
+            <Text allowFontScaling={false} style={styles.textStyle}>Show Modal</Text>
             </Pressable>
         </View>
     </View>

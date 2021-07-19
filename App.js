@@ -11,10 +11,11 @@ import {
 import { fontSizeFlex,heightSize } from "./fontSizeFlex.js";
 import * as Facebook from 'expo-facebook';
 import * as SQLite from 'expo-sqlite';
+import { FlatList } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
 const db = SQLite.openDatabase('hideDB.db');
 Facebook.initializeAsync({appId:'1284519921980066'})
-
 
 export default function App() {
   const [searchText, setSearchText] = React.useState("");
@@ -24,40 +25,25 @@ export default function App() {
   const [loaded] = useFonts({
     BMHANNAPro: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
+  const [hideListVisible,setHideListVisible]=React.useState(false)
 
   //테스트기기설정
     // React.useEffect(() => {
     //    setTestDeviceIDAsync("testdevice");
     // }, []);
 
-
-
-  const createTable=`PRAGMA encoding = "UTF-8";
-    CREATE TABLE IF NOT EXISTS
-    hideitem(brandName TEXT PRIMARY KEY); `
-
+  const createTable='CREATE TABLE IF NOT EXISTS hidetable(item TEXT PRIMARY KEY);'
+  
+  const [hideItem,setHideItem]=React.useState([]);
   db.transaction((tx)=>{
-    tx.executeSql(createTable);
-    tx.executeSql('insert into hideitem(brandName) VALUES("1asdf")');
-    tx.executeSql('select * from hideitem',[],(_,{rows})=>{
-      console.log(rows,123)
+    tx.executeSql(createTable,[]);
+    tx.executeSql('select * from hidetable',[],(_,{rows:{_array}})=>{
+      _array=_array.map(v=>v.item)
+      if(JSON.stringify(hideItem)!==JSON.stringify(_array)){
+        setHideItem([..._array])
+      }
     })
   })
-
-  // db.transaction([{ sql: createTable, args: [] }], true, (res) =>
-  //   console.log(res,'res') ,(error)=>console.log(error,'error')
-  // );  
-  // db.exec([{ sql: 'insert into hideitem(brandName) VALUES("1asdf")', args: [] }], true, (res) =>
-  //   console.log(res,'res') ,(error)=>console.log(error,'error')
-  // );
-
-  // db.transaction(tx => {
-  //   tx.executeSql(
-  //     `select * from HideItem;`,
-  //     0,
-  //     (_, { rows: { _array } }) => console.log(_array,1)
-  //   );
-  // });
   
   //앱 종료
   useEffect(() => {
@@ -76,7 +62,67 @@ export default function App() {
       BackHandler.exitApp()
       setModalVisible(!modalVisible)
   }
+  const deleteHideBrand=(item)=>{
+    // console.log(item)
+    db.transaction((tx)=>{
+      tx.executeSql('delete from hidetable where item=?',[item],()=>{
+        setHideItem(hideItem.filter(v=>v!=item))
+      })
+    })
+  }
+  const HideList=()=>{
+    return(
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={hideListVisible}
+        onRequestClose={() => {
+          setHideListVisible(false);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.hideModalView}>
+            <Text 
+              allowFontScaling={false} 
+              style={{ fontSize:fontSizeFlex(23),fontFamily:'BMHANNAPro', marginBottom:20}}>
+                숨기기 목록
+            </Text>
+            <View style={{flex:1}}>
+              <FlatList
+                data={hideItem}
+                keyExtractor={(item, index) => index.toString()}
 
+                renderItem={({item}) => 
+                  <View style={{width:fontSizeFlex(250),flexDirection:'row' }}>
+                      <View style={{flex:2, justifyContent:'center'}} >
+                        <Text
+                          allowFontScaling={false} 
+                          style={{ fontSize:fontSizeFlex(23),fontFamily:'BMHANNAPro'}} 
+
+                        >
+                          {item}
+                        </Text>
+                      </View>
+                      <Pressable style={{flex:1}} onPress={()=>deleteHideBrand(item)}>
+                        <AntDesign name="closecircleo" size={fontSizeFlex(20)} color="black"  />
+                      </Pressable>
+                  </View>
+                }
+              />
+            </View>
+            <View style={{marginTop:10}}>
+              <Pressable
+                style={[styles.button, styles.buttonClose,{paddingHorizontal:30}]}
+                onPress={() => setHideListVisible(false)}
+              >
+                <Text allowFontScaling={false} style={styles.textStyle}>닫기</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    )
+  }
   const fadeIn = () => {
     setIsHide(false)
     // Will change fadeAnim value to 1 in 5 seconds
@@ -95,6 +141,7 @@ export default function App() {
       useNativeDriver: true, 
     }).start();
   };
+
 
   const HideButton =()=>{
     if(isHide){
@@ -132,33 +179,35 @@ export default function App() {
     }else{
       return(
         <View style={{flex:7.5,flexDirection:'row'}}>
+          <HideList/>
           <View style={{flex: 7 }}>
           <SearchBar
-              placeholder="어떤 브랜드를 찾으시나요?"
-              onChangeText={setSearchText}
-              value={searchText}
-              allowFontScaling={false} 
-              containerStyle={{backgroundColor:'#8A0602',
+            placeholder="어떤 브랜드를 찾으시나요?"
+            onChangeText={setSearchText}
+            value={searchText}
+            allowFontScaling={false} 
+            containerStyle={{
+              backgroundColor:'#8A0602',
               borderBottomColor: 'transparent',
               borderTopColor: 'transparent',
               padding:fontSizeFlex(6)
-              }}
-              inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(13)}}
-              style={{backgroundColor:'white',fontSize:fontSizeFlex(13)}}
-              cancelIcon ={true}
+            }}
+            inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(13)}}
+            style={{backgroundColor:'white',fontSize:fontSizeFlex(13)}}
+            cancelIcon ={true}
             />
           </View>
           <Pressable 
-          style={{flex:1.5,alignContent:'center',justifyContent:'center'}}
-          onPress={fadeOut}
+            style={{flex:1.5,alignContent:'center',justifyContent:'center'}}
+            onPress={()=>setHideListVisible(true)}
           >
-          <Text 
-            allowFontScaling={false} 
-            style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
-          >
-            목록
-          </Text>
-        </Pressable>
+            <Text 
+              allowFontScaling={false} 
+              style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
+            >
+              목록
+            </Text>
+          </Pressable>
           <Pressable 
           style={{flex:1.5,alignContent:'center',justifyContent:'center'}}
           onPress={fadeOut}
@@ -188,7 +237,7 @@ export default function App() {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{"앱을 종료하시겠습니까??"}</Text>          
+            <Text allowFontScaling={false} style={styles.modalText}>{"앱을 종료하시겠습니까??"}</Text>          
             <AdMobBanner
               bannerSize="mediumRectangle"
               adUnitID="ca-app-pub-5926200986625193/7250011193" 
@@ -200,13 +249,13 @@ export default function App() {
               style={[styles.button, styles.buttonClose,{paddingHorizontal:30, marginRight:20}]}
               onPress={() => closeApp() }
             >
-              <Text style={styles.textStyle}>종료</Text>
+              <Text allowFontScaling={false} style={styles.textStyle}>종료</Text>
             </Pressable>
             <Pressable
               style={[styles.button, styles.buttonClose,{paddingHorizontal:30}]}
               onPress={() => setModalVisible(!modalVisible)}
             >
-              <Text style={styles.textStyle}>취소</Text>
+              <Text allowFontScaling={false} style={styles.textStyle}>취소</Text>
             </Pressable>
           </View>
         </View>
@@ -220,7 +269,7 @@ export default function App() {
         
           <HideButton/>
       </View>
-      <ContentsTab searchText={searchText} setSearchText={setSearchText} fadeAnim={fadeAnim} isHide={isHide} />
+      <ContentsTab searchText={searchText} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} />
     </SafeAreaView>
   );
 }
@@ -242,6 +291,24 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalView: {
+    flex:1,
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  hideModalView: {
+    width:fontSizeFlex(250),
+    flex:1,
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,

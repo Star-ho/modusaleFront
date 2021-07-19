@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View,  StyleSheet, RefreshControl, FlatList, TouchableOpacity } from 'react-native';
 import SaleListItem from './saleListItem';
 
-function Contents({ViewInfo,cate,refeshData,redirectModalVisible,setRedirectModalVisible, setModalVal,fadeAnim,isHide}) {
+function Contents({ViewInfo,setViewInfo,cate,refeshData,redirectModalVisible,setRedirectModalVisible, setModalVal,fadeAnim,isHide,hideItem,setHideItem}) {
   let data
   if(cate){
     data=[...ViewInfo].filter(v=>v[3]==cate)
@@ -58,7 +58,7 @@ function Contents({ViewInfo,cate,refeshData,redirectModalVisible,setRedirectModa
         
         renderItem={({item}) => 
         <View>
-          <SaleListItem val={item} cate={cate} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} setModalVal={setModalVal} fadeAnim={fadeAnim} isHide={isHide} />
+          <SaleListItem val={item} cate={cate} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} setModalVal={setModalVal} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} ViewInfo={ViewInfo} setViewInfo={setViewInfo} />
         </View>
       }
       keyExtractor={(item, index) => index.toString()}
