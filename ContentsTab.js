@@ -8,7 +8,7 @@ import ErrorModal from './ErrorModal.js'
 import DrawerIcon from './DrawerIconSet.js';
 import { useFonts } from 'expo-font';
 import { fontSizeFlex, heightSize } from "./fontSizeFlex.js";
-import {
+import { 
   AdMobBanner,
   //setTestDeviceIDAsync
 } from "expo-ads-admob";
@@ -357,9 +357,10 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
     </Pressable>)
   }
 
-  const ItemModal=()=>{
-    return(
-      <Modal
+
+  return (
+    <View style={styles.container}>
+            <Modal
         animationType="slide"
         transparent={true}
         visible={redirectModalVisible}
@@ -388,12 +389,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
           </View>
         </View>
       </Modal>
-    )
-  }
 
-  return (
-    <View style={styles.container}>
-      <ItemModal/>
       <NavigationContainer>
         <Tab.Navigator  
             screenOptions={{

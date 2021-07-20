@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Image, SafeAreaView, BackHandler, Modal,Pressable,Dimensions,Animated} from 'react-native';
+import { View, Text, StyleSheet, Image, SafeAreaView, BackHandler, Modal,Pressable,FlatList,Animated} from 'react-native';
 import ContentsTab from './ContentsTab.js'
 import { SearchBar } from 'react-native-elements';
 import { useEffect } from 'react';
@@ -11,9 +11,7 @@ import {
 import { fontSizeFlex,heightSize } from "./fontSizeFlex.js";
 import * as Facebook from 'expo-facebook';
 import * as SQLite from 'expo-sqlite';
-import { FlatList } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { TextInput } from 'react-native';
 
 const db = SQLite.openDatabase('hideDB.db');
 Facebook.initializeAsync({appId:'1284519921980066'})
@@ -28,12 +26,6 @@ export default function App() {
     BMHANNAPro: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
   const [hideListVisible,setHideListVisible]=React.useState(false)
-
-  //테스트기기설정
-    // React.useEffect(() => {
-    //    setTestDeviceIDAsync("testdevice");
-    // }, []);
-
   const createTable='CREATE TABLE IF NOT EXISTS hidetable(item TEXT PRIMARY KEY);'
   
   const [hideItem,setHideItem]=React.useState([]);
@@ -49,8 +41,6 @@ export default function App() {
     })
   },[])
 
-  // db.exec('',false,())
-  // db.exec('select * from hidetable',false,())
   
   //앱 종료
   useEffect(() => {
@@ -86,9 +76,28 @@ export default function App() {
     setHideListVisible(false)
   }
   
-  const HideList=()=>{
-    return(
-      <Modal
+  const fadeIn = () => {
+    setIsHide(false)
+    // Will change fadeAnim value to 1 in 5 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 250,
+      useNativeDriver: true, 
+    }).start();
+  };
+  const fadeOut = () => {
+    setIsHide(true)
+    // Will change fadeAnim value to 0 in 3 seconds
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 250,
+      useNativeDriver: true, 
+    }).start();
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+        <Modal
         animationType="slide"
         transparent={true}
         visible={hideListVisible}
@@ -135,118 +144,6 @@ export default function App() {
           </View>
         </View>
       </Modal>
-    )
-  }
-  const fadeIn = () => {
-    setIsHide(false)
-    // Will change fadeAnim value to 1 in 5 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 250,
-      useNativeDriver: true, 
-    }).start();
-  };
-  const fadeOut = () => {
-    setIsHide(true)
-    // Will change fadeAnim value to 0 in 3 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 250,
-      useNativeDriver: true, 
-    }).start();
-  };
-
-
-  const HideButton =()=>{
-    if(isHide){
-      return(
-        <View style={{flex:7.5,flexDirection:'row'}}>
-          <View style={{flex: 5 }}>
-            <SearchBar
-              placeholder="어떤 브랜드를 찾으시나요?"
-              onChangeText={item=>setSearchText(item)}
-              value={searchText}
-              allowFontScaling={false} 
-              containerStyle={{backgroundColor:'#8A0602',
-              borderBottomColor: 'transparent',
-              borderTopColor: 'transparent',
-              padding:fontSizeFlex(6)
-              }}
-              inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(13),}}
-              style={{backgroundColor:'white',fontSize:fontSizeFlex(13)}}
-              cancelIcon ={true}
-            />
-            {/* <TextInput
-            placeholder="어떤브랜드를 찾으시나요?"
-            onChangeText={item=>setSearchText(item)}
-              value={searchText}
-              allowFontScaling={false} 
-            ></TextInput> */}
-          </View>
-          <Pressable 
-            style={{flex:1.5,alignItems:'center',justifyContent:'center'}}
-            onPress={fadeIn}
-            >
-            <Text 
-              allowFontScaling={false} 
-              style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
-            >
-              숨기기
-            </Text>
-          </Pressable>
-        </View>
-       )
-    }else{
-      return(
-        <View style={{flex:7.5,flexDirection:'row'}}>
-          <View style={{flex: 7 }}>
-          <SearchBar
-            placeholder="어떤 브랜드를 찾으시나요?"
-            onChangeText={item=>setSearchText(item)}
-            value={searchText}
-            allowFontScaling={false} 
-            containerStyle={{
-              backgroundColor:'#8A0602',
-              borderBottomColor: 'transparent',
-              borderTopColor: 'transparent',
-              padding:fontSizeFlex(6)
-            }}
-            inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(13)}}
-            style={{backgroundColor:'white',fontSize:fontSizeFlex(13)}}
-            cancelIcon ={true}
-            />
-          </View>
-          <Pressable 
-            style={{flex:1.5,alignContent:'center',justifyContent:'center'}}
-            onPress={()=>setHideListVisible(true)}
-          >
-            <Text 
-              allowFontScaling={false} 
-              style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
-            >
-              목록
-            </Text>
-          </Pressable>
-          <Pressable 
-          style={{flex:1.5,alignContent:'center',justifyContent:'center'}}
-          onPress={fadeOut}
-          >
-          <Text 
-            allowFontScaling={false} 
-            style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
-          >
-            취소
-          </Text>
-        </Pressable>
-        <HideList/>
-      </View>
-      )
-    }
-  }
-
-
-  return (
-    <SafeAreaView style={styles.container}>          
       <Modal
         animationType="slide"
         transparent={true}
@@ -285,10 +182,64 @@ export default function App() {
         <View style={{flex: 1.5 }}>
         <Image style={{width:heightSize(40),height:heightSize(40),margin:heightSize(7)}} source={require('./assets/homelogo.png')} />
         </View>
-
         
-          <HideButton/>
-      </View>
+        <View style={{flex:7.5,flexDirection:'row'}}>
+          <View style={{flex: 5 }}>
+            <SearchBar
+              placeholder="어떤 브랜드를 찾으시나요?"
+              onChangeText={item=>setSearchText(item)}
+              value={searchText}
+              allowFontScaling={false} 
+              containerStyle={{backgroundColor:'#8A0602',
+              borderBottomColor: 'transparent',
+              borderTopColor: 'transparent',
+              padding:fontSizeFlex(6)
+              }}
+              inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(12)}}
+              style={{backgroundColor:'white',fontSize:fontSizeFlex(12)}}
+              cancelIcon ={true}
+              onEndEditing={()=>{console.log(1)}}
+            />
+          </View>
+        {isHide?
+            <Pressable 
+              style={{flex:1.5,alignItems:'center',justifyContent:'center'}}
+              onPress={fadeIn}
+              >
+              <Text 
+                allowFontScaling={false} 
+                style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
+              >
+                숨기기
+              </Text>
+            </Pressable>:
+              <View style={{flex:2,flexDirection:'row'}}>
+                <Pressable 
+                style={{flex:1.5,alignContent:'center',justifyContent:'center'}}
+                onPress={()=>setHideListVisible(true)}
+              >
+                <Text 
+                  allowFontScaling={false} 
+                  style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
+                >
+                  목록
+                </Text>
+              </Pressable>
+              <Pressable 
+              style={{flex:1.5,alignContent:'center',justifyContent:'center'}}
+              onPress={fadeOut}
+              >
+              <Text 
+                allowFontScaling={false} 
+                style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
+              >
+                취소
+              </Text>
+            </Pressable>
+          </View>
+          }
+          </View>
+        </View>
       <ContentsTab searchText={searchText} refreshing={refreshing} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} />
     </SafeAreaView>
   );

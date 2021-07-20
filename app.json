@@ -28,7 +28,7 @@
       }
     },
     "android": {
-      "versionCode": 17,
+      "versionCode": 18,
       "package": "iof.processTA",
       "permissions": [],
       "softwareKeyboardLayoutMode": "pan",
