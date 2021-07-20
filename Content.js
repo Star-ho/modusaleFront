@@ -5,16 +5,12 @@ import SaleListItem from './saleListItem';
 function Contents({ViewInfo,setViewInfo,cate,refeshData,redirectModalVisible,setRedirectModalVisible, setModalVal,fadeAnim,isHide,hideItem,setHideItem}) {
   let data
   if(cate){
-    data=[...ViewInfo].filter(v=>v[3]==cate)
+    data=[...ViewInfo].filter(v=>v[3]==cate).filter(v=>!hideItem.includes(v[0]))
   }else{
-    data=[...ViewInfo]
+    data=[...ViewInfo].filter(v=>!hideItem.includes(v[0]))
+    
   }
   const [tabRefreshing,tabOnRefresh]=React.useState(false)
-    
-  const onTabRefresh = React.useCallback(() => {
-    tabOnRefresh(true);
-    setTimeout(()=>{tabOnRefresh(false)},1500)
-  }, []);
 
   let len=data.length
   if(len<7){
@@ -48,7 +44,8 @@ function Contents({ViewInfo,setViewInfo,cate,refeshData,redirectModalVisible,set
   return (    
     <View style={{flex:1}}>
       <FlatList
-        disableVirtualization={true} 
+        keyExtractor={(item, index) => index.toString()}
+        disableVirtualization={false} 
         refreshControl={
             <RefreshControl
               refreshing={tabRefreshing}
@@ -61,14 +58,14 @@ function Contents({ViewInfo,setViewInfo,cate,refeshData,redirectModalVisible,set
           <SaleListItem val={item} cate={cate} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} setModalVal={setModalVal} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} ViewInfo={ViewInfo} setViewInfo={setViewInfo} />
         </View>
       }
-      keyExtractor={(item, index) => index.toString()}
+      
       />
     </View>
   );
 } 
 
 const equalComparison = (prevProps, nextProps) =>{
-  return JSON.stringify(prevProps.ViewInfo) === JSON.stringify(nextProps.ViewInfo)
+  return ((JSON.stringify(prevProps.ViewInfo) === JSON.stringify(nextProps.ViewInfo)))
 }
 
 export default React.memo(Contents, equalComparison);

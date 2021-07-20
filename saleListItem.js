@@ -87,23 +87,22 @@ const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide
     setRedirectModalVisible(true)
   }
 
-  const BrandNameText=()=>{
-    if(val[0].length<10){
-      return <Text allowFontScaling={false} style={styles.brandText}>{ val[0] }</Text>
+  function hideFunc(){
+    // console.log(isHide)
+    if(isHide){
+      // console.log(val[0])
     }else{
-      return <Text allowFontScaling={false} style={styles.longbrandText}>{ val[0] }</Text>
-    }
-  }
-
-  const hideFunc=()=>{
-    // if(isHide){
       db.transaction((tx)=>{
         tx.executeSql("INSERT INTO hidetable(item) VALUES(?)",[val[0]],()=>{
-          setHideItem([...hideItem,val[0]])
+          let temp=[...hideItem,val[0]]
+          temp.sort()
+          setHideItem(temp)
           // console.log("insert")
-        },()=>console.log('fuCKKKKKKKKKKKKKKK'))
+        }
+        //,()=>console.log('fuCKKKKKKKKKKKKKKK')
+        )
       })
-    // }
+    }
   }
 
   return (
@@ -121,7 +120,10 @@ const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide
                 <BrandName val={val}  />
               </View>
               <View style={{height:30}}>
-                <BrandNameText/>
+                {val[0].length<8?
+                  <Text allowFontScaling={false} style={styles.longbrandText}>{ val[0] }</Text>:
+                  <Text allowFontScaling={false} style={styles.longbrandText}>{ val[0] }</Text>
+                }
               </View>
               <View style={{flex:0.5,flexDirection:'row'}}>
                 <Text allowFontScaling={false}  style={styles.priceText}>{ "최대 " }</Text><Text allowFontScaling={false} style={styles.price}>{ val[4] }</Text><Text allowFontScaling={false}  style={styles.priceText}>{"원 할인" }</Text>

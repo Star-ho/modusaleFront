@@ -13,6 +13,7 @@ import * as Facebook from 'expo-facebook';
 import * as SQLite from 'expo-sqlite';
 import { FlatList } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+import { TextInput } from 'react-native';
 
 const db = SQLite.openDatabase('hideDB.db');
 Facebook.initializeAsync({appId:'1284519921980066'})
@@ -22,6 +23,7 @@ export default function App() {
   const [modalVisible,setModalVisible]=React.useState(false);
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const [isHide, setIsHide] = React.useState(true)
+  const [refreshing,setRfreshing]=React.useState(true)
   const [loaded] = useFonts({
     BMHANNAPro: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
@@ -35,15 +37,20 @@ export default function App() {
   const createTable='CREATE TABLE IF NOT EXISTS hidetable(item TEXT PRIMARY KEY);'
   
   const [hideItem,setHideItem]=React.useState([]);
-  db.transaction((tx)=>{
-    tx.executeSql(createTable,[]);
-    tx.executeSql('select * from hidetable',[],(_,{rows:{_array}})=>{
-      _array=_array.map(v=>v.item)
-      if(JSON.stringify(hideItem)!==JSON.stringify(_array)){
-        setHideItem([..._array])
-      }
+  React.useEffect(()=>{
+    db.transaction((tx)=>{
+      tx.executeSql(createTable);
+      tx.executeSql('select * from hidetable',[],(_,{rows:{_array}})=>{
+        _array=_array.map(v=>v.item)
+        let temp=[..._array]
+        temp.sort()
+        setHideItem(temp)
+      })
     })
-  })
+  },[])
+
+  // db.exec('',false,())
+  // db.exec('select * from hidetable',false,())
   
   //앱 종료
   useEffect(() => {
@@ -65,11 +72,20 @@ export default function App() {
   const deleteHideBrand=(item)=>{
     // console.log(item)
     db.transaction((tx)=>{
-      tx.executeSql('delete from hidetable where item=?',[item],()=>{
-        setHideItem(hideItem.filter(v=>v!=item))
+      tx.executeSql('delete from hidetable where item=?',[item])
+      tx.executeSql('select * from hidetable',[],(_,{rows:{_array}})=>{
+        _array=_array.map(v=>v.item)
+        let temp=[..._array]
+        temp.sort()
+        setHideItem(temp)
       })
     })
   }
+  const hideListClose=()=>{
+    setRfreshing(!refreshing)
+    setHideListVisible(false)
+  }
+  
   const HideList=()=>{
     return(
       <Modal
@@ -77,7 +93,7 @@ export default function App() {
         transparent={true}
         visible={hideListVisible}
         onRequestClose={() => {
-          setHideListVisible(false);
+          hideListClose();
         }}
       >
         <View style={styles.centeredView}>
@@ -93,15 +109,13 @@ export default function App() {
                 keyExtractor={(item, index) => index.toString()}
 
                 renderItem={({item}) => 
-                  <View style={{width:fontSizeFlex(250),flexDirection:'row' }}>
+                  <View style={{width:fontSizeFlex(250),flexDirection:'row',marginVertical:fontSizeFlex(5) }}>
                       <View style={{flex:2, justifyContent:'center'}} >
-                        <Text
-                          allowFontScaling={false} 
-                          style={{ fontSize:fontSizeFlex(23),fontFamily:'BMHANNAPro'}} 
-
-                        >
-                          {item}
-                        </Text>
+                        {item.length<8?
+                        <Text allowFontScaling={false} style={{ fontSize:fontSizeFlex(23),fontFamily:'BMHANNAPro'}}>{item}</Text>:
+                        <Text allowFontScaling={false} style={{ fontSize:fontSizeFlex(17),fontFamily:'BMHANNAPro'}}>{item}</Text>
+                        }
+                          
                       </View>
                       <Pressable style={{flex:1}} onPress={()=>deleteHideBrand(item)}>
                         <AntDesign name="closecircleo" size={fontSizeFlex(20)} color="black"  />
@@ -150,7 +164,7 @@ export default function App() {
           <View style={{flex: 5 }}>
             <SearchBar
               placeholder="어떤 브랜드를 찾으시나요?"
-              onChangeText={setSearchText}
+              onChangeText={item=>setSearchText(item)}
               value={searchText}
               allowFontScaling={false} 
               containerStyle={{backgroundColor:'#8A0602',
@@ -158,10 +172,16 @@ export default function App() {
               borderTopColor: 'transparent',
               padding:fontSizeFlex(6)
               }}
-              inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(13)}}
+              inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(13),}}
               style={{backgroundColor:'white',fontSize:fontSizeFlex(13)}}
               cancelIcon ={true}
             />
+            {/* <TextInput
+            placeholder="어떤브랜드를 찾으시나요?"
+            onChangeText={item=>setSearchText(item)}
+              value={searchText}
+              allowFontScaling={false} 
+            ></TextInput> */}
           </View>
           <Pressable 
             style={{flex:1.5,alignItems:'center',justifyContent:'center'}}
@@ -179,11 +199,10 @@ export default function App() {
     }else{
       return(
         <View style={{flex:7.5,flexDirection:'row'}}>
-          <HideList/>
           <View style={{flex: 7 }}>
           <SearchBar
             placeholder="어떤 브랜드를 찾으시나요?"
-            onChangeText={setSearchText}
+            onChangeText={item=>setSearchText(item)}
             value={searchText}
             allowFontScaling={false} 
             containerStyle={{
@@ -219,6 +238,7 @@ export default function App() {
             취소
           </Text>
         </Pressable>
+        <HideList/>
       </View>
       )
     }
@@ -269,7 +289,7 @@ export default function App() {
         
           <HideButton/>
       </View>
-      <ContentsTab searchText={searchText} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} />
+      <ContentsTab searchText={searchText} refreshing={refreshing} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} />
     </SafeAreaView>
   );
 }
@@ -288,10 +308,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
+    
   },
   modalView: {
     flex:1,
+    maxHeight:420,
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
@@ -319,6 +341,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2
     },
+    maxHeight:fontSizeFlex(400),
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5

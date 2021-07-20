@@ -18,7 +18,7 @@ import * as SQLite from 'expo-sqlite';
 const Tab = createMaterialTopTabNavigator();
 const db = SQLite.openDatabase('hideDB.db');
 
-function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem}){ 
+function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing}){ 
   const [loaded] = useFonts({
     BMJUA_ttf: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
@@ -32,7 +32,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
 
   const appState = React.useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = React.useState(appState.current);
-  const [refreshing, setRefreshing] = React.useState(false);
+  
   const [sortValue, setsortValue] = React.useState('1');
 
   const [yogiyoSelected, setyogiyoSelected] = React.useState(true);
@@ -118,10 +118,9 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
         arr.push( [ i[1][0].toUpperCase(), i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
       }
       //console.log(arr)
+      setAllInfo(arr)
       arr=arr.filter(v=>!hideItem.includes(v[0]))
       arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
-      
-      setAllInfo(arr)
       setFilterInfo(arr)
       setViewInfo(arr)
       setSearchText('')
@@ -145,10 +144,10 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
         arr.push( [ i[1][0].toUpperCase(), i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
       }
       //console.log(arr)
+
+      setAllInfo(arr)
       arr=arr.filter(v=>!hideItem.includes(v[0]))
       arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
-      
-      setAllInfo(arr)
       setFilterInfo(arr)
       setViewInfo(arr)
       setSearchText('')
@@ -162,15 +161,17 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
       }
     })
   }
+  
   React.useEffect(() => {
-    // console.log(hideItem)
-    setViewInfo(ViewInfo.filter(v=>!hideItem.includes(v[0])))
-    // ViewInfo.forEach(v=>{
-    //   if(hideItem.includes(v[0])){
-    //     console.log(v)
-    //   }
-    // })
-}, [hideItem]);
+      // console.log(hideItem)
+      setViewInfo(filterInfo.filter(v=>!hideItem.includes(v[0])))
+
+      // ViewInfo.forEach(v=>{
+      //   if(hideItem.includes(v[0])){
+      //     console.log(v)
+      //   }
+      // })
+  }, [hideItem]);
 
   //검색어입력
   React.useEffect(() => {
@@ -180,7 +181,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
 
   React.useEffect(()=>{
     controllData()
-  },[appStateVisible,refreshing])
+  },[appStateVisible,isHide])
 
   React.useEffect(()=>{
     sortData()
@@ -422,13 +423,13 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
         >
           <Tab.Screen 
             name="전체" 
-            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} refeshData={refeshData}  setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} /></View> }
+            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} refeshData={refeshData}  setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText} /></View> }
           />
            {category.map( (cate,index) => {
               return <Tab.Screen 
                 name={cate}
                 key={index}
-              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} cate={cate}   refeshData={refeshData} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem}
+              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} cate={cate}   refeshData={refeshData} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText}
               /></View> }
               />
             }
