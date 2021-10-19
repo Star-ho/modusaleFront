@@ -12,13 +12,14 @@ function Contents({ViewInfo,setViewInfo,cate,refeshData,redirectModalVisible,set
   }
   const [tabRefreshing,tabOnRefresh]=React.useState(false)
 
-  if(data.length>6){
-    for(let i =0;i<data.length;i+=7){
-      data.splice(7*Math.random()+i,0,'ad')
-    }
-  }else{
-    data.push('ad')
-  }
+  data.unshift('ad')
+  // if(data.length>6){
+  //   for(let i =0;i<data.length;i+=7){
+  //     data.splice(7*Math.random()+i,0,'ad')
+  //   }
+  // }else{
+  //   data.push('ad')
+  // }
   data.push('null')
   data.push('null')
 
