@@ -23,12 +23,18 @@
         "SKAdNetworkItems": [
           {
             "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
+          },
+          {
+            "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
           }
         ]
       }
     },
     "android": {
-      "versionCode": 18,
+      "versionCode": 21,
       "package": "iof.processTA",
       "permissions": [],
       "softwareKeyboardLayoutMode": "pan",
@@ -45,7 +51,8 @@
     },
     "plugins": [
       "expo-ads-admob",
-      "expo-facebook"
+      "expo-facebook",
+      "expo-splash-screen"
     ]
   }
 }
