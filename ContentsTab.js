@@ -18,7 +18,16 @@ import * as SQLite from 'expo-sqlite';
 const Tab = createMaterialTopTabNavigator();
 const db = SQLite.openDatabase('hideDB.db');
 
-function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing}){ 
+function getAppDataRequest(location){
+    // return location!=null?fetch(`http://sailmoa.com//getDataFromGps?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}`).then(res=>res.json()):
+    //   fetch("http://sailmoa.com/?ver=0.92").then(res=>res.json())
+
+    console.log(location)
+
+    return location?fetch(`http://192.168.1.171/getDataFromGps?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}`).then(res=>res.json()):fetch("http://192.168.1.171/?ver=0.92").then(res=>res.json())
+}
+
+function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing,location}){ 
   const [loaded] = useFonts({
     BMJUA_ttf: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
@@ -110,9 +119,11 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
 
   
   const refeshData=()=>{
-    fetch("http://sailmoa.com/?ver=0.91").then(res=>res.json())
-    .then(res=>{
+    let request=getAppDataRequest(location)
+
+    request.then(res=>{
       if(!res.error){
+        
       let arr=[]
       for(let i of Object.entries(res)){
         arr.push( [ i[1][0].toUpperCase(), i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
@@ -136,9 +147,11 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
   }
 
   function controllData(){
-    fetch("http://sailmoa.com/?ver=0.91").then(res=>res.json())
-    .then(res=>{
+    let request=getAppDataRequest(location)
+
+    request.then(res=>{
       if(!res.error){
+        // console.log(res);
       let arr=[]
       for(let i of Object.entries(res)){
         arr.push( [ i[1][0].toUpperCase(), i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
@@ -275,8 +288,8 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
 
   const TobUnderBar=({sortValue})=>{
     return(
-    <View style={{height:heightSize(33), borderBottomWidth:1, borderBottomColor: '#990200',flexDirection:'row',backgroundColor:'white',zIndex:9999}}>
-        <View style={{flexDirection:'row',flex:3}}>
+    <View style={{height:heightSize(33), borderBottomWidth:1, borderBottomColor: '#7f7a7a',flexDirection:'row',backgroundColor:'white',zIndex:9999}}>
+        <View style={{flexDirection:'row',flex:3.5}}>
           <AppButton appname='baemin'/>
           <AppButton appname='yogiyo'/>
           <AppButton appname='coupang'/>
@@ -290,21 +303,24 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
                 items={items}
                 setOpen={setOpen}
                 showArrowIcon={false}
-                style={{height:32,width:heightSize(80) }}
+
                 containerStyle={{width:heightSize(80),margin:4}}
                 zIndex={100}
                 setValue={setsortValue}
                 setItems={setItems}
                 listItemContainerStyle={{height:40}}
+
                 bottomOffset={100}
                 listMode='MODAL'
                 placeholder="이름순"
                 allowFontScaling={false} 
-                textStyle={{
-                  color:'black',
-                }}
+                placeholderStyle={{color:'#7f7a7a'}}
+                
+                style={{height:32,width:heightSize(80),borderColor:'#7f7a7a'}}
+                textStyle={{color:'#7f7a7a'}}
                 labelStyle={{
-                  fontSize:fontSizeFlex(13)
+                  fontSize:fontSizeFlex(13),
+
                 }}
               />  
           </View>
@@ -487,10 +503,11 @@ const styles = StyleSheet.create({
   },
   buttonText:{
     fontSize: fontSizeFlex(11),//12,
+    color:'#6a5c5c'
   },
   delButtonText:{
     fontSize: fontSizeFlex(11),//12,
-    color:'gray',
+    color:'#a08b8b',
     textDecorationLine: 'line-through', 
     textDecorationStyle: 'solid'
   },
@@ -502,7 +519,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginHorizontal:1,
     marginVertical:3,
-    borderWidth:1
+    borderWidth:1,
+    borderColor:'#7f7a7a'
   },
   wemef:{
     flex:1,
@@ -512,7 +530,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginHorizontal:1,
     marginVertical:3,
-    borderWidth:1
+    borderWidth:1,
+    borderColor:'#7f7a7a'
   },
   yogiyo:{
     flex:1,
@@ -522,17 +541,19 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginHorizontal:1,
     marginVertical:3,
-    borderWidth:1
+    borderWidth:1,
+    borderColor:'#7f7a7a'
   },
   baemin:{
-    flex:1,
+    flex:1.3,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 8,
     borderRadius: 50,
     marginHorizontal:1,
     marginVertical:3,
-    borderWidth:1
+    borderWidth:1,
+    borderColor:'#7f7a7a',
   }
 
 });
