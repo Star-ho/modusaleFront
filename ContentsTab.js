@@ -10,24 +10,15 @@ import { useFonts } from 'expo-font';
 import { fontSizeFlex, heightSize } from "./fontSizeFlex.js";
 import { 
   AdMobBanner,
-  //setTestDeviceIDAsync
+  setTestDeviceIDAsync
 } from "expo-ads-admob";
 import * as SQLite from 'expo-sqlite';
-
+import { getAppDataRequest } from "./request.js"
 
 const Tab = createMaterialTopTabNavigator();
 const db = SQLite.openDatabase('hideDB.db');
 
-function getAppDataRequest(location){
-    // return location!=null?fetch(`http://sailmoa.com//getDataFromGps?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}`).then(res=>res.json()):
-    //   fetch("http://sailmoa.com/?ver=0.92").then(res=>res.json())
-
-    console.log(location)
-
-    return location?fetch(`http://192.168.1.171/getDataFromGps?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}`).then(res=>res.json()):fetch("http://192.168.1.171/?ver=0.92").then(res=>res.json())
-}
-
-function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing,location}){ 
+function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing,location,resData}){ 
   const [loaded] = useFonts({
     BMJUA_ttf: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
@@ -328,8 +319,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
   }
 
   const LinkingAPP=()=>{
-    //console.log(uriScheme)
-    //console.log(val)
+
     let redirectURL
     const baeminURL = "baemin://";
     const yogiyoURL = "yogiyoapp://open";
