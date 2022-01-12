@@ -160,6 +160,7 @@ const HaveImage = ({ImageName}) => {
     style={styles.logo}
     source={{
       uri: `https://sailmoa.com/${ImageName}`,
+      // uri: `http://192.168.1.187:3000/${ImageName}`,
     }}
     />
   }
@@ -167,6 +168,7 @@ const HaveImage = ({ImageName}) => {
     style={styles.logo}
     source={{
       uri: "https://sailmoa.com/undefined.png",
+      // uri: "http://192.168.1.187:3000/undefined.png",
     }}
     />
 }

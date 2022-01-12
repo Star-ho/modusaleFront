@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "903384345760",
+    "project_id": "salemoa-c979e",
+    "storage_bucket": "salemoa-c979e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903384345760:android:3f1ff8ec39956381216dc5",
+        "android_client_info": {
+          "package_name": "iof.processTA"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "903384345760-nmmkfec5hbmc1i13htokki3g577pfd4i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAt6sBnM6zaeFzfEhhDI04G7GgnDfrtiO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "903384345760-nmmkfec5hbmc1i13htokki3g577pfd4i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

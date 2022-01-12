@@ -31,12 +31,13 @@
             "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
           }
         ]
-      }
+      },
+      "bundleIdentifier": "iof.processTA"
     },
     "android": {
-      "versionCode": 21,
+      "versionCode": 25,
       "package": "iof.processTA",
-      "permissions": [],
+      "permissions": ["ACCESS_COARSE_LOCATION","ACCESS_FINE_LOCATION"],
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
@@ -52,7 +53,8 @@
     "plugins": [
       "expo-ads-admob",
       "expo-facebook",
-      "expo-splash-screen"
+      "expo-splash-screen",
+      "expo-location"
     ]
   }
 }
