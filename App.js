@@ -1,20 +1,18 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Image, SafeAreaView, BackHandler, Modal,Pressable,FlatList,Animated } from 'react-native';
+import { View, Text, StyleSheet, Image, SafeAreaView, BackHandler, Modal,Pressable,FlatList,Animated, Platform } from 'react-native';
 import ContentsTab from './ContentsTab.js'
 import { SearchBar } from 'react-native-elements';
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import * as Location from "expo-location";
-import {
-  AdMobBanner,
-  //setTestDeviceIDAsync
-} from "expo-ads-admob";
+import { ExitModule } from  "./exitModule.js"
 import { fontSizeFlex,heightSize } from "./fontSizeFlex.js";
 import * as Facebook from 'expo-facebook';
 import * as SQLite from 'expo-sqlite';
 import { AntDesign } from '@expo/vector-icons';
 import { initializeApp } from 'firebase/app';
 import AppLoading from 'expo-app-loading';
+import { getAppDataRequest } from "./request.js"
 
 const db = SQLite.openDatabase('hideDB.db');
 Facebook.initializeAsync({appId:'1284519921980066'})
@@ -59,18 +57,6 @@ export default function App() {
     })
   },[])
 
-   //위치정보
-  useEffect(() => {
-  (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        return;
-      }
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-    })();
-  }, []);
-
   //앱 종료
   useEffect(() => {
     const backAction = () => {
@@ -84,10 +70,7 @@ export default function App() {
     return () => backHandler.remove();
   }, []);
 
-  const closeApp=()=>{
-      BackHandler.exitApp()
-      setModalVisible(!modalVisible)
-  }
+
   const deleteHideBrand=(item)=>{
     // console.log(item)
     db.transaction((tx)=>{
@@ -202,31 +185,7 @@ export default function App() {
           setModalVisible(!modalVisible);
         }}
       >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text allowFontScaling={false} style={styles.modalText}>{"앱을 종료하시겠습니까??"}</Text>          
-            <AdMobBanner
-              bannerSize="mediumRectangle"
-              adUnitID="ca-app-pub-5926200986625193/7250011193" 
-              servePersonalizedAds={true}
-              onDidFailToReceiveAdWithError={(e) => console.log(e)}
-              />
-            <View style={{flexDirection:'row',marginTop:10}}>
-            <Pressable
-              style={[styles.button, styles.buttonClose,{paddingHorizontal:30, marginRight:20}]}
-              onPress={() => closeApp() }
-            >
-              <Text allowFontScaling={false} style={styles.textStyle}>종료</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.button, styles.buttonClose,{paddingHorizontal:30}]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text allowFontScaling={false} style={styles.textStyle}>취소</Text>
-            </Pressable>
-          </View>
-        </View>
-      </View>
+    <ExitModule modalVisible={modalVisible} setModalVisible={setModalVisible}  />
     </Modal>
       <View style={{ flex:1.1, flexDirection: 'row',backgroundColor:'#8A0602'}}>
         <View style={{flex: 1.5 }}>
@@ -295,14 +254,17 @@ export default function App() {
     </SafeAreaView>
   );
 }
- 
+let marginTop=0
+if(Platform.OS=="android"){
+  marginTop=40
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
+    marginTop: marginTop,
     zIndex: 0,
   },
   
