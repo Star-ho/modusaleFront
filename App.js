@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Image, SafeAreaView, BackHandler, Modal,Pressable,FlatList,Animated,Switch,StatusBar } from 'react-native';
+import { View, Text, StyleSheet, Image, SafeAreaView, BackHandler, Modal,Pressable,FlatList,Animated } from 'react-native';
 import ContentsTab from './ContentsTab.js'
 import { SearchBar } from 'react-native-elements';
 import { useEffect } from 'react';
@@ -14,6 +14,7 @@ import * as Facebook from 'expo-facebook';
 import * as SQLite from 'expo-sqlite';
 import { AntDesign } from '@expo/vector-icons';
 import { initializeApp } from 'firebase/app';
+import AppLoading from 'expo-app-loading';
 
 const db = SQLite.openDatabase('hideDB.db');
 Facebook.initializeAsync({appId:'1284519921980066'})
@@ -30,6 +31,8 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 export default function App() {
+  const [initFlag, setInitFlag] = React.useState(false);
+
   const [searchText, setSearchText] = React.useState("");
   const [modalVisible,setModalVisible]=React.useState(false);
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
@@ -41,6 +44,8 @@ export default function App() {
   const [hideListVisible,setHideListVisible]=React.useState(false)
   const createTable='CREATE TABLE IF NOT EXISTS hidetable(item TEXT PRIMARY KEY);'
   
+  const [location, setLocation] = React.useState(null);
+
   const [hideItem,setHideItem]=React.useState([]);
   React.useEffect(()=>{
     db.transaction((tx)=>{
@@ -55,7 +60,6 @@ export default function App() {
   },[])
 
    //위치정보
-  const [location, setLocation] = React.useState(null);
   useEffect(() => {
   (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -96,6 +100,7 @@ export default function App() {
       })
     })
   }
+
   const hideListClose=()=>{
     setRfreshing(!refreshing)
     setHideListVisible(false)
@@ -110,6 +115,7 @@ export default function App() {
       useNativeDriver: true, 
     }).start();
   };
+
   const fadeOut = () => {
     setIsHide(true)
     // Will change fadeAnim value to 0 in 3 seconds
@@ -119,6 +125,25 @@ export default function App() {
       useNativeDriver: true, 
     }).start();
   };
+
+  const initFunc = async() => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location); 
+  }
+
+  if (!initFlag) {
+    return (
+      <AppLoading
+        startAsync={initFunc}
+        onFinish={() => setInitFlag(true)}
+        onError={console.warn}
+      />
+    ); 
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -132,21 +157,6 @@ export default function App() {
       >
         <View style={styles.centeredView}>
           <View style={styles.hideModalView}>
-
-          {/* <View
-            style={{flexDirection:'row',marginBottom:10}}>
-            <Text
-              allowFontScaling={false} 
-              style={{ fontSize:fontSizeFlex(18),fontFamily:'BMHANNAPro'}}>
-                위치정보 동의
-            </Text>
-            {location!=null?
-              <Text style={{ color:'green',fontSize:fontSizeFlex(18),fontFamily:'BMHANNAPro'}}> O </Text>:
-              <Text style={{ color:'red',fontSize:fontSizeFlex(18),fontFamily:'BMHANNAPro'}}> X </Text>
-            }
-          </View> */}
-
-
             <Text 
               allowFontScaling={false} 
               style={{ fontSize:fontSizeFlex(23),fontFamily:'BMHANNAPro', marginBottom:20}}>
