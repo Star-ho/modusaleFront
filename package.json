@@ -12,6 +12,7 @@
     "@react-navigation/native": "next",
     "expo": "^44.0.0",
     "expo-ads-admob": "~12.0.0",
+    "expo-app-loading": "~1.3.0",
     "expo-facebook": "~12.1.0",
     "expo-font": "~10.0.4",
     "expo-location": "~14.0.1",
