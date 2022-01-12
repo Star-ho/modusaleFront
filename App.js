@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, Image, SafeAreaView, BackHandler, Modal,Pressable,FlatList,Animated} from 'react-native';
+import { View, Text, StyleSheet, Image, SafeAreaView, BackHandler, Modal,Pressable,FlatList,Animated,Switch,StatusBar } from 'react-native';
 import ContentsTab from './ContentsTab.js'
 import { SearchBar } from 'react-native-elements';
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
+import * as Location from "expo-location";
 import {
   AdMobBanner,
   //setTestDeviceIDAsync
@@ -12,9 +13,21 @@ import { fontSizeFlex,heightSize } from "./fontSizeFlex.js";
 import * as Facebook from 'expo-facebook';
 import * as SQLite from 'expo-sqlite';
 import { AntDesign } from '@expo/vector-icons';
+import { initializeApp } from 'firebase/app';
 
 const db = SQLite.openDatabase('hideDB.db');
 Facebook.initializeAsync({appId:'1284519921980066'})
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyAt6sBnM6zaeFzfEhhDI04G7GgnDfrtiO4',
+  authDomain: 'salemoa-c979e.firebaseapp.com',
+  databaseURL: 'https://salemoa-c979e.firebaseio.com',
+  projectId: 'salemoa-c979e',
+  storageBucket: 'salemoa-c979e.appspot.com',
+  appId: 'iof.processTA',
+};
+
+initializeApp(firebaseConfig);
 
 export default function App() {
   const [searchText, setSearchText] = React.useState("");
@@ -41,7 +54,19 @@ export default function App() {
     })
   },[])
 
-  
+   //위치정보
+  const [location, setLocation] = React.useState(null);
+  useEffect(() => {
+  (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        return;
+      }
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
+
   //앱 종료
   useEffect(() => {
     const backAction = () => {
@@ -107,10 +132,25 @@ export default function App() {
       >
         <View style={styles.centeredView}>
           <View style={styles.hideModalView}>
+
+          {/* <View
+            style={{flexDirection:'row',marginBottom:10}}>
+            <Text
+              allowFontScaling={false} 
+              style={{ fontSize:fontSizeFlex(18),fontFamily:'BMHANNAPro'}}>
+                위치정보 동의
+            </Text>
+            {location!=null?
+              <Text style={{ color:'green',fontSize:fontSizeFlex(18),fontFamily:'BMHANNAPro'}}> O </Text>:
+              <Text style={{ color:'red',fontSize:fontSizeFlex(18),fontFamily:'BMHANNAPro'}}> X </Text>
+            }
+          </View> */}
+
+
             <Text 
               allowFontScaling={false} 
               style={{ fontSize:fontSizeFlex(23),fontFamily:'BMHANNAPro', marginBottom:20}}>
-                숨기기 목록
+              숨기기 목록
             </Text>
             <View style={{flex:1}}>
               <FlatList
@@ -195,7 +235,8 @@ export default function App() {
               borderTopColor: 'transparent',
               padding:fontSizeFlex(6)
               }}
-              inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(12)}}
+              placeholderTextColor="#5f5858"
+              inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(12) }}
               style={{backgroundColor:'white',fontSize:fontSizeFlex(12)}}
               cancelIcon ={true}
               onEndEditing={()=>{console.log(1)}}
@@ -240,7 +281,7 @@ export default function App() {
           }
           </View>
         </View>
-      <ContentsTab searchText={searchText} refreshing={refreshing} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} />
+      <ContentsTab searchText={searchText} location={location} refreshing={refreshing} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} />
     </SafeAreaView>
   );
 }
