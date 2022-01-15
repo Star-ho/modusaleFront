@@ -34,9 +34,6 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 export default function App() {
-  React.useEffect(() => {
-    setTestDeviceIDAsync("testdevice");
- }, []);
 
  const [error,setError]=React.useState(false);
 

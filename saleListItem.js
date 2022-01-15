@@ -30,9 +30,9 @@ const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide
     resourceApp='위메프오'
   }
   // 테스트 앱 test app
-    React.useEffect(() => {
-      setTestDeviceIDAsync("testdevice");
-   }, []);
+  //   React.useEffect(() => {
+  //     setTestDeviceIDAsync("testdevice");
+  //  }, []);
 
   if(val=='ad')  {
     return( <View style={styles.adView}>
