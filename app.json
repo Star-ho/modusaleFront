@@ -35,7 +35,7 @@
       "bundleIdentifier": "iof.processTA"
     },
     "android": {
-      "versionCode": 25,
+      "versionCode": 27,
       "package": "iof.processTA",
       "permissions": ["ACCESS_COARSE_LOCATION","ACCESS_FINE_LOCATION"],
       "softwareKeyboardLayoutMode": "pan",
