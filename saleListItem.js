@@ -6,13 +6,13 @@ import { useFonts } from 'expo-font';
 import { fontSizeFlex,heightSize } from "./fontSizeFlex.js";
 import {
   AdMobBanner,
-  //setTestDeviceIDAsync
+  setTestDeviceIDAsync
 } from "expo-ads-admob";
 import * as SQLite from 'expo-sqlite';
 
 const db = SQLite.openDatabase('hideDB.db');
 
-const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide, hideItem,setHideItem,ViewInfo,setViewInfo}) => {
+const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide, hideItem,setHideItem}) => {
   const [loaded] = useFonts({
     BMHANNAPro: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
@@ -20,10 +20,20 @@ const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide
   
   let resourceApp
 
-  //테스트 앱 test app
-  //   React.useEffect(() => {
-  //     setTestDeviceIDAsync("testdevice");
-  //  }, []);
+  if(val[1]=='yogiyo'){
+    resourceApp='요기요'
+  }else if(val[1]=='baemin'){
+    resourceApp='배달의민족'
+  }else if(val[1]=='coupang'){
+    resourceApp='쿠팡이츠'
+  }else if(val[1]=='wemef'){
+    resourceApp='위메프오'
+  }
+  // 테스트 앱 test app
+    React.useEffect(() => {
+      setTestDeviceIDAsync("testdevice");
+   }, []);
+
   if(val=='ad')  {
     return( <View style={styles.adView}>
       <AdMobBanner
@@ -35,50 +45,34 @@ const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide
   </View>)
   }
 
-  if(val=='null')  {
-    return(  <View style={styles.nullView}>
+  if(val=='null')  {return(  <View style={styles.nullView}></View>)}
 
-  </View>)
-  }
-  if(val[1]=='yogiyo'){
-    resourceApp='요기요'
-  }else if(val[1]=='baemin'){
-    resourceApp='배달의민족'
-  }else if(val[1]=='coupang'){
-    resourceApp='쿠팡이츠'
-  }else if(val[1]=='wemef'){
-    resourceApp='위메프오'
-  }
+  const YogiyoIcon= () =><View style={{flexDirection:'row',marginBottom:1}} >
+    <Image style={styles.brandlogo} source={require('./assets/yogiyo_logo.png')} />
+    <Text allowFontScaling={false} style={styles.sourceText}>  요기요</Text>
+  </View>;
+  const BaeminIcon= () =><View style={{flexDirection:'row',marginBottom:1}} >
+    <Image style={styles.brandlogo} source={require('./assets/bamin_logo.png')} />
+    <Text allowFontScaling={false} style={styles.sourceText}>  배달의민족</Text>
+  </View>;
+  const CoupangIcon= () => <View style={{flexDirection:'row',marginBottom:1}} >
+    <Image style={styles.brandlogo} source={require('./assets/coupang_logo.png')} />
+    <Text allowFontScaling={false}  style={styles.sourceText}>  쿠팡잇츠</Text>
+  </View>;
+  const WemefIcon= () =><View style={{flexDirection:'row',marginBottom:1}} >
+    <Image style={styles.brandlogo} source={require('./assets/wemef_logo.png')} />
+    <Text allowFontScaling={false} style={styles.sourceText}>  위메프오</Text>
+  </View>;
 
   function BrandName({val}){
     if(val[1]=='yogiyo'){
-      return (
-        <View style={{flexDirection:'row',marginBottom:1}} >
-            <Image style={styles.brandlogo} source={require('./assets/yogiyo_logo.png')} />
-            <Text allowFontScaling={false} style={styles.sourceText}>  요기요</Text>
-        </View>
-      )
+      return <YogiyoIcon/> 
     }else if(val[1]=='baemin'){
-      return (
-        <View style={{flexDirection:'row',marginBottom:1}} >
-          <Image style={styles.brandlogo} source={require('./assets/bamin_logo.png')} />
-          <Text allowFontScaling={false} style={styles.sourceText}>  배달의민족</Text>
-        </View>
-        )
+      return <BaeminIcon/>
     }else if(val[1]=='coupang'){
-      return (
-        <View style={{flexDirection:'row',marginBottom:1}} >
-          <Image style={styles.brandlogo} source={require('./assets/coupang_logo.png')} />
-          <Text allowFontScaling={false}  style={styles.sourceText}>  쿠팡잇츠</Text>
-        </View>
-      )
+      return <CoupangIcon/>
     }else if(val[1]=='wemef'){
-      return (
-        <View style={{flexDirection:'row',marginBottom:1}} >
-          <Image style={styles.brandlogo} source={require('./assets/wemef_logo.png')} />
-          <Text allowFontScaling={false} style={styles.sourceText}>  위메프오</Text>
-        </View>
-      )
+      return <WemefIcon/>
     }
   }
 
@@ -88,22 +82,38 @@ const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide
   }
 
   function hideFunc(){
-    // console.log(isHide)
-    if(isHide){
-      // console.log(val[0])
-    }else{
+    if(!isHide){
       db.transaction((tx)=>{
         tx.executeSql("INSERT INTO hidetable(item) VALUES(?)",[val[0]],()=>{
           let temp=[...hideItem,val[0]]
           temp.sort()
           setHideItem(temp)
-          // console.log("insert")
         }
-        // ,()=>console.log('fuCKKKKKKKKKKKKKKK')
         )
       })
     }
   }
+
+  const HaveImage = ({ImageName}) => { 
+    if(ImageName!='없음'){
+      return <Image 
+      style={styles.logo}
+      source={{
+        uri: `https://sailmoa.com/${ImageName}`,
+        // uri: `http://192.168.1.187:3000/${ImageName}`,
+      }}
+      />
+    }
+    return noImage
+  }
+  
+  const noImage = <Image 
+    style={styles.logo}
+    source={{
+      uri: "https://sailmoa.com/undefined.png",
+      // uri: "http://192.168.1.187:3000/undefined.png",
+    }}
+    />
 
   return (
     <View style={{flexDirection:'row',height:90, borderBottomColor: '#f4e5e5', backgroundColor:'white',
@@ -154,24 +164,7 @@ const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide
   );
 };
 
-const HaveImage = ({ImageName}) => { 
-  if(ImageName!='없음'){
-    return <Image 
-    style={styles.logo}
-    source={{
-      uri: `https://sailmoa.com/${ImageName}`,
-      // uri: `http://192.168.1.187:3000/${ImageName}`,
-    }}
-    />
-  }
-  return <Image 
-    style={styles.logo}
-    source={{
-      uri: "https://sailmoa.com/undefined.png",
-      // uri: "http://192.168.1.187:3000/undefined.png",
-    }}
-    />
-}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

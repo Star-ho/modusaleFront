@@ -13,6 +13,11 @@ import { AntDesign } from '@expo/vector-icons';
 import { initializeApp } from 'firebase/app';
 import AppLoading from 'expo-app-loading';
 import { getAppDataRequest } from "./request.js"
+import { 
+  setTestDeviceIDAsync
+} from "expo-ads-admob";
+import ErrorModal from './ErrorModal.js'
+
 
 const db = SQLite.openDatabase('hideDB.db');
 Facebook.initializeAsync({appId:'1284519921980066'})
@@ -29,7 +34,11 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 export default function App() {
-  const [initFlag, setInitFlag] = React.useState(false);
+  React.useEffect(() => {
+    setTestDeviceIDAsync("testdevice");
+ }, []);
+
+ const [error,setError]=React.useState(false);
 
   const [searchText, setSearchText] = React.useState("");
   const [modalVisible,setModalVisible]=React.useState(false);
@@ -43,8 +52,10 @@ export default function App() {
   const createTable='CREATE TABLE IF NOT EXISTS hidetable(item TEXT PRIMARY KEY);'
   
   const [location, setLocation] = React.useState(null);
-
+  const [resData, setRestData ]=React.useState([]);
   const [hideItem,setHideItem]=React.useState([]);
+
+  //앱 시작
   React.useEffect(()=>{
     db.transaction((tx)=>{
       tx.executeSql(createTable);
@@ -55,6 +66,21 @@ export default function App() {
         setHideItem(temp)
       })
     })
+    
+    Location.requestForegroundPermissionsAsync().then(res=>{
+      if(res?.status== 'granted'){
+        Location.getCurrentPositionAsync({}).then(location=>{
+          setLocation(location);
+          getAppDataRequest(location).then(res=>{
+            setRestData(res)
+          })
+        });
+      }else{
+        getAppDataRequest(null).then(res=>{
+        setRestData(res)
+        })
+      }
+    });
   },[])
 
   //앱 종료
@@ -109,22 +135,13 @@ export default function App() {
     }).start();
   };
 
-  const initFunc = async() => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        return;
-      }
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location); 
+  if(resData.error){
+    return <ErrorModal/>
   }
 
-  if (!initFlag) {
+  if (resData.length==0) {
     return (
-      <AppLoading
-        startAsync={initFunc}
-        onFinish={() => setInitFlag(true)}
-        onError={console.warn}
-      />
+      <AppLoading/>
     ); 
   }
 
@@ -187,77 +204,87 @@ export default function App() {
       >
     <ExitModule modalVisible={modalVisible} setModalVisible={setModalVisible}  />
     </Modal>
-      <View style={{ flex:1.1, flexDirection: 'row',backgroundColor:'#8A0602'}}>
-        <View style={{flex: 1.5 }}>
-        <Image style={{width:heightSize(40),height:heightSize(40),margin:heightSize(7)}} source={require('./assets/homelogo.png')} />
+      <View style={{ flexDirection: 'row',backgroundColor:'#8A0602', height:heightSize(54)}}>
+        <View style={{ flex:1.2 }}>
+          <Image style={styles.logoImg} source={require('./assets/homelogo.png')} />
         </View>
         
-        <View style={{flex:7.5,flexDirection:'row'}}>
-          <View style={{flex: 5 }}>
+        <View style={{flex:5}}>
+          <View style={styles.SearchBar}>
             <SearchBar
               placeholder="어떤 브랜드를 찾으시나요?"
               onChangeText={item=>setSearchText(item)}
               value={searchText}
               allowFontScaling={false} 
               containerStyle={{backgroundColor:'#8A0602',
-              borderBottomColor: 'transparent',
-              borderTopColor: 'transparent',
-              padding:fontSizeFlex(6)
+                borderBottomColor: 'transparent',
+                borderTopColor: 'transparent',
+                padding:heightSize(1),
+                height:heightSize(40),
               }}
               placeholderTextColor="#5f5858"
-              inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:fontSizeFlex(12) }}
+              inputContainerStyle={{backgroundColor:'white',borderRadius:20,fontSize:heightSize(8) }}
               style={{backgroundColor:'white',fontSize:fontSizeFlex(12)}}
               cancelIcon ={true}
               onEndEditing={()=>{console.log(1)}}
             />
           </View>
-        {isHide?
+          </View>
+          {isHide?
             <Pressable 
               style={{flex:1.5,alignItems:'center',justifyContent:'center'}}
               onPress={fadeIn}
               >
               <Text 
                 allowFontScaling={false} 
-                style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
+                style={styles.hide}
               >
                 숨기기
               </Text>
             </Pressable>:
               <View style={{flex:2,flexDirection:'row'}}>
                 <Pressable 
-                style={{flex:1.5,alignContent:'center',justifyContent:'center'}}
+                style={{flex:1.5,alignContent:'center',justifyContent:'center',paddingLeft:fontSizeFlex(5)}}
                 onPress={()=>setHideListVisible(true)}
               >
                 <Text 
                   allowFontScaling={false} 
-                  style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
+                  style={styles.hide}
                 >
                   목록
                 </Text>
               </Pressable>
               <Pressable 
-              style={{flex:1.5,alignContent:'center',justifyContent:'center'}}
+              style={{flex:1.5,alignContent:'center',justifyContent:'center',paddingRight:fontSizeFlex(5)}}
               onPress={fadeOut}
               >
               <Text 
                 allowFontScaling={false} 
-                style={{color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:9}}
+                style={styles.hide}
               >
                 취소
               </Text>
             </Pressable>
           </View>
           }
-          </View>
         </View>
-      <ContentsTab searchText={searchText} location={location} refreshing={refreshing} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} />
+      <ContentsTab searchText={searchText} location={location} refreshing={refreshing} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} resData={resData} />
     </SafeAreaView>
   );
 }
 let marginTop=0
+let searchMargin=heightSize(1.75)
+let logoMargin=heightSize(7)
+let hideMarginTop=heightSize(0)
 if(Platform.OS=="android"){
   marginTop=40
+  searchMargin=heightSize(8)
+  logoMargin=heightSize(8)
+  hideMarginTop=heightSize(8)
 }
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -267,7 +294,15 @@ const styles = StyleSheet.create({
     marginTop: marginTop,
     zIndex: 0,
   },
-  
+  SearchBar:{
+    marginTop:searchMargin,
+  },
+  logoImg:{
+    width:heightSize(40),height:heightSize(40),margin:logoMargin
+  },
+  hide:{
+    color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:hideMarginTop
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",

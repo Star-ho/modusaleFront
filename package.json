@@ -41,7 +41,8 @@
     "unimodules-permissions-interface": "^6.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "reactotron-react-native": "^5.0.1"
   },
   "private": true,
   "rnpm": {

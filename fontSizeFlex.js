@@ -6,10 +6,11 @@ const {
      } = Dimensions.get('window');
 
      // based on iphone 5s's scale
-     const scale = SCREEN_WIDTH / 320   ;
-// console.log(SCREEN_WIDTH)
+const widthScale = SCREEN_WIDTH / 320;
+const heightScale = SCREEN_HEIGHT / 320;
+
 export function fontSizeFlex(size) {
-    const newSize = size * scale 
+    const newSize = size * widthScale 
     if (Platform.OS === 'ios') {
         return Math.round(PixelRatio.roundToNearestPixel(newSize))
     } else {
@@ -18,7 +19,7 @@ export function fontSizeFlex(size) {
 }
 
 export function heightSize(size) {
-    const newSize = size * scale 
+    const newSize = size * heightScale/2
     if (Platform.OS === 'ios') {
         return Math.round(PixelRatio.roundToNearestPixel(newSize))
     } else {

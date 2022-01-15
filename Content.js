@@ -2,13 +2,12 @@ import * as React from 'react';
 import { View, RefreshControl, FlatList, } from 'react-native';
 import SaleListItem from './saleListItem';
 
-function Contents({ViewInfo,setViewInfo,cate,refeshData,redirectModalVisible,setRedirectModalVisible, setModalVal,fadeAnim,isHide,hideItem,setHideItem}) {
+function Contents({ViewInfo,setViewInfo,cate,getData,redirectModalVisible,setRedirectModalVisible, setModalVal,fadeAnim,isHide,hideItem,setHideItem}) {
   let data
   if(cate){
-    data=[...ViewInfo].filter(v=>v[3]==cate).filter(v=>!hideItem.includes(v[0]))
+    data=[...ViewInfo].filter(v=>v[3]==cate)
   }else{
-    data=[...ViewInfo].filter(v=>!hideItem.includes(v[0]))
-    
+    data=[...ViewInfo]
   }
   const [tabRefreshing,tabOnRefresh]=React.useState(false)
 
@@ -27,7 +26,7 @@ function Contents({ViewInfo,setViewInfo,cate,refeshData,redirectModalVisible,set
         refreshControl={
             <RefreshControl
               refreshing={tabRefreshing}
-              onRefresh={refeshData}
+              onRefresh={getData}
             />} 
         data={data}
         

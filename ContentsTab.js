@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Contents from "./Content.js"
 import DropDownPicker from 'react-native-dropdown-picker';
-import ErrorModal from './ErrorModal.js'
 import DrawerIcon from './DrawerIconSet.js';
 import { useFonts } from 'expo-font';
 import { fontSizeFlex, heightSize } from "./fontSizeFlex.js";
@@ -18,7 +17,7 @@ import { getAppDataRequest } from "./request.js"
 const Tab = createMaterialTopTabNavigator();
 const db = SQLite.openDatabase('hideDB.db');
 
-function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing,location,resData}){ 
+function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing,location,resData,initFlag}){ 
   const [loaded] = useFonts({
     BMJUA_ttf: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
@@ -27,7 +26,6 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
   const [filterInfo, setFilterInfo] = React.useState([]);
   const [ViewInfo, setViewInfo] = React.useState([]);
   let category=["치킨","피자","한식","양식","기타"]
-  const [error,setError]=React.useState(false);
   const [redirectModalVisible, setRedirectModalVisible] = React.useState(false);
 
   const appState = React.useRef(AppState.currentState);
@@ -79,7 +77,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
       temp.sort((a,b)=>( b[4]-a[4] ) ) 
     }
     setFilterInfo(temp)
-    setViewInfo(temp)
+    setViewInfo(temp.filter(v=>!hideItem.includes(v[0])))
   }
 
   function filteringData(){
@@ -104,51 +102,16 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
       temp.sort((a,b)=>( b[4]-a[4] ) ) 
     }
     setFilterInfo(temp)
-    setViewInfo(temp)
+    setViewInfo(temp.filter(v=>!hideItem.includes(v[0])))
 
-  }
-
-  
-  const refeshData=()=>{
-    let request=getAppDataRequest(location)
-
-    request.then(res=>{
-      if(!res.error){
-        
-      let arr=[]
-      for(let i of Object.entries(res)){
-        arr.push( [ i[1][0].toUpperCase(), i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
-      }
-      //console.log(arr)
-      setAllInfo(arr)
-      arr=arr.filter(v=>!hideItem.includes(v[0]))
-      arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
-      setFilterInfo(arr)
-      setViewInfo(arr)
-      setSearchText('')
-      if(flag!=1){
-        filteringData()
-      }else{
-        setFlag(2)
-      }
-      }else{
-        setError(true)
-      }
-    })
   }
 
   function controllData(){
-    let request=getAppDataRequest(location)
-
-    request.then(res=>{
-      if(!res.error){
-        // console.log(res);
+    getAppDataRequest(location).then(res=>{
       let arr=[]
       for(let i of Object.entries(res)){
         arr.push( [ i[1][0].toUpperCase(), i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
       }
-      //console.log(arr)
-
       setAllInfo(arr)
       arr=arr.filter(v=>!hideItem.includes(v[0]))
       arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
@@ -159,9 +122,6 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
         filteringData()
       }else{
         setFlag(2)
-      }
-      }else{
-        setError(true)
       }
     })
   }
@@ -180,7 +140,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
   //검색어입력
   React.useEffect(() => {
       let res=filterInfo.filter(v=>v[0].toLowerCase().includes(searchText.toLowerCase()))
-      setViewInfo(res)
+      setViewInfo(res.filter(v=>!hideItem.includes(v[0])))
   }, [searchText]);
 
   React.useEffect(()=>{
@@ -195,11 +155,6 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
     filteringData()
   },[yogiyoSelected,baeminSelected,coupangSelected,wemefSelected,allInfo,refreshing,appStateVisible])
 
-  if(error){
-    return (
-      <ErrorModal/>
-    )
-  }
 
 
   const filterApp=(appname)=>{
@@ -325,20 +280,24 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
     const yogiyoURL = "yogiyoapp://open";
     const coupangURL = "coupangeats://";
     const wemeURL = "cupping://doCommand";
-    let playStoreLink
+    let storeURL
 
     if(modalVal[1]=='yogiyo'){
       redirectURL=yogiyoURL
-      playStoreLink="market://details?id=com.fineapp.yogiyo"
+      if(Platform.OS=="android"){storeURL="market://details?id=com.fineapp.yogiyo"}
+      else{storeURL="itms-apps://itunes.apple.com/app/id543831532"}
     }else if(modalVal[1]=='baemin'){
       redirectURL=baeminURL
-      playStoreLink="market://details?id=com.sampleapp"
+      if(Platform.OS=="android"){storeURL="market://details?id=com.sampleapp"}
+      else{storeURL="itms-apps://itunes.apple.com/app/id378084485"}
     }else if(modalVal[1]=='coupang'){
       redirectURL=coupangURL
-      playStoreLink="market://details?id=com.coupang.mobile.eats"
+      if(Platform.OS=="android"){storeURL="market://details?id=com.coupang.mobile.eats"}
+      else{storeURL="itms-apps://itunes.apple.com/app/id1445504255"}
     }else if(modalVal[1]=='wemef'){
       redirectURL=wemeURL
-      playStoreLink="market://details?id=com.wemakeprice.cupping"
+      if(Platform.OS=="android"){storeURL="market://details?id=com.wemakeprice.cupping"}
+      else{storeURL="itms-apps://itunes.apple.com/app/id1225077702"}
     }
 
     const handlePress = React.useCallback(async () => {
@@ -348,7 +307,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
         try{
           await Linking.openURL(redirectURL);
         }catch{
-          await Linking.openURL(playStoreLink);
+          await Linking.openURL(storeURL);
         }
       }
 
@@ -425,13 +384,13 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
         >
           <Tab.Screen 
             name="전체" 
-            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} refeshData={refeshData}  setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText} /></View> }
+            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} getData={controllData}  setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText} /></View> }
           />
            {category.map( (cate,index) => {
               return <Tab.Screen 
                 name={cate}
                 key={index}
-              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} cate={cate}   refeshData={refeshData} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText}
+              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} cate={cate}   getData={controllData} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText}
               /></View> }
               />
             }
@@ -538,7 +497,7 @@ const styles = StyleSheet.create({
     flex:1.3,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 8,
+    padding: 2,
     borderRadius: 50,
     marginHorizontal:1,
     marginVertical:3,
