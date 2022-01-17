@@ -6,7 +6,8 @@ import { fontSizeFlex } from './fontSizeFlex';
 function ErrorModal (){ 
   const [modalVisible, setModalVisible] = React.useState(true);
   const ToPlayStore=()=>{
-    const redirectURL = "market://details?id=iof.processTA"
+    const redirectURL = Platform.OS=='android'?"market://details?id=iof.processTA":"itms-apps://itunes.apple.com/app/id1605520651"
+    
     const handlePress = React.useCallback(async () => {
         await Linking.openURL(redirectURL);
     }, [redirectURL]);
