@@ -20,6 +20,7 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you.",
+        "CFBundleAllowMixedLocalizations": true,
         "SKAdNetworkItems": [
           {
             "SKAdNetworkIdentifier": "cstr6suwn9.skadnetwork"
@@ -49,6 +50,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "locales": {
+      "ko": "./languages/korean.json"
     },
     "plugins": [
       "expo-ads-admob",
