@@ -2,7 +2,7 @@
   "expo": {
     "name": "할인 모아",
     "slug": "salemoa",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,9 +17,10 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "infoPlist": {
-        "NSUserTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you.",
+        "NSUserTrackingUsageDescription": "광고 최적화를 위한 추적입니다.",
+        "NSLocationWhenInUseUsageDescription":"위치정보를 허용하시면 주변에 있는 가게 목록만 볼 수 있습니다.",
         "CFBundleAllowMixedLocalizations": true,
         "SKAdNetworkItems": [
           {
