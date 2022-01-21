@@ -1,0 +1,8 @@
+{
+    "ios":{
+        "CFBundleDisplayName": "salemoa",
+        "NSContactsUsageDescription": "It is an application that collects delivery app information.",
+        "NSUserTrackingUsageDescription": "Tracking for ad optimization",
+        "NSLocationWhenInUseUsageDescription":"If you allow location information, you can only see a list of nearby stores." 
+    }
+}
