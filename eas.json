@@ -1,11 +1,8 @@
 {
   "build": {
     "base": {
-      "node": "12.13.0",
-      "yarn": "1.22.5",
-      "env": {
-        "EXAMPLE_ENV": "example value"
-      },
+      "node": "16.5.0",
+      "yarn": "1.22.17",
       "android": {
         "image": "default",
         "env": {
@@ -13,45 +10,17 @@
         }
       },
       "ios": {
-        "image": "latest",
-        "env": {
-          "PLATFORM": "ios"
-        }
-      }
-    },
-    "development": {
-      "extends": "base",
-      "developmentClient": true,
-      "env": {
-        "ENVIRONMENT": "development"
-      },
-      "android": {
-        "distribution": "internal",
-        "withoutCredentials": true
-      },
-      "ios": {
-        "simulator": true
-      }
-    },
-    "staging": {
-      "extends": "base",
-      "env": {
-        "ENVIRONMENT": "staging"
-      },
-      "distribution": "internal",
-      "android": {
-        "buildType": "apk"
+        "simulator":false,
+        "autoIncrement":true,
+        "cocoapods": "1.11.2",
+        "image": "macos-big-sur-11.4-xcode-13.0"
       }
     },
     "production": {
       "extends": "base",
-      "env": {
-        "ENVIRONMENT": "production"
+  "cli": {
+    "version": ">= 0.44.1"
       }
     }
-  },
-  "cli": {
-    "version": ">= 0.44.1",
-    "requireCommit": true
   }
 }
