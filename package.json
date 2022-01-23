@@ -20,6 +20,7 @@
     "expo-splash-screen": "~0.14.1",
     "expo-sqlite": "~10.1.0",
     "expo-status-bar": "~1.2.0",
+    "expo-tracking-transparency": "~2.1.0",
     "firebase": "^9.6.3",
     "install": "^0.13.0",
     "npm": "^8.3.1",

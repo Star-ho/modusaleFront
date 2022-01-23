@@ -17,7 +17,7 @@ import { getAppDataRequest } from "./request.js"
 const Tab = createMaterialTopTabNavigator();
 const db = SQLite.openDatabase('hideDB.db');
 
-function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing,location,resData,initFlag}){ 
+function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing,location,resData,initFlag,isPersonal}){ 
 
   const [allInfo, setAllInfo] = React.useState([]);
   const [filterInfo, setFilterInfo] = React.useState([]);
@@ -336,7 +336,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
             <AdMobBanner
               bannerSize="mediumRectangle"
               adUnitID="ca-app-pub-5926200986625193/7250011193" 
-              servePersonalizedAds={true}
+              servePersonalizedAds={isPersonal}
               onDidFailToReceiveAdWithError={(e) => console.log(e)}
             />
             <View style={{flexDirection:'row',marginTop:10}}>
@@ -381,13 +381,13 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
         >
           <Tab.Screen 
             name="전체" 
-            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} getData={controllData}  setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText} /></View> }
+            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} getData={controllData}  setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText} isPersonal={isPersonal} /></View> }
           />
            {category.map( (cate,index) => {
               return <Tab.Screen 
                 name={cate}
                 key={index}
-              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} cate={cate}   getData={controllData} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText}
+              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} cate={cate}   getData={controllData} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText} isPersonal={isPersonal}
               /></View> }
               />
             }

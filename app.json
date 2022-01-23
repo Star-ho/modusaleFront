@@ -19,10 +19,11 @@
     "ios": {
       "supportsTablet": false,
       "infoPlist": {
-        "buildNumber": "7.0.0",
-        "CFBundleVersion":"7.0.0",
+        "buildNumber": "8.0.0",
+        "CFBundleVersion": "8.0.0",
         "NSUserTrackingUsageDescription": "광고 최적화를 위한 추적입니다.",
         "NSLocationWhenInUseUsageDescription": "위치정보를 허용하시면 주변에 있는 가게 목록만 볼 수 있습니다.",
+        "userTrackingPermission": "개인 광고 최적화를 위해 앱관련 데이터를 수집하도록 허용합니다.",
         "CFBundleAllowMixedLocalizations": true,
         "SKAdNetworkItems": [
           {
@@ -36,7 +37,6 @@
           }
         ]
       },
-
       "bundleIdentifier": "iof.processTA"
     },
     "android": {
@@ -63,10 +63,7 @@
       "en": "./languages/english.json"
     },
     "plugins": [
-      "expo-ads-admob",
-      "expo-facebook",
-      "expo-splash-screen",
-      "expo-location"
+      "expo-tracking-transparency"
     ]
   }
 }

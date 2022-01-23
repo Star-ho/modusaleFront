@@ -3,6 +3,7 @@
         "CFBundleDisplayName": "salemoa",
         "NSContactsUsageDescription": "It is an application that collects delivery app information.",
         "NSUserTrackingUsageDescription": "Tracking for ad optimization",
-        "NSLocationWhenInUseUsageDescription":"If you allow location information, you can only see a list of nearby stores." 
+        "NSLocationWhenInUseUsageDescription":"If you allow location information, you can only see a list of nearby stores." ,
+        "userTrackingPermission": "Allow this app to collect app-related data that can be used for tracking you or your device."
     }
 }

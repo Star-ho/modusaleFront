@@ -6,7 +6,7 @@ import {
 import { fontSizeFlex,heightSize } from "./fontSizeFlex.js";
 
 
-export function ExitModule({modalVisible,setModalVisible}){
+export function ExitModule({modalVisible,setModalVisible,isPersonal}){
     const closeApp=()=>{
         BackHandler.exitApp()
         setModalVisible(!modalVisible)
@@ -19,7 +19,7 @@ export function ExitModule({modalVisible,setModalVisible}){
                 <AdMobBanner
                     bannerSize="mediumRectangle"
                     adUnitID="ca-app-pub-5926200986625193/7250011193" 
-                    servePersonalizedAds={true}
+                    servePersonalizedAds={isPersonal}
                     onDidFailToReceiveAdWithError={(e) => console.log(e)}
                     />
                 <View style={{flexDirection:'row',marginTop:10}}>

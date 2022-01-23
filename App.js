@@ -17,6 +17,7 @@ import {
   setTestDeviceIDAsync
 } from "expo-ads-admob";
 import ErrorModal from './ErrorModal.js'
+import { requestTrackingPermissionsAsync } from 'expo-tracking-transparency';
 
 
 const db = SQLite.openDatabase('hideDB.db');
@@ -49,6 +50,8 @@ export default function App() {
   const [resData, setRestData ]=React.useState([]);
   const [hideItem,setHideItem]=React.useState([]);
 
+  const [isPersonal,setPersonal]=React.useState(false);
+
   useFonts({
     BMJUA_ttf: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
@@ -64,6 +67,16 @@ export default function App() {
         setHideItem(temp)
       })
     })
+
+    
+    if(Platform.OS=='ios'){
+      requestTrackingPermissionsAsync().then(res=>{
+        if (res?.statusstatus === 'granted') {
+          setPersonal(true)
+        }
+      })  
+    }
+    
     
     Location.requestForegroundPermissionsAsync().then(res=>{
       if(res?.status== 'granted'){
@@ -200,7 +213,7 @@ export default function App() {
           setModalVisible(!modalVisible);
         }}
       >
-    <ExitModule modalVisible={modalVisible} setModalVisible={setModalVisible}  />
+    <ExitModule modalVisible={modalVisible} setModalVisible={setModalVisible} isPersonal={isPersonal}  />
     </Modal>
       <View style={{ flexDirection: 'row',backgroundColor:'#8A0602', height:heightSize(54)}}>
         <View style={{ flex:1.2 }}>
@@ -266,7 +279,7 @@ export default function App() {
           </View>
           }
         </View>
-      <ContentsTab searchText={searchText} location={location} refreshing={refreshing} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} resData={resData} />
+      <ContentsTab searchText={searchText} location={location} refreshing={refreshing} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} resData={resData} isPersonal={isPersonal} />
     </SafeAreaView>
   );
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View, RefreshControl, FlatList, } from 'react-native';
 import SaleListItem from './saleListItem';
 
-function Contents({ViewInfo,setViewInfo,cate,getData,redirectModalVisible,setRedirectModalVisible, setModalVal,fadeAnim,isHide,hideItem,setHideItem}) {
+function Contents({ViewInfo,setViewInfo,cate,getData,redirectModalVisible,setRedirectModalVisible, setModalVal,fadeAnim,isHide,hideItem,setHideItem, isPersonal}) {
   let data
   if(cate){
     data=[...ViewInfo].filter(v=>v[3]==cate)
@@ -32,10 +32,9 @@ function Contents({ViewInfo,setViewInfo,cate,getData,redirectModalVisible,setRed
         
         renderItem={({item}) => 
         <View>
-          <SaleListItem val={item} cate={cate} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} setModalVal={setModalVal} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} ViewInfo={ViewInfo} setViewInfo={setViewInfo} />
+          <SaleListItem val={item} cate={cate} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} setModalVal={setModalVal} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} ViewInfo={ViewInfo} setViewInfo={setViewInfo} isPersonal={isPersonal} />
         </View>
       }
-      
       />
     </View>
   );
