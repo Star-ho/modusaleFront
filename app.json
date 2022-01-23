@@ -40,7 +40,7 @@
       "bundleIdentifier": "iof.processTA"
     },
     "android": {
-      "versionCode": 27,
+      "versionCode": 28,
       "package": "iof.processTA",
       "permissions": [
         "ACCESS_COARSE_LOCATION",
