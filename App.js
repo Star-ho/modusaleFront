@@ -42,15 +42,16 @@ export default function App() {
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const [isHide, setIsHide] = React.useState(true)
   const [refreshing,setRfreshing]=React.useState(true)
-  const [loaded] = useFonts({
-    BMHANNAPro: require('./assets/fonts/BMJUA_ttf.ttf'),
-  });
   const [hideListVisible,setHideListVisible]=React.useState(false)
   const createTable='CREATE TABLE IF NOT EXISTS hidetable(item TEXT PRIMARY KEY);'
   
   const [location, setLocation] = React.useState(null);
   const [resData, setRestData ]=React.useState([]);
   const [hideItem,setHideItem]=React.useState([]);
+
+  useFonts({
+    BMJUA_ttf: require('./assets/fonts/BMJUA_ttf.ttf'),
+  });
 
   //앱 시작
   React.useEffect(()=>{
@@ -156,7 +157,7 @@ export default function App() {
           <View style={styles.hideModalView}>
             <Text 
               allowFontScaling={false} 
-              style={{ fontSize:fontSizeFlex(23),fontFamily:'BMHANNAPro', marginBottom:20}}>
+              style={{ fontSize:fontSizeFlex(23),fontFamily:'BMJUA_ttf', marginBottom:20}}>
               숨기기 목록
             </Text>
             <View style={{flex:1}}>
@@ -168,8 +169,8 @@ export default function App() {
                   <View style={{width:fontSizeFlex(250),flexDirection:'row',marginVertical:fontSizeFlex(5) }}>
                       <View style={{flex:2, justifyContent:'center'}} >
                         {item.length<8?
-                        <Text allowFontScaling={false} style={{ fontSize:fontSizeFlex(23),fontFamily:'BMHANNAPro'}}>{item}</Text>:
-                        <Text allowFontScaling={false} style={{ fontSize:fontSizeFlex(17),fontFamily:'BMHANNAPro'}}>{item}</Text>
+                        <Text allowFontScaling={false} style={{ fontSize:fontSizeFlex(23),fontFamily:'BMJUA_ttf'}}>{item}</Text>:
+                        <Text allowFontScaling={false} style={{ fontSize:fontSizeFlex(17),fontFamily:'BMJUA_ttf'}}>{item}</Text>
                         }
                           
                       </View>
@@ -298,7 +299,7 @@ const styles = StyleSheet.create({
     width:heightSize(40),height:heightSize(40),margin:logoMargin
   },
   hide:{
-    color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMHANNAPro',marginLeft:7,marginTop:hideMarginTop
+    color:'white',fontSize:fontSizeFlex(15),fontFamily:'BMJUA_ttf',marginLeft:7,marginTop:hideMarginTop
   },
   centeredView: {
     flex: 1,

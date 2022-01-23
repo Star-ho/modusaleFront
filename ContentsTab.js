@@ -18,9 +18,6 @@ const Tab = createMaterialTopTabNavigator();
 const db = SQLite.openDatabase('hideDB.db');
 
 function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing,location,resData,initFlag}){ 
-  const [loaded] = useFonts({
-    BMJUA_ttf: require('./assets/fonts/BMJUA_ttf.ttf'),
-  });
 
   const [allInfo, setAllInfo] = React.useState([]);
   const [filterInfo, setFilterInfo] = React.useState([]);

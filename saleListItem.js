@@ -14,7 +14,7 @@ const db = SQLite.openDatabase('hideDB.db');
 
 const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide, hideItem,setHideItem}) => {
   const [loaded] = useFonts({
-    BMHANNAPro: require('./assets/fonts/BMJUA_ttf.ttf'),
+    BMJUA_ttf: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
 
   
@@ -156,7 +156,7 @@ const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide
             justifyContent: "center",
             alignItems: "center",
           }}>
-            <Text allowFontScaling={false} style={{fontSize: fontSizeFlex(17),fontFamily:'BMHANNAPro'}} >숨기기</Text>
+            <Text allowFontScaling={false} style={{fontSize: fontSizeFlex(17),fontFamily:'BMJUA_ttf'}} >숨기기</Text>
           </View>
         </Pressable>
       </Animated.View>
@@ -174,23 +174,23 @@ const styles = StyleSheet.create({
   brandText: {
     flex: 6,
     fontSize: fontSizeFlex(26),
-    fontFamily:'BMHANNAPro'
+    fontFamily:'BMJUA_ttf'
   },
   longbrandText: {
     flex: 6,
     fontSize: fontSizeFlex(23),
-    fontFamily:'BMHANNAPro'
+    fontFamily:'BMJUA_ttf'
   },
   priceText: {
     fontWeight: '500',
     fontSize: fontSizeFlex(12.5),//12,
-    fontFamily:'BMHANNAPro'
+    fontFamily:'BMJUA_ttf'
   },
   price: {
     fontWeight: '500',
     fontSize: fontSizeFlex(12.5),//12,
     color:'#C10000',
-    fontFamily:'BMHANNAPro'
+    fontFamily:'BMJUA_ttf'
   },
   logo: {
     marginVertical:5,
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     flex: 2,
     fontWeight: '500',
     fontSize: fontSizeFlex(9),//9.5,
-    fontFamily:'BMHANNAPro',
+    fontFamily:'BMJUA_ttf',
     marginTop:1,
     marginLeft:-2
   },

@@ -17,10 +17,7 @@
       }
     },
     "production": {
-      "extends": "base",
-  "cli": {
-    "version": ">= 0.44.1"
-      }
+      "extends": "base"
     }
   }
 }
