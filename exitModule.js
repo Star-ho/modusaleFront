@@ -6,7 +6,7 @@ import {
 import { fontSizeFlex,heightSize } from "./fontSizeFlex.js";
 
 
-export function ExitModule({modalVisible,setModalVisible,isPersonal}){
+export function ExitModule({modalVisible,setModalVisible,isPersonal,closeBannerId}){
     const closeApp=()=>{
         BackHandler.exitApp()
         setModalVisible(!modalVisible)
@@ -18,7 +18,7 @@ export function ExitModule({modalVisible,setModalVisible,isPersonal}){
             <Text allowFontScaling={false} style={styles.modalText}>{"앱을 종료하시겠습니까??"}</Text>          
                 <AdMobBanner
                     bannerSize="mediumRectangle"
-                    adUnitID="ca-app-pub-5926200986625193/7250011193" 
+                    adUnitID={closeBannerId} 
                     servePersonalizedAds={isPersonal}
                     onDidFailToReceiveAdWithError={(e) => console.log(e)}
                     />

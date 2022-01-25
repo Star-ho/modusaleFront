@@ -17,7 +17,8 @@ import { getAppDataRequest } from "./request.js"
 const Tab = createMaterialTopTabNavigator();
 const db = SQLite.openDatabase('hideDB.db');
 
-function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing,location,resData,initFlag,isPersonal}){ 
+function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing,location,isPersonal,clickBannerId}){ 
+  const listBannerId= Platform.OS=="android"?"ca-app-pub-5926200986625193/2749125724":"ca-app-pub-5926200986625193/5597159653"
 
   const [allInfo, setAllInfo] = React.useState([]);
   const [filterInfo, setFilterInfo] = React.useState([]);
@@ -238,8 +239,10 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
           <AppButton appname='coupang'/>
           <AppButton appname='wemef'/>
         </View>
+        <View style={{flex:0.3}}>
 
-          <View style={{flex: 1.7,flexDirection:'row-reverse'}}> 
+        </View>
+          <View style={{flex: 1.4}}> 
               <DropDownPicker
                 open={open}
                 value={sortValue}
@@ -247,7 +250,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
                 setOpen={setOpen}
                 showArrowIcon={false}
 
-                containerStyle={{width:heightSize(80),margin:4}}
+                containerStyle={{width:fontSizeFlex(100),margin:4}}
                 zIndex={100}
                 setValue={setsortValue}
                 setItems={setItems}
@@ -257,9 +260,9 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
                 listMode='MODAL'
                 placeholder="이름순"
                 allowFontScaling={false} 
-                placeholderStyle={{color:'#7f7a7a'}}
+                placeholderStyle={{color:'#7f7a7a', alignContent:'center'}}
                 
-                style={{height:32,width:heightSize(80),borderColor:'#7f7a7a'}}
+                style={{height:heightSize(26),width:fontSizeFlex(78),borderColor:'#7f7a7a'}}
                 textStyle={{color:'#7f7a7a'}}
                 labelStyle={{
                   fontSize:fontSizeFlex(13),
@@ -335,7 +338,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
             <Text allowFontScaling={false} style={styles.modalText}>{modalVal[0]+"앱으로 이동하시겠습니까?"}</Text>          
             <AdMobBanner
               bannerSize="mediumRectangle"
-              adUnitID="ca-app-pub-5926200986625193/7250011193" 
+              adUnitID={clickBannerId}
               servePersonalizedAds={isPersonal}
               onDidFailToReceiveAdWithError={(e) => console.log(e)}
             />
@@ -381,13 +384,13 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
         >
           <Tab.Screen 
             name="전체" 
-            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} getData={controllData}  setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText} isPersonal={isPersonal} /></View> }
+            children={ () => <View style={{flex:1}}><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} getData={controllData}  setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText} isPersonal={isPersonal} listBannerId={listBannerId} /></View> }
           />
            {category.map( (cate,index) => {
               return <Tab.Screen 
                 name={cate}
                 key={index}
-              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} cate={cate}   getData={controllData} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText} isPersonal={isPersonal}
+              children={ () => <View style={{flex:1}} ><TobUnderBar sortValue={sortValue} /><Contents ViewInfo={ViewInfo} setViewInfo={setViewInfo} cate={cate}   getData={controllData} setModalVal={setModalVal} redirectModalVisible={redirectModalVisible} setRedirectModalVisible={setRedirectModalVisible} fadeAnim={fadeAnim} isHide={isHide} hideItem={hideItem} setHideItem={setHideItem} searchText={searchText} isPersonal={isPersonal} listBannerId={listBannerId}
               /></View> }
               />
             }

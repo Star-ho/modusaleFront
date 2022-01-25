@@ -36,7 +36,13 @@ initializeApp(firebaseConfig);
 
 export default function App() {
 
- const [error,setError]=React.useState(false);
+    // 테스트 앱 test app
+    React.useEffect(() => {
+      setTestDeviceIDAsync("testdevice");
+   }, []);
+
+ const clickBannerId=Platform.OS=="android"? "ca-app-pub-5926200986625193/3507017087" : "ca-app-pub-5926200986625193/7745644995"
+ const closeBannerId=Platform.OS=="android"? "ca-app-pub-5926200986625193/6873554635" : "ca-app-pub-5926200986625193/6815706708"
 
   const [searchText, setSearchText] = React.useState("");
   const [modalVisible,setModalVisible]=React.useState(false);
@@ -213,7 +219,7 @@ export default function App() {
           setModalVisible(!modalVisible);
         }}
       >
-    <ExitModule modalVisible={modalVisible} setModalVisible={setModalVisible} isPersonal={isPersonal}  />
+    <ExitModule modalVisible={modalVisible} setModalVisible={setModalVisible} isPersonal={isPersonal} closeBannerId={closeBannerId}  />
     </Modal>
       <View style={{ flexDirection: 'row',backgroundColor:'#8A0602', height:heightSize(54)}}>
         <View style={{ flex:1.2 }}>
@@ -279,7 +285,7 @@ export default function App() {
           </View>
           }
         </View>
-      <ContentsTab searchText={searchText} location={location} refreshing={refreshing} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} resData={resData} isPersonal={isPersonal} />
+      <ContentsTab searchText={searchText} location={location} refreshing={refreshing} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} isPersonal={isPersonal} clickBannerId={clickBannerId} />
     </SafeAreaView>
   );
 }

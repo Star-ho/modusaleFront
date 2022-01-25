@@ -12,7 +12,7 @@ import * as SQLite from 'expo-sqlite';
 
 const db = SQLite.openDatabase('hideDB.db');
 
-const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide, hideItem,setHideItem, isPersonal}) => {
+const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide, hideItem,setHideItem, isPersonal,listBannerId}) => {
   const [loaded] = useFonts({
     BMJUA_ttf: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
@@ -37,8 +37,8 @@ const SaleListItem = ({val,setRedirectModalVisible, setModalVal,fadeAnim, isHide
   if(val=='ad')  {
     return( <View style={styles.adView}>
       <AdMobBanner
-        bannerSize="smartBanner"
-        adUnitID="ca-app-pub-5926200986625193/7250011193" 
+        bannerSize="smartBannerPortrait"
+        adUnitID={listBannerId}
         servePersonalizedAds={isPersonal}
         onDidFailToReceiveAdWithError={(e) => console.log(e)}
       />

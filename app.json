@@ -37,7 +37,10 @@
           }
         ]
       },
-      "bundleIdentifier": "iof.processTA"
+      "bundleIdentifier": "iof.processTA",
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-5926200986625193~7861851608"
+      }
     },
     "android": {
       "versionCode": 28,
