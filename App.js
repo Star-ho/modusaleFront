@@ -14,7 +14,7 @@ import { initializeApp } from 'firebase/app';
 import AppLoading from 'expo-app-loading';
 import { getAppDataRequest } from "./request.js"
 import { 
-  setTestDeviceIDAsync
+  // setTestDeviceIDAsync
 } from "expo-ads-admob";
 import ErrorModal from './ErrorModal.js'
 import { requestTrackingPermissionsAsync } from 'expo-tracking-transparency';
@@ -41,8 +41,10 @@ export default function App() {
   //     setTestDeviceIDAsync("testdevice");
   //  }, []);
 
- const clickBannerId=Platform.OS=="android"? "ca-app-pub-5926200986625193/3507017087" : "ca-app-pub-5926200986625193/7745644995"
- const closeBannerId=Platform.OS=="android"? "ca-app-pub-5926200986625193/6873554635" : "ca-app-pub-5926200986625193/6815706708"
+  // const clickBannerId="ca-app-pub-5926200986625193/1204093850"
+  // const closeBannerId="ca-app-pub-5926200986625193/1204093850"
+  const clickBannerId=Platform.OS=="android"? "ca-app-pub-5926200986625193/3507017087" : "ca-app-pub-5926200986625193/7745644995"
+  const closeBannerId=Platform.OS=="android"? "ca-app-pub-5926200986625193/6873554635" : "ca-app-pub-5926200986625193/6815706708"
 
   const [searchText, setSearchText] = React.useState("");
   const [modalVisible,setModalVisible]=React.useState(false);
@@ -62,6 +64,7 @@ export default function App() {
     BMJUA_ttf: require('./assets/fonts/BMJUA_ttf.ttf'),
   });
 
+  
   //앱 시작
   React.useEffect(()=>{
     db.transaction((tx)=>{
@@ -73,8 +76,6 @@ export default function App() {
         setHideItem(temp)
       })
     })
-
-    
     if(Platform.OS=='ios'){
       requestTrackingPermissionsAsync().then(res=>{
         if (res?.statusstatus === 'granted') {
