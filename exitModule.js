@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, SafeAreaView, BackHandler, Modal,Pressable,FlatList,Animated, Platform } from 'react-native';
 import {
     AdMobBanner,
-    setTestDeviceIDAsync
+    // setTestDeviceIDAsync
   } from "expo-ads-admob";
 import { fontSizeFlex,heightSize } from "./fontSizeFlex.js";
 

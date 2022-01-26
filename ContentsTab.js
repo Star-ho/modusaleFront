@@ -9,7 +9,7 @@ import { useFonts } from 'expo-font';
 import { fontSizeFlex, heightSize } from "./fontSizeFlex.js";
 import { 
   AdMobBanner,
-  setTestDeviceIDAsync
+  // setTestDeviceIDAsync
 } from "expo-ads-admob";
 import * as SQLite from 'expo-sqlite';
 import { getAppDataRequest } from "./request.js"
