@@ -55,10 +55,10 @@ export default function App() {
   const createTable='CREATE TABLE IF NOT EXISTS hidetable(item TEXT PRIMARY KEY);'
   
   const [location, setLocation] = React.useState(null);
-  const [resData, setRestData ]=React.useState([]);
   const [hideItem,setHideItem]=React.useState([]);
 
   const [isPersonal,setPersonal]=React.useState(false);
+  const [resData, setResData] = React.useState([]);
 
   useFonts({
     BMJUA_ttf: require('./assets/fonts/BMJUA_ttf.ttf'),
@@ -90,12 +90,12 @@ export default function App() {
         Location.getCurrentPositionAsync({}).then(location=>{
           setLocation(location);
           getAppDataRequest(location).then(res=>{
-            setRestData(res)
+            setResData(res)
           })
         });
       }else{
         getAppDataRequest(null).then(res=>{
-        setRestData(res)
+        setResData(res)
         })
       }
     });
@@ -286,7 +286,7 @@ export default function App() {
           </View>
           }
         </View>
-      <ContentsTab searchText={searchText} location={location} refreshing={refreshing} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} isPersonal={isPersonal} clickBannerId={clickBannerId} />
+      <ContentsTab searchText={searchText} location={location} refreshing={refreshing} setSearchText={setSearchText} hideItem={hideItem} setHideItem={setHideItem} fadeAnim={fadeAnim} isHide={isHide} isPersonal={isPersonal} clickBannerId={clickBannerId} resData={resData} />
     </SafeAreaView>
   );
 }

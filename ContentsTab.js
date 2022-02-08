@@ -17,7 +17,7 @@ import { getAppDataRequest } from "./request.js"
 const Tab = createMaterialTopTabNavigator();
 const db = SQLite.openDatabase('hideDB.db');
 
-function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing,location,isPersonal,clickBannerId}){ 
+function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing,location,isPersonal,clickBannerId, resData } ){ 
   const listBannerId= Platform.OS=="android"?"ca-app-pub-5926200986625193/2749125724":"ca-app-pub-5926200986625193/5597159653"
 
   const [allInfo, setAllInfo] = React.useState([]);
@@ -36,6 +36,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
   const [coupangSelected, setcoupangSelected] = React.useState(true);
   const [wemefSelected, setwemefSelected] = React.useState(true);
   const [flag, setFlag]=React.useState(1)
+  const [isInit, setIsInit] = React.useState(true);
   const [open, setOpen]=React.useState(false)
   const [modalVal, setModalVal]=React.useState(['','',''])
   const [items, setItems] = React.useState([
@@ -105,25 +106,34 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
   }
 
   function controllData(){
+    if(isInit){
+      updateAllInfo(resData)
+      setIsInit(false);
+      return;
+    }
     getAppDataRequest(location).then(res=>{
-      let arr=[]
-      for(let i of Object.entries(res)){
-        arr.push( [ i[1][0].toUpperCase(), i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
-      }
-      setAllInfo(arr)
-      arr=arr.filter(v=>!hideItem.includes(v[0]))
-      arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
-      setFilterInfo(arr)
-      setViewInfo(arr)
-      setSearchText('')
-      if(flag!=1){
-        filteringData()
-      }else{
-        setFlag(2)
-      }
+      updateAllInfo(res)
     })
   }
   
+  function updateAllInfo(res){
+    let arr=[]
+    for(let i of Object.entries(res)){
+      arr.push( [ i[1][0].toUpperCase(), i[1][1], i[1][2], i[1][3], i[1][4], i[1][5] ]  )
+    }
+    setAllInfo(arr)
+    arr=arr.filter(v=>!hideItem.includes(v[0]))
+    arr.sort((a,b)=>( `${a[0]}`.localeCompare(`${b[0]}`)) )
+    setFilterInfo(arr)
+    setViewInfo(arr)
+    setSearchText('')
+    if(flag!=1){
+      filteringData()
+    }else{
+      setFlag(2)
+    }
+  }
+
   React.useEffect(() => {
       // console.log(hideItem)
       setViewInfo(filterInfo.filter(v=>!hideItem.includes(v[0])))
