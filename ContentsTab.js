@@ -5,17 +5,14 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Contents from "./Content.js"
 import DropDownPicker from 'react-native-dropdown-picker';
 import DrawerIcon from './DrawerIconSet.js';
-import { useFonts } from 'expo-font';
 import { fontSizeFlex, heightSize } from "./fontSizeFlex.js";
 import { 
   AdMobBanner,
   // setTestDeviceIDAsync
 } from "expo-ads-admob";
-import * as SQLite from 'expo-sqlite';
 import { getAppDataRequest } from "./request.js"
 
 const Tab = createMaterialTopTabNavigator();
-const db = SQLite.openDatabase('hideDB.db');
 
 function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHideItem,refreshing,location,isPersonal,clickBannerId, resData } ){ 
   const listBannerId= Platform.OS=="android"?"ca-app-pub-5926200986625193/2749125724":"ca-app-pub-5926200986625193/5597159653"
@@ -80,6 +77,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
   }
 
   function filteringData(){
+    if(allInfo.length==0)return
     let temp=allInfo.slice()
     if(!yogiyoSelected){
       temp=temp.filter(v=>v[1]!='yogiyo')
@@ -106,11 +104,6 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
   }
 
   function controllData(){
-    if(isInit){
-      updateAllInfo(resData)
-      setIsInit(false);
-      return;
-    }
     getAppDataRequest(location).then(res=>{
       updateAllInfo(res)
     })
@@ -135,15 +128,12 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
   }
 
   React.useEffect(() => {
-      // console.log(hideItem)
       setViewInfo(filterInfo.filter(v=>!hideItem.includes(v[0])))
-
-      // ViewInfo.forEach(v=>{
-      //   if(hideItem.includes(v[0])){
-      //     console.log(v)
-      //   }
-      // })
   }, [hideItem]);
+
+  React.useEffect(() => {
+    updateAllInfo(resData)
+  }, [resData]);
 
   //검색어입력
   React.useEffect(() => {
@@ -283,8 +273,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
       </View>)
   }
 
-  const LinkingAPP=()=>{
-
+  const LinkingAPP=({source,url})=>{
     let redirectURL
     const baeminURL = "baemin://";
     const yogiyoURL = "yogiyoapp://open";
@@ -292,15 +281,15 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
     const wemeURL = "cupping://doCommand";
     let storeURL
 
-    if(modalVal[1]=='yogiyo'){
+    if(source=='yogiyo'){
       redirectURL=yogiyoURL
       if(Platform.OS=="android"){storeURL="market://details?id=com.fineapp.yogiyo"}
       else{storeURL="itms-apps://itunes.apple.com/app/id543831532"}
-    }else if(modalVal[1]=='baemin'){
+    }else if(source=='baemin'){
       redirectURL=baeminURL
       if(Platform.OS=="android"){storeURL="market://details?id=com.sampleapp"}
       else{storeURL="itms-apps://itunes.apple.com/app/id378084485"}
-    }else if(modalVal[1]=='coupang'){
+    }else if(source=='coupang'){
       redirectURL=coupangURL
       if(Platform.OS=="android"){storeURL="market://details?id=com.coupang.mobile.eats"}
       else{storeURL="itms-apps://itunes.apple.com/app/id1445504255"}
@@ -312,7 +301,7 @@ function ContentsTab ({ searchText,setSearchText,fadeAnim,isHide,hideItem,setHid
 
     const handlePress = React.useCallback(async () => {
       try{
-        await Linking.openURL(modalVal[2]);
+        await Linking.openURL(url);
       }catch{
         try{
           await Linking.openURL(redirectURL);

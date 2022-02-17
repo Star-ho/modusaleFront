@@ -157,12 +157,6 @@ export default function App() {
     return <ErrorModal/>
   }
 
-  if (resData.length==0) {
-    return (
-      <AppLoading/>
-    ); 
-  }
-
   return (
     <SafeAreaView style={styles.container}>
         <Modal
