@@ -2,7 +2,7 @@
   "expo": {
     "name": "할인모아",
     "slug": "salemoa",
-    "version": "10.0.0",
+    "version": "12.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,8 +19,8 @@
     "ios": {
       "supportsTablet": false,
       "infoPlist": {
-        "buildNumber": "10.0.0",
-        "CFBundleVersion": "10.0.0",
+        "buildNumber": "12.0.0",
+        "CFBundleVersion": "12.0.0",
         "NSUserTrackingUsageDescription": "광고 최적화를 위한 추적입니다.",
         "NSLocationWhenInUseUsageDescription": "위치정보를 허용하시면 주변에 있는 가게 목록만 볼 수 있습니다.",
         "userTrackingPermission": "개인 광고 최적화를 위해 앱관련 데이터를 수집하도록 허용합니다.",
@@ -43,7 +43,7 @@
       }
     },
     "android": {
-      "versionCode": 30,
+      "versionCode": 33,
       "package": "iof.processTA",
       "permissions": [
         "ACCESS_COARSE_LOCATION",
